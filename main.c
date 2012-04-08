@@ -20,16 +20,14 @@
 #include "usbcomms.h"
 //#include "hiding.h"
 
-#define mylen 1024  //for hiding, use 1024 bytes, which are 8192 bits
-#define Nbyte 1024   //test 256 bytes, 1k*8=8k
-#define Nbit 8192 //Nbit=Nbyte*8
+#define mylen 4096  //for hiding, use 1024 bytes, which are 8192 bits
+#define Nbyte 4096   //test 256 bytes, 1k*8=8k
 #define Ntimes 1
+
 
 uint8_t write_buffer[mylen];
 uint8_t read_buffer[Nbyte];
-uint16_t bitrank[Nbyte][8];  //record the bit program rank
-uint8_t obuffer[64]; 
-
+ 
 uint32_t tprogram, terase;
 /**
  * Application entry point
@@ -43,13 +41,6 @@ int main(void) {
 	uint8_t otime1[4];   
 	uint16_t block, byte, j, nn;
 	uint8_t bit, page;  
-	const uint16_t hbyte[64] = {5, 23, 46, 88, 94, 112, 113, 115, 121, 146, 157, 183, 
-	218, 219, 271, 281, 299, 318, 337, 352, 359, 368, 406, 412, 433, 441, 448, 497, 
-	528, 553, 553, 562, 606, 617, 643, 650, 651, 651, 656, 665, 733, 748, 754, 776, 
-	778, 792, 798, 801, 806, 807, 818, 822, 825, 842, 867, 868, 885, 902, 925, 946, 948, 978, 1001, 1003};
-	const uint8_t hbit[64]={0, 5, 2, 5, 6, 1, 1, 0, 2, 3, 3, 3, 5, 5, 2, 6, 7, 2, 2, 
-	7, 4, 4, 4, 1, 7, 2, 6, 5, 5, 0, 1, 1, 2, 4, 5, 6, 4, 6, 1, 4, 7, 7, 3, 6, 7, 2, 
-	6, 5, 4, 1, 5, 6, 1, 0, 6, 4, 5, 4, 7, 4, 6, 2, 0, 1};
 	
 	uint8_t result;
 	
@@ -80,48 +71,13 @@ int main(void) {
 				T1MCR=0x00;  //stop comparing
 				T1PR=99;  //prescaler, note that this changed from previous results
 				//for slc_4G, it should be  26 18 12,  this is for mlc16g
-				address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12);  //lower page
+				address0 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x00) << 20) | (((uint32_t) (0x00)) << 12);  //lower page
 				address=address0;
 							
 				for (i=0;i<Ntimes;i++)
 				{
-					ptr2=0;
-					for (block=90;block<157;block=block+2)   //34 blocks
+					for (block=7;block<8;block=block+2)   //34 blocks
 					{
-					/*	if (ptr2)
-						{
-							//setup the write buffer
-							memset(write_buffer, 0xFF, mylen ); 
-
-							for (ptr=0;ptr<64;ptr++)
-							{
-								byte=hbyte[ptr];
-								bit=hbit[ptr];
-								//set the corresponding bit to 0, which is to program
-								write_buffer[byte] = write_buffer[byte] & (~(0x01<<bit));
-							}
-							
-							for (j=0; j<20000; j++) //20,000 pe stress now
-							{						
-								address=address0 | (((uint32_t) block) << 18);
-								
-								result = complete_erase(address);  //complete erase
-								//complete write selected pages
-								for (page=20;page<21;page=page+3)  //only page 20 is programmed
-								{						
-									address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-									
-									//hide information by stress
-									result = write(address, mylen, write_buffer); 
-								}
-							} 
-						}
-						
-						ptr2=ptr2+1;
-						
-						if (ptr2==2)
-							ptr2=0; */
-							
 						memset(write_buffer, 0x00, mylen ); 
 						//complete write all of the block, prevent over erase attack
 						for (page=20;page<21;page=page+1)  //64 pages
@@ -420,10 +376,6 @@ uint8_t read_status(void) {
  */
 uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 	uint32_t i, result;
-
-	// Maximum page size that can be written at once is 2k + 64 bytes of spare
-	if (count > 2112)
-		count = 2112;
 		
 	//  *********control timing******
 	T0PR=0;  //one tick is 0.01 ms
@@ -492,10 +444,6 @@ uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 uint8_t write(uint32_t address, uint32_t count, const uint8_t *src) {
 	uint32_t i, result;
 
-	// Maximum page size that can be written at once is 2k + 64 bytes of spare
-	if (count > 2112)
-		count = 2112;
-
 	// Activate the chip
 	ASSERT_CHIP_ENABLE;
 	SET_IO_AS_OUTPUT;
@@ -542,9 +490,6 @@ uint8_t write(uint32_t address, uint32_t count, const uint8_t *src) {
 void read(uint32_t address, uint32_t count, uint8_t *dest) {
 	uint32_t i;
 
-	// Maximum page size is 2k + 64 bytes of spare
-/*	if (count > 2112)
-		count = 2112;*/
 
 	// Activate the chip
 	ASSERT_CHIP_ENABLE;
