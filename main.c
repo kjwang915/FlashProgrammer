@@ -88,7 +88,63 @@ int main(void) {
 							result = write(address, mylen, write_buffer); 
 						}
 						
+						page=16;
+						memset(write_buffer, 0x00, mylen ); 
+						result = write(address, mylen, write_buffer); 
+						for (page=7;page<20;page=page+1)  //256 pages
+						{						
+							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+							read(address, Nbyte, read_buffer);  //read while output
+							mypage=(uint8_t)page;
+							//be carefull whether this can change page
+							usb_write(&mypage, 1);
+							for (mm=0;mm<Nbyte;mm=mm+64)
+							{
+								usb_write((read_buffer+mm), 64);
+							}
+							//usb_write(read_buffer, Nbyte);
+							usb_write((uint8_t *) "Done.", 5);
+							//insert some delay, because hynix chips need this
+							T0PR=799;  //7 2 0.8 second delay
+							T0TCR=2; //stop and reset time
+							T0MCR=0x20;
+							T0MR1=T0TC+30000;  //30e6,
+							T0PC=0; //reset prescale counter register
+							T0TCR=1; //start the timer
+							while ((T0TCR&1)==1)
+							{
+								WAIT;
+							}
+						}
+						memset(write_buffer, 0xFF, mylen ); 
+						result = write(address, mylen, write_buffer); 
+						for (page=7;page<20;page=page+1)  //256 pages
+						{						
+							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+							read(address, Nbyte, read_buffer);  //read while output
+							mypage=(uint8_t)page;
+							//be carefull whether this can change page
+							usb_write(&mypage, 1);
+							for (mm=0;mm<Nbyte;mm=mm+64)
+							{
+								usb_write((read_buffer+mm), 64);
+							}
+							//usb_write(read_buffer, Nbyte);
+							usb_write((uint8_t *) "Done.", 5);
+							//insert some delay, because hynix chips need this
+							T0PR=799;  //7 2 0.8 second delay
+							T0TCR=2; //stop and reset time
+							T0MCR=0x20;
+							T0MR1=T0TC+30000;  //30e6,
+							T0PC=0; //reset prescale counter register
+							T0TCR=1; //start the timer
+							while ((T0TCR&1)==1)
+							{
+								WAIT;
+							}
+						}
 						
+						continue;
 						
 						//read
 					/*	for (page=0;page<256;page=page+1)  //256 pages
