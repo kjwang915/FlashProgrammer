@@ -33,14 +33,14 @@ uint32_t tprogram, terase;
  * Application entry point
  */
 int main(void) {
-	uint32_t otime, i;
+	uint32_t otime, i, mm;
 	uint8_t ptr, count, ptr2;
 	
 	uint32_t address0, address;
 	uint8_t cmd[20];
-	uint8_t otime1[4];   
+	uint8_t otime1[4], mypage;   
 	uint16_t block, byte, j, nn;
-	uint8_t bit, page;  
+	uint16_t bit, page;  
 	
 	uint8_t result;
 	
@@ -64,7 +64,7 @@ int main(void) {
 	
 	while (1) {
 		if (usb_read_ready()) {
-			usb_read(cmd, 4);
+			usb_read(cmd, 4);  //cmd m start symbol, next symbol: 1 -- FF 2 00 3 0F  next symbol: 1 lower page 2 higher page
 			if (strncmp((char *)cmd, "m", 1) == 0) {
 			
 				usb_write((uint8_t *) "Done.", 5);
@@ -76,74 +76,36 @@ int main(void) {
 							
 				for (i=0;i<Ntimes;i++)
 				{
-					for (block=7;block<8;block=block+2)   //34 blocks
-					{
-						memset(write_buffer, 0x00, mylen ); 
-						//complete write all of the block, prevent over erase attack
-						for (page=20;page<21;page=page+1)  //64 pages
+					for (block=10;block<11;block=block+2)   //34 blocks
+					{ 
+						address=address0 | (((uint32_t) block) << 20);
+						result = complete_erase(address);  //complete erase	
+						memset(write_buffer, 0xFF, mylen ); 
+						//program all block to 0xFF, hopefully, this would eliminate all the flags
+						for (page=0;page<256;page=page+1)  //256 pages
 						{						
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
 							result = write(address, mylen, write_buffer); 
 						}
-						result = complete_erase(address);  //complete erase
-						for (page=20;page<21;page=page+1)  //64 pages
+						
+						
+						
+						//read
+					/*	for (page=0;page<256;page=page+1)  //256 pages
 						{						
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
-							
-							
-							T1TCR=2; //stop and reset time				
-							T1TCR=1; //start the timer
-				
-							tprogram=780;   //to be determined  810
-							for (nn=0;nn<1200;nn++)
+							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+							read(address, Nbyte, read_buffer);  //read while output
+							mypage=(uint8_t)page;
+							//be carefull whether this can change page
+							usb_write(&mypage, 1);
+							for (mm=0;mm<Nbyte;mm=mm+64)
 							{
-								result = incomplete_write(address, mylen, write_buffer);  //program the whole page
-											
-								read(address, Nbyte, read_buffer);  //read while output
-																
-								for (byte=0; byte<Nbyte; byte++)
-								{
-									for (bit=0; bit<8; bit++)
-									{
-										
-										if ( (bitrank[byte][bit]==0x0000) && ((read_buffer[byte] & (0x01<<bit))==0x00))
-										{
-											bitrank[byte][bit]=nn+1;  //this should be nn+1
-										}
-									}
-								}	
+								usb_write((read_buffer+mm), 64);
 							}
-
-							otime=T1TC;
-							T1TCR=2; //stop and reset time
-							
-							count=0;
-							for (byte=0; byte<Nbyte; byte++)
-							{
-								for (bit=0; bit<8; bit++)
-								{
-									obuffer[count]=(uint8_t) (bitrank[byte][bit]>>8);
-									count++;
-									obuffer[count]=(uint8_t) (bitrank[byte][bit]);
-									count++;
-								}
-								if (count==64)
-								{
-									count=0;
-									usb_write(obuffer,64);
-								}
-							}
-							otime1[0] = (uint8_t) (otime >> 24);  //time used
-							otime1[1] = (uint8_t) (otime >> 16);
-							otime1[2] = (uint8_t) (otime >> 8);
-							otime1[3] = (uint8_t) (otime);
-							usb_write(otime1,4);
-
-							usb_write((uint8_t *) "Done.", 5);	
-							
+							//usb_write(read_buffer, Nbyte);
+							usb_write((uint8_t *) "Done.", 5);
 							//insert some delay, because hynix chips need this
-							T0PR=99;  //7 2 0.1 second delay
+							T0PR=799;  //7 2 0.8 second delay
 							T0TCR=2; //stop and reset time
 							T0MCR=0x20;
 							T0MR1=T0TC+30000;  //30e6,
@@ -152,9 +114,64 @@ int main(void) {
 							while ((T0TCR&1)==1)
 							{
 								WAIT;
-							}							
+							}
+						}	*/
+						
+						if (strncmp((char *)(cmd+1), "1", 1) == 0)
+						{
+							memset(write_buffer, 0xFF, mylen ); 
 						}
-						result = complete_erase(address);  //complete erase	
+						else if (strncmp((char *)(cmd+1), "2", 1) == 0)
+						{
+							memset(write_buffer, 0x00, mylen ); 
+						}
+						else
+						{
+							memset(write_buffer, 0x0F, mylen ); 
+						}
+						memset(write_buffer, 0x00, mylen );   //  *******************force it to be
+						
+						if (strncmp((char *)(cmd+2), "1", 1) == 0)
+						{
+							page=10;
+						}
+						else 
+						{
+							page=16;
+						}
+						
+						page = 10;  //  **********************force it to be
+						
+						address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+							
+						result = write(address, mylen, write_buffer);  //program the whole page
+						
+						for (page=0;page<256;page=page+1)  //256 pages
+						{						
+							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+							read(address, Nbyte, read_buffer);  //read while output
+							//be carefull whether this can change page
+							mypage=(uint8_t)page;
+							usb_write(&mypage, 1);
+							for (mm=0;mm<Nbyte;mm=mm+64)
+							{
+								usb_write((read_buffer+mm), 64);
+							}
+							//usb_write(read_buffer, Nbyte);
+							usb_write((uint8_t *) "Done.", 5);
+							//insert some delay, because hynix chips need this
+							T0PR=799;  //7 2 0.8 second delay
+							T0TCR=2; //stop and reset time
+							T0MCR=0x20;
+							T0MR1=T0TC+30000;  //30e6,
+							T0PC=0; //reset prescale counter register
+							T0TCR=1; //start the timer
+							while ((T0TCR&1)==1)
+							{
+								WAIT;
+							}
+						}						
+						//result = complete_erase(address);  //complete erase	
 					}
 				}			
 			}
