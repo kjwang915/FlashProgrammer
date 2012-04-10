@@ -80,13 +80,19 @@ int main(void) {
 					{ 
 						address=address0 | (((uint32_t) block) << 20);
 						result = complete_erase(address);  //complete erase	
+						memset(write_buffer, 0xFF, mylen ); 
+						//program all block to 0xFF, hopefully, this would eliminate all the flags
+						for (page=0;page<256;page=page+1)  //256 pages
+						{						
+							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+							result = write(address, mylen, write_buffer); 
+						}
 						
-						page=16; //higher page
+						page=16;
 						memset(write_buffer, 0x00, mylen ); 
 						address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
 						result = write(address, mylen, write_buffer); 
 						usb_write(&result, 1);
-						
 						for (page=7;page<20;page=page+1)  //256 pages
 						{						
 							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
@@ -112,7 +118,6 @@ int main(void) {
 								WAIT;
 							}
 						}
-						
 						memset(write_buffer, 0xFF, mylen ); 
 						page=16;
 						address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
