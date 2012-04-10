@@ -73,6 +73,8 @@ int main(void) {
 				//for slc_4G, it should be  26 18 12,  this is for mlc16g
 				address0 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x00) << 20) | (((uint32_t) (0x00)) << 12);  //lower page
 				address=address0;
+				
+				//if this doesn't work, the only way is to measure the program latency now. measure the standard ones first and then measure the irregular ones
 							
 				for (i=0;i<Ntimes;i++)
 				{
@@ -82,17 +84,18 @@ int main(void) {
 						result = complete_erase(address);  //complete erase	
 						memset(write_buffer, 0xFF, mylen ); 
 						//program all block to 0xFF, hopefully, this would eliminate all the flags
-						for (page=0;page<256;page=page+1)  //256 pages
-						{						
-							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
-							result = write(address, mylen, write_buffer); 
-						}
 						
 						page=16;
+						address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+						result = write(address, mylen, write_buffer); 
+						usb_write(&result, 1);
+						
+						page=10;
 						memset(write_buffer, 0x00, mylen ); 
 						address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
 						result = write(address, mylen, write_buffer); 
 						usb_write(&result, 1);
+
 						for (page=7;page<20;page=page+1)  //256 pages
 						{						
 							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
@@ -119,7 +122,7 @@ int main(void) {
 							}
 						}
 						memset(write_buffer, 0xFF, mylen ); 
-						page=16;
+						page=10;
 						address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
 						result = write(address, mylen, write_buffer); 
 						usb_write(&result, 1);
