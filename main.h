@@ -67,6 +67,7 @@
 #define WRITE_WITH_FLOP(x) FIO0CLR = P_WRITE_ENABLE;  WRITE_VALUE(x); FIO0SET = P_WRITE_ENABLE; //there are two waits at each position before
 
 // Function prototypes
+void ini_poweron();
 void insert_delay(uint32_t Nprescaler);
 void init(void);
 void read(uint32_t address, uint32_t count, uint8_t *dest);

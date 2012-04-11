@@ -50,17 +50,7 @@ int main(void) {
 	USB_Init();
 	USB_Connect(TRUE);
 	
-	//intialize the chip
-	ASSERT_CHIP_ENABLE;
-	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
-	WAIT_FOR_BUSY;
-	SET_IO_AS_OUTPUT;
-	
-	//ASSERT_CHIP_ENABLE;
-	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE | P_ADDR_LATCH;
-	FIO0SET = P_WRITE_PROTECT | P_READ_ENABLE;
-	
-    write_cmd_word(0xFF);  //the first command to initialized the chip
+	ini_poweron();
 	
 	while (1) {
 		if (usb_read_ready()) {
@@ -85,16 +75,16 @@ int main(void) {
 						memset(write_buffer, 0xFF, mylen ); 
 						//program all block to 0xFF, hopefully, this would eliminate all the flags
 						
-						page=16;
-						address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
-						result = write(address, mylen, write_buffer); 
-						usb_write(&result, 1);
 						
 						page=10;
 						memset(write_buffer, 0x00, mylen ); 
 						address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
 						result = write(address, mylen, write_buffer); 
 						usb_write(&result, 1);
+						
+						memset(write_buffer, 0xFF, mylen ); 
+						result = write(address, mylen, write_buffer); 
+						
 
 						for (page=7;page<20;page=page+1)  //256 pages
 						{						
@@ -121,11 +111,12 @@ int main(void) {
 								WAIT;
 							}
 						}
-						memset(write_buffer, 0xFF, mylen ); 
+						memset(write_buffer, 0x00, mylen ); 
 						page=10;
 						address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
 						result = write(address, mylen, write_buffer); 
 						usb_write(&result, 1);
+						ini_poweron();
 						for (page=7;page<20;page=page+1)  //256 pages
 						{						
 							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
@@ -244,6 +235,26 @@ int main(void) {
 
 	return 0;
 }
+
+void ini_poweron()
+{
+	//intialize the chip
+	ASSERT_CHIP_ENABLE;
+	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	WAIT_FOR_BUSY;
+	SET_IO_AS_OUTPUT;
+	
+	//ASSERT_CHIP_ENABLE;
+	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE | P_ADDR_LATCH;
+	FIO0SET = P_WRITE_PROTECT | P_READ_ENABLE;
+	
+    write_cmd_word(0xFF);  //the first command to initialized the chip
+	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	WAIT_FOR_BUSY;
+	DEASSERT_CHIP_ENABLE;
+}
+
+
 
 void readID(uint8_t *dest)
 {
