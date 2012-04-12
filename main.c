@@ -77,21 +77,8 @@ int main(void) {
 				usb_write(otime1, 4);  //as a marker, still debugging
 				usb_write((uint8_t *) "Done.", 5);
 				usb_write(otime1, 4);  //as a marker, still debugging
-
-				for (i=0;i<10;i++)
-				{
-					//srand ( i );
-					
-					for (j=0;j<50; j++)
-					{
-						//bit= rand() % 256;
-						//usb_write(&bit, 1);
-					}
-					usb_write((uint8_t *) "Done.", 5);
-					usb_write(otime1, 4);  //as a marker
-					usb_write((uint8_t *) "Done.", 5);
-				}
 				usb_write((uint8_t *) "Done.", 5);
+				
 				continue;
 				//if this doesn't work, the only way is to measure the program latency now. measure the standard ones first and then measure the irregular ones
 							
