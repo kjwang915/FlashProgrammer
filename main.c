@@ -36,7 +36,7 @@ uint32_t tprogram, terase;
  */
 int main(void) {
 	uint32_t otime, i;
-	uint8_t ptr, count, ptr2, mystr[4];
+	uint8_t ptr, count, ptr2, mystr[20];
 	
 	uint32_t address0, address;
 	uint8_t cmd[20];
@@ -72,17 +72,26 @@ int main(void) {
 				T1PR=99;  //prescaler, note that this changed from previous results
 				//for slc_4G, it should be  26 18 12,  this is for mlc16g
 				memset(otime1, 0x00, 4);
+				
+				for (i=0;i<20;i++)
+				{
+					mystr[i]=i;
+				}
+				for (i=0;i<64; i++)
+				{
+					obuffer[i]=i;
+				}
 
 				for (i=0;i<10;i++)
 				{
 					//srand ( i );
 					
-					if (otime1[0]!=0x00 ||otime1[1]!=0x00 || otime1[2]!=0x00 || otime1[3]!=0x00 )
+				/*	if (otime1[0]!=0x00 ||otime1[1]!=0x00 || otime1[2]!=0x00 || otime1[3]!=0x00 )
 					{
 						bit=i;
 						usb_write(&bit, 1);  //as a marker
 						break;
-					}
+					}*/
 					
 					for (j=0;j<50; j++)
 					{
@@ -93,7 +102,11 @@ int main(void) {
 					usb_write(otime1, 4);  //as a marker
 					usb_write((uint8_t *) "Done.", 5);
 				} 
+				usb_write(mystr, 20);  //as a marker
+				usb_write(obuffer, 64);  //as a marker
 				usb_write((uint8_t *) "Done.", 5);
+				
+				
 				continue;
 				//if this doesn't work, the only way is to measure the program latency now. measure the standard ones first and then measure the irregular ones
 							
