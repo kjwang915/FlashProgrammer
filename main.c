@@ -20,13 +20,15 @@
 #include "usbcomms.h"
 //#include "hiding.h"
 
-#define mylen 20096  //for hiding, use 1024 bytes, which are 8192 bits
-#define Nbyte 4096   //test 256 bytes, 1k*8=8k
+#define mylen 1024  //for hiding, use 1024 bytes, which are 8192 bits
+#define Nbyte 1024   //test 256 bytes, 1k*8=8k
+#define Nbit 8192 //Nbit=Nbyte*8
 #define Ntimes 1
-
 
 uint8_t write_buffer[mylen];
 uint8_t read_buffer[Nbyte];
+uint16_t bitrank[Nbyte][8];  //record the bit program rank
+uint8_t obuffer[64]; 
  
 uint32_t tprogram, terase;
 /**
