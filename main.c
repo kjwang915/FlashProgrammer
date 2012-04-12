@@ -60,10 +60,17 @@ int main(void) {
 				usb_write((uint8_t *) "Done.", 5);
 				T1MCR=0x00;  //stop comparing
 				T1PR=99;  //prescaler, note that this changed from previous results
-				//for slc_4G, it should be  26 18 12,  this is for mlc16g
+				//for slc_4G, it should be  26 18 12,  this is for mlc16
+				
 				address0 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x00) << 20) | (((uint32_t) (0x00)) << 12);  //lower page
 				address=address0;
 				
+				memset(otime1, 0x00, 4);
+				usb_write(otime1, 4);
+				usb_write((uint8_t *) "Done.", 5);
+				usb_write(otime1, 4);
+				usb_write((uint8_t *) "Done.", 5);
+				continue;
 				//if this doesn't work, the only way is to measure the program latency now. measure the standard ones first and then measure the irregular ones
 							
 				for (i=0;i<Ntimes;i++)
