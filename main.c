@@ -72,50 +72,7 @@ int main(void) {
 				T1PR=99;  //prescaler, note that this changed from previous results
 				//for slc_4G, it should be  26 18 12,  this is for mlc16g
 				memset(otime1, 0x00, 4);
-				usb_write(otime1, 4);  //as a marker
-					if (otime1[0]!=0x00 ||otime1[1]!=0x00 || otime1[2]!=0x00 || otime1[3]!=0x00 )
-					{
-						bit=255;
-						usb_write(&bit, 1);  //as a marker
-						break;
-					}
-				usb_write((uint8_t *) "Done.", 5);
-					if (otime1[0]!=0x00 ||otime1[1]!=0x00 || otime1[2]!=0x00 || otime1[3]!=0x00 )
-					{
-						bit=255;
-						usb_write(&bit, 1);  //as a marker
-						break;
-					}
-				usb_write(otime1, 4);  //as a marker, still debugging
-					if (otime1[0]!=0x00 ||otime1[1]!=0x00 || otime1[2]!=0x00 || otime1[3]!=0x00 )
-					{
-						bit=255;
-						usb_write(&bit, 1);  //as a marker
-						break;
-					}
-				usb_write((uint8_t *) "Done.", 5);
-					if (otime1[0]!=0x00 ||otime1[1]!=0x00 || otime1[2]!=0x00 || otime1[3]!=0x00 )
-					{
-						bit=255;
-						usb_write(&bit, 1);  //as a marker
-						break;
-					}
-				usb_write(otime1, 4);  //as a marker, still debugging
-					if (otime1[0]!=0x00 ||otime1[1]!=0x00 || otime1[2]!=0x00 || otime1[3]!=0x00 )
-					{
-						bit=255;
-						usb_write(&bit, 1);  //as a marker
-						break;
-					}
-				usb_write((uint8_t *) "Done.", 5);
-					if (otime1[0]!=0x00 ||otime1[1]!=0x00 || otime1[2]!=0x00 || otime1[3]!=0x00 )
-					{
-						bit=255;
-						usb_write(&bit, 1);  //as a marker
-						break;
-					}
-				
-				insert_delay(899);
+
 				for (i=0;i<10;i++)
 				{
 					//srand ( i );
