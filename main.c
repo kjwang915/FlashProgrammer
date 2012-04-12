@@ -35,15 +35,21 @@ uint32_t tprogram, terase;
  * Application entry point
  */
 int main(void) {
-	uint32_t otime, i, mm;
-	uint8_t ptr, count, ptr2;
+	uint32_t otime, i;
+	uint8_t ptr, count, ptr2, mystr[4];
 	
 	uint32_t address0, address;
 	uint8_t cmd[20];
-	uint8_t otime1[4], mypage;   
+	uint8_t otime1[4];   
 	uint16_t block, byte, j, nn;
-	uint16_t bit, page;  
-	
+	uint8_t bit, page;  
+	const uint16_t hbyte[64] = {5, 23, 46, 88, 94, 112, 113, 115, 121, 146, 157, 183, 
+	218, 219, 271, 281, 299, 318, 337, 352, 359, 368, 406, 412, 433, 441, 448, 497, 
+	528, 553, 553, 562, 606, 617, 643, 650, 651, 651, 656, 665, 733, 748, 754, 776, 
+	778, 792, 798, 801, 806, 807, 818, 822, 825, 842, 867, 868, 885, 902, 925, 946, 948, 978, 1001, 1003};
+	const uint8_t hbit[64]={0, 5, 2, 5, 6, 1, 1, 0, 2, 3, 3, 3, 5, 5, 2, 6, 7, 2, 2, 
+	7, 4, 4, 4, 1, 7, 2, 6, 5, 5, 0, 1, 1, 2, 4, 5, 6, 4, 6, 1, 4, 7, 7, 3, 6, 7, 2, 
+	6, 5, 4, 1, 5, 6, 1, 0, 6, 4, 5, 4, 7, 4, 6, 2, 0, 1};
 	uint8_t result;
 	
 	init();
@@ -79,7 +85,7 @@ int main(void) {
 				continue;
 				//if this doesn't work, the only way is to measure the program latency now. measure the standard ones first and then measure the irregular ones
 							
-				for (i=0;i<Ntimes;i++)
+			/*	for (i=0;i<Ntimes;i++)
 				{
 					for (block=10;block<11;block=block+2)   //34 blocks
 					{ 
@@ -183,7 +189,7 @@ int main(void) {
 							{
 								WAIT;
 							}
-						}	*/
+						}	
 						
 						if (strncmp((char *)(cmd+1), "1", 1) == 0)
 						{
@@ -241,10 +247,10 @@ int main(void) {
 						}						
 						//result = complete_erase(address);  //complete erase	
 					}
-				}			
-			}
+				}	*/		
+			} 
 		}
-	}
+	} 
 
 	return 0;
 }
