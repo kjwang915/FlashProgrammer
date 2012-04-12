@@ -20,7 +20,7 @@
 #include "usbcomms.h"
 //#include "hiding.h"
 
-#define mylen 4096  //for hiding, use 1024 bytes, which are 8192 bits
+#define mylen 20096  //for hiding, use 1024 bytes, which are 8192 bits
 #define Nbyte 4096   //test 256 bytes, 1k*8=8k
 #define Ntimes 1
 
@@ -66,6 +66,10 @@ int main(void) {
 				address=address0;
 				
 				memset(otime1, 0x00, 4);
+				usb_write(otime1, 4);
+				usb_write((uint8_t *) "Done.", 5);
+				usb_write(otime1, 4);
+				usb_write((uint8_t *) "Done.", 5);
 				usb_write(otime1, 4);
 				usb_write((uint8_t *) "Done.", 5);
 				usb_write(otime1, 4);
