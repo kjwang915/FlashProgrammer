@@ -64,23 +64,39 @@ int main(void) {
 		if (usb_read_ready()) {
 			usb_read(cmd, 4);  //cmd m start symbol, next symbol: 1 -- FF 2 00 3 0F  next symbol: 1 lower page 2 higher page
 			if (strncmp((char *)cmd, "m", 1) == 0) {
-			
-				usb_write((uint8_t *) "Done.", 5);
+							
+				mystr[0]=0x44;
+				mystr[1]=0x6F;
+				mystr[2]=0x6E;
+				mystr[3]=0x65;
+				mystr[4]=0x2E;
+				usb_write(mystr, 5);
+				insert_delay(399);
 				T1MCR=0x00;  //stop comparing
 				T1PR=99;  //prescaler, note that this changed from previous results
-				//for slc_4G, it should be  26 18 12,  this is for mlc16
-				
-				address0 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x00) << 20) | (((uint32_t) (0x00)) << 12);  //lower page
-				address=address0;
-				
+				//for slc_4G, it should be  26 18 12,  this is for mlc16g
 				memset(otime1, 0x00, 4);
-				usb_write(otime1, 4);
-				usb_write((uint8_t *) "Done.", 5);
-				usb_write(otime1, 4);
-				usb_write((uint8_t *) "Done.", 5);
-				usb_write(otime1, 4);
-				usb_write((uint8_t *) "Done.", 5);
-				usb_write(otime1, 4);
+				usb_write(otime1, 4);  //as a marker
+				insert_delay(399);
+				usb_write(mystr, 5);
+				insert_delay(399);
+				usb_write(otime1, 4);  //as a marker, still debugging
+				insert_delay(399);
+				usb_write(otime1, 4);  //as a marker, still debugging
+				insert_delay(399);
+				for (i=0;i<10;i++)
+				{
+					//srand ( i );
+					
+					for (j=0;j<50; j++)
+					{
+						//bit= rand() % 256;
+						//usb_write(&bit, 1);
+					}
+					usb_write((uint8_t *) "Done.", 5);
+					usb_write(otime1, 4);  //as a marker
+					usb_write((uint8_t *) "Done.", 5);
+				}
 				usb_write((uint8_t *) "Done.", 5);
 				continue;
 				//if this doesn't work, the only way is to measure the program latency now. measure the standard ones first and then measure the irregular ones
