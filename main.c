@@ -29,7 +29,7 @@
 #define myMsk 0x1F  //for Ngroup 32, the last 5 bits of generated random location is useful
 #define Ntimes 1
 #define strLen 53  //there are 53 letters in hMessage
-#define Npages 64  //the first Npages pages are used in a block
+#define Npages 14  //the first Npages pages are used in a block
 
 uint8_t write_buffer[mylen];
 uint8_t read_buffer[Nbyte];
@@ -55,7 +55,7 @@ int main(void) {
 	//sblock is used to store the program speed characterization for the block in 
 	//another block of flash memory (run out of microcontroller SRAM)
 	uint16_t block, byte, j, nn, count;  
-	uint8_t bit, page,  mynum, k, m, zz;  
+	uint8_t bit, page,  mynum, k, m,  stpage;  
 	
 	uint8_t result;
 	
@@ -89,40 +89,37 @@ int main(void) {
 							
 				for (i=0;i<Ntimes;i++)
 				{
-					for (block=144;block<145;block=block+1)   //2 blocks
-					{									
-						//info hiding by stress	
-						for (j=0; j<5000; j++) //1,000 pe stress now
-						{	
-							ptr=0;  //pointer for hMessage
-							address=address0 | (((uint32_t) block) << 18);
-							
-							zz=0;
-								
-							result = complete_erase(address);  //complete erase
-							//complete write selected pages
-							for (page=0;page<Npages;page=page+10)  //the first 14 pages are used to hide the info
-							{						
-								address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-								
-								//using a fixed seed, gnerate the random group assignment
-								srand (  zz+100 );  //set up the seed
-								zz=zz+1;
-								
-								//at beginning, each group has 0 bits, maximum number should be Ncount
-								memset(mycounts, 0x00, Ngroups);
-								
-								count=0;  //count the number of bits which has been assigned
-								byte=0;
-								bit=0;
-								while(count<Nbit)
-								{
-									mynum= (uint8_t) rand();
-									mynum=mynum & myMsk;  //the range of bit is 0-(Ngroups-1)
-									if (mycounts[mynum]<Ncount)  //valid generation
+					for (block=152;block<153;block=block+1)   //2 blocks
+					{	
+						//in this way, the blocks sees 5 times more erase than program
+						for (stpage=0; stpage<5; stpage++)
+						{
+							//info hiding by stress	
+							for (j=0; j<1000; j++) //1,000 pe stress now
+							{	
+								address=address0 | (((uint32_t) block) << 18);
+									
+								result = complete_erase(address);  //complete erase
+								//complete write selected pages
+								for (page=stpage;page<Npages;page=page+5)  //the first 14 pages are used to hide the info
+								{						
+									address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+									
+									//using a fixed seed, gnerate the random group assignment
+									srand (  page+100 );  //set up the seed
+									
+									//at beginning, each group has 0 bits, maximum number should be Ncount
+									memset(mycounts, 0x00, Ngroups);
+									
+									count=0;  //count the number of bits which has been assigned
+									byte=0;
+									bit=0;
+									while(count<Nbit)
 									{
+										mynum= (uint8_t) rand();
+										mynum=mynum & myMsk;  //the range of bit is 0-(Ngroups-1)
+										//here, different groups may have different number of bits
 										count=count+1;
-										mycounts[mynum]=mycounts[mynum]+1;
 										myASG[byte][bit]=mynum;  //assign the group number to this bit
 										bit=bit+1;
 										if (bit==8)
@@ -131,57 +128,56 @@ int main(void) {
 											bit=0;
 										}
 									}
-								}
-								
-								//set up the flags for the groups. If the flag is one, this group should be programmed
-								memset(myflags, 0x00, Ngroups);
-								k=0;
-								for (ptr2=ptr;ptr2<(ptr+Nletters);ptr2=ptr2+1)
-								{
-									if (ptr2==strLen)
+									
+									//set up the flags for the groups. If the flag is one, this group should be programmed
+									memset(myflags, 0x00, Ngroups);
+									k=0;
+									ptr=  page<<2; //page*4;
+									for (ptr2=ptr;ptr2<(ptr+Nletters);ptr2=ptr2+1)
 									{
-										break;
-									}
-									for (m=0;m<8;m++)
-									{
-										//note that the first 8 bit is the binary expression of the letter
-										myflags[k]=hMessage[ptr2] & (1<<(7-m));  //if the corresponding position is 1, then flag will be one
-										k++;
-									}
-								}
-								ptr=ptr2; //updata ptr
-								
-								//set up the write buffer for this page  
-								memset(write_buffer, 0xFF, mylen);
-								
-								for (byte=0; byte<Nbyte; byte++)
-								{
-									for (bit=0; bit<8; bit++)
-									{
-										if (myflags[myASG[byte][bit]])  //if this bit belongs to a group that should be programmed
+										if (ptr2==strLen)
 										{
-											write_buffer[byte] = write_buffer[byte] & ~(0x01<<bit);
+											break;
+										}
+										for (m=0;m<8;m++)
+										{
+											//note that the first 8 bit is the binary expression of the letter
+											myflags[k]=hMessage[ptr2] & (1<<(7-m));  //if the corresponding position is 1, then flag will be one
+											k++;
 										}
 									}
-								}
 									
-								//hide information by stress
-								result = write(address, mylen, write_buffer); 
-							}  //end of a page
-						}  //end of hiding by stress
-						
+									//set up the write buffer for this page  
+									memset(write_buffer, 0xFF, mylen);
+									
+									for (byte=0; byte<Nbyte; byte++)
+									{
+										for (bit=0; bit<8; bit++)
+										{
+											if (myflags[myASG[byte][bit]])  //if this bit belongs to a group that should be programmed
+											{
+												write_buffer[byte] = write_buffer[byte] & ~(0x01<<bit);
+											}
+										}
+									}
+										
+									//hide information by stress
+									result = write(address, mylen, write_buffer); 
+								}  //end of a page
+							}  //end of hiding by stress
+						}
 						
 						//characterization part
 						result = complete_erase(address);  //complete erase
 						memset(write_buffer, 0x00, mylen ); 
 						//complete write all of the block, prevent over erase attack
-						for (page=0;page<Npages;page=page+10)  //64 pages
+						for (page=0;page<Npages;page=page+1)  //64 pages
 						{						
 							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
 							result = write(address, mylen, write_buffer); 
 						}
 						result = complete_erase(address);  //complete erase
-						for (page=0;page<Npages;page=page+10)  //64 pages
+						for (page=0;page<Npages;page=page+1)  //64 pages
 						{						
 							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
 							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
