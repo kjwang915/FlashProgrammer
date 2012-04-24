@@ -30,12 +30,12 @@ uint32_t tprogram, terase;
  * Application entry point
  */
 int main(void) {
-	uint32_t i, ii, otime;
-	uint32_t address, address1, address2, address3, address10;
+	uint32_t i, ii;
+	uint32_t address, address0;
 	uint8_t cmd[20];
 	uint8_t otime1[4];   //te is used to print out the actual erase time
-	uint8_t cc, cccpy;  //dt is the increment or decrement of the erase time
-	uint8_t j, k;  //remember the largest value of j and k is 255, be careful
+	//uint8_t j, k;  //remember the largest value of j and k is 255, be careful
+	uint16_t block, page;
 	
 	uint8_t result;
 	
@@ -65,66 +65,57 @@ int main(void) {
 			if (strncmp((char *)cmd, "m", 1) == 0) {
 			
 				usb_write((uint8_t *) "Done.", 5);
-				//for slc_4G, it should be  26 18 12,  this is for mlc16g
-				address = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x11) << 20) | (((uint32_t) (0x03)) << 12);  //lower page
-				address1 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x11) << 20) | (((uint32_t) (0x09)) << 12);  //higher page
-				
-				address2 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x11) << 20) | (((uint32_t) (0x0a)) << 12);  //lower page
-				address3 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x11) << 20) | (((uint32_t) (0x10)) << 12);  //higher page
-				
-				address10 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x12) << 20) | (((uint32_t) (0x20)) << 12);  //higher page
-				
-				result = complete_erase(address);  //complete erase
-				
-				memset(write_buffer, 0xFF, mylen);
-				result = write(address1, Nbyte, write_buffer);  //write higher page
-
-				memset(write_buffer, 0x00, mylen );
-				result = write(address, Nbyte, write_buffer);  //write the lower page, this page will remain at 0xFF
-				read(address1, Nbyte, read_buffer);  //read	higher page
-				
-				// write the data instead of disturb
-				result = complete_erase(address);  //complete erase
-				
-				memset(write_buffer, 0xFF, mylen);
-				result = write(address, Nbyte, write_buffer);  //write lower page
-				
-				memcpy(write_buffer, read_buffer, Nbyte ); //copy the higher page content to the write buffer
-				result = write(address1, Nbyte, write_buffer);  //write lower page
-				
-				read(address, Nbyte, read_buffer);  //read	higher page
-				for (ii=0;ii<2048;ii=ii+64)   //output
-					usb_write(read_buffer+ii, 64);
-				usb_write((uint8_t *)"Done.", 5); 
-				//wait for the usb transmission to finish
-				insert_delay(99);
-				
-				read(address1, Nbyte, read_buffer);  //read	higher page
-				for (ii=0;ii<2048;ii=ii+64)   //output
-					usb_write(read_buffer+ii, 64);
-				usb_write((uint8_t *)"Done.", 5); 
-				//wait for the usb transmission to finish
-				insert_delay(99);
-				
-				//write again and verify
-				memset(write_buffer, 0x00, mylen );
-				result = write(address, Nbyte, write_buffer);  //write the lower page again
-				
-				read(address, Nbyte, read_buffer);  //read	higher page
-				for (ii=0;ii<2048;ii=ii+64)   //output
-					usb_write(read_buffer+ii, 64);
-				usb_write((uint8_t *)"Done.", 5); 
-				//wait for the usb transmission to finish
-				insert_delay(99);
-				
-				read(address1, Nbyte, read_buffer);  //read	higher page
-				for (ii=0;ii<2048;ii=ii+64)   //output
-					usb_write(read_buffer+ii, 64);
-				usb_write((uint8_t *)"Done.", 5); 
-				//wait for the usb transmission to finish
-				insert_delay(99);
-				
-				
+				address0 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x00) << 20) | (((uint32_t) (0x00)) << 12);  //lower page
+				address=address0;
+							
+					for (block=12;block<13;block=block+2)   //
+					{ 
+						address=address0 | (((uint32_t) block) << 20);
+						result = complete_erase(address);  //complete erase	
+						memset(write_buffer, 0xF0, mylen ); 
+						//program all block to 0xFF, hopefully, this would eliminate all the flags
+						for (page=0;page<256;page=page+1)  //256 pages
+						{						
+							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+							result = write(address, mylen, write_buffer, otime1); 
+							usb_write(otime1, 4);
+							insert_delay(99);
+						}
+						
+						//read the whole block
+						for (page=0;page<256;page=page+1)  //256 pages
+						{						
+							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+							read(address, Nbyte, read_buffer);  //read	higher page
+							for (ii=0;ii<Nbyte;ii=ii+64)   //output
+								usb_write(read_buffer+ii, 64);
+							usb_write((uint8_t *)"Done.", 5); 
+							//wait for the usb transmission to finish
+							insert_delay(199);
+						}
+						
+						//write different values
+						memset(write_buffer, 0x00, mylen ); 
+						for (page=0;page<256;page=page+1)  //256 pages
+						{						
+							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+							result = write(address, mylen, write_buffer, otime1); 
+							usb_write(otime1, 4);
+							insert_delay(99);
+						}
+						
+						//read the whole block again
+						for (page=0;page<256;page=page+1)  //256 pages
+						{						
+							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+							read(address, Nbyte, read_buffer);  //read	higher page
+							for (ii=0;ii<Nbyte;ii=ii+64)   //output
+								usb_write(read_buffer+ii, 64);
+							usb_write((uint8_t *)"Done.", 5); 
+							//wait for the usb transmission to finish
+							insert_delay(199);
+						}
+					}
 			}
 		}
 	}
