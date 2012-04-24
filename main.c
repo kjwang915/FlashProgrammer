@@ -428,8 +428,13 @@ uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 /**
  * Sequentially programs some number of bytes starting at a given address.
  */
-uint8_t write(uint32_t address, uint32_t count, const uint8_t *src) {
-	uint32_t i, result;
+uint8_t write(uint32_t address, uint32_t count, const uint8_t *src, uint8_t *otime1) {
+	uint32_t i, result, otime;
+	
+	//set up timer 0 to moniter the program time latency
+	T0MCR=0x00;  //stop comparing
+	T0PR=0;  //prescaler
+	T0TCR=2; //stop and reset time
 
 	// Activate the chip
 	ASSERT_CHIP_ENABLE;
@@ -455,12 +460,24 @@ uint8_t write(uint32_t address, uint32_t count, const uint8_t *src) {
 
 	// Now send out the final command to begin programming
 	write_cmd_word(CMD_PAGE_PROGRAM_2);
+	
+	T0TCR=1; //start the timer
 
 	// Just to be safe go back to input mode
 	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	
+	
 
 	// Wait for programming to finish
 	WAIT_FOR_BUSY;
+	
+	otime=T0TC;
+	T0TCR=2; //stop and reset time
+	otime1[0] = (uint8_t) (otime >> 24);  //time used
+	otime1[1] = (uint8_t) (otime >> 16);
+	otime1[2] = (uint8_t) (otime >> 8);
+	otime1[3] = (uint8_t) (otime);
+	
 	DEASSERT_CHIP_ENABLE; 
 	reset_io();
 
