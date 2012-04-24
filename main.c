@@ -31,7 +31,7 @@ uint32_t tprogram, terase;
  */
 int main(void) {
 	uint32_t i, ii, otime;
-	uint32_t address, address1, address2, address3;
+	uint32_t address, address1, address2, address3, address10;
 	uint8_t cmd[20];
 	uint8_t otime1[4];   //te is used to print out the actual erase time
 	uint8_t cc, cccpy;  //dt is the increment or decrement of the erase time
@@ -72,6 +72,8 @@ int main(void) {
 				address2 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x11) << 20) | (((uint32_t) (0x0a)) << 12);  //lower page
 				address3 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x11) << 20) | (((uint32_t) (0x10)) << 12);  //higher page
 				
+				address10 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x12) << 20) | (((uint32_t) (0x20)) << 12);  //higher page
+				
 				result = complete_erase(address);  //complete erase
 				
 				memset(write_buffer, 0xFF, mylen);
@@ -97,6 +99,12 @@ int main(void) {
 				usb_write((uint8_t *)"Done.", 5); 
 				//wait for the usb transmission to finish
 				insert_delay(99);
+				
+				//  **********insert another
+				memset(write_buffer, 0x0F, mylen );
+				result = write(address10, Nbyte, write_buffer);  //write
+				read(address10, Nbyte, read_buffer);  
+				//  ************end of insert another
 				
 				memset(write_buffer, 0x00, mylen );
 				result = write(address, Nbyte, write_buffer);  //write
