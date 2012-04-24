@@ -77,22 +77,28 @@ int main(void) {
 				result = complete_erase(address);  //complete erase
 				
 				memset(write_buffer, 0xFF, mylen);
-				result = write(address1, Nbyte, write_buffer);  //write
-				read(address1, Nbyte, read_buffer);  //read	
-				for (ii=0;ii<2048;ii=ii+64)   //output
-					usb_write(read_buffer+ii, 64);
-				usb_write((uint8_t *)"Done.", 5); 
-				//wait for the usb transmission to finish
-				insert_delay(99);	
+				result = write(address1, Nbyte, write_buffer);  //write higher page
 
 				memset(write_buffer, 0x00, mylen );
-				result = write(address, Nbyte, write_buffer);  //write
-				read(address, Nbyte, read_buffer);  //read lower page
+				result = write(address, Nbyte, write_buffer);  //write the lower page, this page will remain at 0xFF
+				read(address1, Nbyte, read_buffer);  //read	higher page
+				
+				// write the data instead of disturb
+				result = complete_erase(address);  //complete erase
+				
+				memset(write_buffer, 0xFF, mylen);
+				result = write(address, Nbyte, write_buffer);  //write lower page
+				
+				memcpy(write_buffer, read_buffer, Nbyte ); //copy the higher page content to the write buffer
+				result = write(address1, Nbyte, write_buffer);  //write lower page
+				
+				read(address, Nbyte, read_buffer);  //read	higher page
 				for (ii=0;ii<2048;ii=ii+64)   //output
 					usb_write(read_buffer+ii, 64);
 				usb_write((uint8_t *)"Done.", 5); 
 				//wait for the usb transmission to finish
 				insert_delay(99);
+				
 				read(address1, Nbyte, read_buffer);  //read	higher page
 				for (ii=0;ii<2048;ii=ii+64)   //output
 					usb_write(read_buffer+ii, 64);
@@ -100,20 +106,17 @@ int main(void) {
 				//wait for the usb transmission to finish
 				insert_delay(99);
 				
-				//  **********insert another
-				memset(write_buffer, 0x0F, mylen );
-				result = write(address10, Nbyte, write_buffer);  //write
-				read(address10, Nbyte, read_buffer);  
-				//  ************end of insert another
-				
+				//write again and verify
 				memset(write_buffer, 0x00, mylen );
-				result = write(address, Nbyte, write_buffer);  //write
-				read(address, Nbyte, read_buffer);  //read lower page	
+				result = write(address, Nbyte, write_buffer);  //write the lower page again
+				
+				read(address, Nbyte, read_buffer);  //read	higher page
 				for (ii=0;ii<2048;ii=ii+64)   //output
 					usb_write(read_buffer+ii, 64);
 				usb_write((uint8_t *)"Done.", 5); 
 				//wait for the usb transmission to finish
 				insert_delay(99);
+				
 				read(address1, Nbyte, read_buffer);  //read	higher page
 				for (ii=0;ii<2048;ii=ii+64)   //output
 					usb_write(read_buffer+ii, 64);
@@ -121,44 +124,7 @@ int main(void) {
 				//wait for the usb transmission to finish
 				insert_delay(99);
 				
-				memset(write_buffer, 0xFF, mylen );
-				result = write(address3, Nbyte, write_buffer);  //write
-				read(address3, Nbyte, read_buffer);  //read	
-				for (ii=0;ii<2048;ii=ii+64)   //output
-					usb_write(read_buffer+ii, 64);
-				usb_write((uint8_t *)"Done.", 5); 
-				//wait for the usb transmission to finish
-				insert_delay(99);
-
-				memset(write_buffer, 0x00, mylen );
-				result = write(address2, Nbyte, write_buffer);  //write
-				read(address2, Nbyte, read_buffer);  //read	lower page
-				memcpy(write_buffer, read_buffer, Nbyte ); //void * memcpy ( void * destination, const void * source, size_t num );
-				for (ii=0;ii<2048;ii=ii+64)   //output
-					usb_write(read_buffer+ii, 64);
-				usb_write((uint8_t *)"Done.", 5); 
-				//wait for the usb transmission to finish
-				insert_delay(99);
-				read(address3, Nbyte, read_buffer);  //read	higher page
-				for (ii=0;ii<2048;ii=ii+64)   //output
-					usb_write(read_buffer+ii, 64);
-				usb_write((uint8_t *)"Done.", 5); 
-				//wait for the usb transmission to finish
-				insert_delay(99);
 				
-				result = write(address2, Nbyte, write_buffer);  //write
-				read(address2, Nbyte, read_buffer);  //read	
-				for (ii=0;ii<2048;ii=ii+64)   //output
-					usb_write(read_buffer+ii, 64);
-				usb_write((uint8_t *)"Done.", 5); 							
-				//wait for the usb transmission to finish
-				insert_delay(99);
-				read(address3, Nbyte, read_buffer);  //read	higher page
-				for (ii=0;ii<2048;ii=ii+64)   //output
-					usb_write(read_buffer+ii, 64);
-				usb_write((uint8_t *)"Done.", 5); 
-				//wait for the usb transmission to finish
-				insert_delay(99);
 			}
 		}
 	}
