@@ -18,44 +18,24 @@
 #include "uart.h"
 #include "usbdesc.h"
 #include "usbcomms.h"
+//#include "hiding.h"
 
-#define mylen 512  //write for hiding, use 512 bytes, which are 512 bits
-#define Nbyte 512  //read 512 bytes
-#define Nbit 4096 //Nbit=Nbyte*8
-#define myLog2 12  //2^12=4096
-#define Ncount 128  //assign 128 bits to a group
-#define Ngroups 32  //Number of groups Nbit bits are divided into
-#define Nletters 4  //each letter is 8 bits, so Ngroup/8=4 letters
-#define myMsk 0x1F  //for Ngroup 32, the last 5 bits of generated random location is useful
-#define Ntimes 1
-#define strLen 53  //there are 53 letters in hMessage
-#define Npages 14  //the first Npages pages are used in a block
+#define mylen 2048  //one page has 2048 bytes
+#define Nbyte 2048   //test 20 bytes
 
 uint8_t write_buffer[mylen];
 uint8_t read_buffer[Nbyte];
-uint16_t bitrank[Nbyte][8];  //record the bit program rank
-uint8_t obuffer[64];  //output buffer
-uint8_t myASG[Nbyte][8];  //group assignment for each bit
-uint8_t myflags[Ngroups];
-uint8_t mycounts[Ngroups];  //counts how many bits are in this group now
 uint32_t tprogram, terase;
-//now, one 512 bytes can hide 32 bits which are four letters
-//then this message need ceil(53/4) 14 pages, just for testing
-const uint8_t hMessage[]="Hello World! ni hao, shi jie! Cornell University, ECE";
 /**
  * Application entry point
  */
 int main(void) {
-	uint32_t otime, i;
-	uint8_t ptr,  ptr2;
-	
-	uint32_t address0, address;
+	uint32_t i, ii, otime;
+	uint32_t address, address1, address2, address3;
 	uint8_t cmd[20];
-	uint8_t otime1[4]; 
-	//sblock is used to store the program speed characterization for the block in 
-	//another block of flash memory (run out of microcontroller SRAM)
-	uint16_t block, byte, j, nn, count;  
-	uint8_t bit, page,  mynum, k, m,  stpage;  
+	uint8_t otime1[4];   //te is used to print out the actual erase time
+	uint8_t cc, cccpy;  //dt is the increment or decrement of the erase time
+	uint8_t j, k;  //remember the largest value of j and k is 255, be careful
 	
 	uint8_t result;
 	
@@ -65,9 +45,11 @@ int main(void) {
 	USB_Init();
 	USB_Connect(TRUE);
 	
+	memset(write_buffer, 0x00, mylen * sizeof(uint8_t));    //0b11101110   there are three good bits between two bad bits
+	
 	//intialize the chip
 	ASSERT_CHIP_ENABLE;
-	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	SET_IO_AS_INPUT; 
 	WAIT_FOR_BUSY;
 	SET_IO_AS_OUTPUT;
 	
@@ -83,163 +65,93 @@ int main(void) {
 			if (strncmp((char *)cmd, "m", 1) == 0) {
 			
 				usb_write((uint8_t *) "Done.", 5);
+				//for slc_4G, it should be  26 18 12,  this is for mlc16g
+				address = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x11) << 20) | (((uint32_t) (0x03)) << 12);  //lower page
+				address1 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x11) << 20) | (((uint32_t) (0x09)) << 12);  //higher page
 				
-				address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12);  //lower page
-				address=address0;
-							
-				for (i=0;i<Ntimes;i++)
-				{
-					for (block=152;block<153;block=block+1)   //2 blocks
-					{	
-						//in this way, the blocks sees 5 times more erase than program
-						for (stpage=0; stpage<5; stpage++)
-						{
-							//info hiding by stress	
-							for (j=0; j<1000; j++) //1,000 pe stress now
-							{	
-								address=address0 | (((uint32_t) block) << 18);
-									
-								result = complete_erase(address);  //complete erase
-								//complete write selected pages
-								for (page=stpage;page<Npages;page=page+5)  //the first 14 pages are used to hide the info
-								{						
-									address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-									
-									//using a fixed seed, gnerate the random group assignment
-									srand (  page+100 );  //set up the seed
-									
-									//at beginning, each group has 0 bits, maximum number should be Ncount
-									memset(mycounts, 0x00, Ngroups);
-									
-									count=0;  //count the number of bits which has been assigned
-									byte=0;
-									bit=0;
-									while(count<Nbit)
-									{
-										mynum= (uint8_t) rand();
-										mynum=mynum & myMsk;  //the range of bit is 0-(Ngroups-1)
-										//here, different groups may have different number of bits
-										count=count+1;
-										myASG[byte][bit]=mynum;  //assign the group number to this bit
-										bit=bit+1;
-										if (bit==8)
-										{
-											byte=byte+1;
-											bit=0;
-										}
-									}
-									
-									//set up the flags for the groups. If the flag is one, this group should be programmed
-									memset(myflags, 0x00, Ngroups);
-									k=0;
-									ptr=  page<<2; //page*4;
-									for (ptr2=ptr;ptr2<(ptr+Nletters);ptr2=ptr2+1)
-									{
-										if (ptr2==strLen)
-										{
-											break;
-										}
-										for (m=0;m<8;m++)
-										{
-											//note that the first 8 bit is the binary expression of the letter
-											myflags[k]=hMessage[ptr2] & (1<<(7-m));  //if the corresponding position is 1, then flag will be one
-											k++;
-										}
-									}
-									
-									//set up the write buffer for this page  
-									memset(write_buffer, 0xFF, mylen);
-									
-									for (byte=0; byte<Nbyte; byte++)
-									{
-										for (bit=0; bit<8; bit++)
-										{
-											if (myflags[myASG[byte][bit]])  //if this bit belongs to a group that should be programmed
-											{
-												write_buffer[byte] = write_buffer[byte] & ~(0x01<<bit);
-											}
-										}
-									}
-										
-									//hide information by stress
-									result = write(address, mylen, write_buffer); 
-								}  //end of a page
-							}  //end of hiding by stress
-						}
-						
-						//characterization part
-						result = complete_erase(address);  //complete erase
-						memset(write_buffer, 0x00, mylen ); 
-						//complete write all of the block, prevent over erase attack
-						for (page=0;page<Npages;page=page+1)  //64 pages
-						{						
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							result = write(address, mylen, write_buffer); 
-						}
-						result = complete_erase(address);  //complete erase
-						for (page=0;page<Npages;page=page+1)  //64 pages
-						{						
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
-							
-							
-							T1TCR=2; //stop and reset time				
-							T1TCR=1; //start the timer
+				address2 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x11) << 20) | (((uint32_t) (0x0a)) << 12);  //lower page
+				address3 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x11) << 20) | (((uint32_t) (0x10)) << 12);  //higher page
 				
-							tprogram=800;   //to be determined  810
-							for (nn=0;nn<800;nn++)
-							{
-								result = incomplete_write(address, mylen, write_buffer);  //program the whole page
-											
-								read(address, Nbyte, read_buffer);  //read while output
-																
-								for (byte=0; byte<Nbyte; byte++)
-								{
-									for (bit=0; bit<8; bit++)
-									{
-										
-										if ( (bitrank[byte][bit]==0x0000) && ((read_buffer[byte] & (0x01<<bit))==0x00))
-										{
-											bitrank[byte][bit]=nn+1;  //this should be nn+1
-										}
-									}
-								}	
-							}
+				result = complete_erase(address);  //complete erase
+				
+				memset(write_buffer, 0xFF, mylen);
+				result = write(address1, Nbyte, write_buffer);  //write
+				read(address1, Nbyte, read_buffer);  //read	
+				for (ii=0;ii<2048;ii=ii+64)   //output
+					usb_write(read_buffer+ii, 64);
+				usb_write((uint8_t *)"Done.", 5); 
+				//wait for the usb transmission to finish
+				insert_delay(99);	
 
-							otime=T1TC;
-							T1TCR=2; //stop and reset time
-							
-							count=0;
-							for (byte=0; byte<Nbyte; byte++)
-							{
-								for (bit=0; bit<8; bit++)
-								{
-									obuffer[count]=(uint8_t) (bitrank[byte][bit]>>8);
-									count++;
-									obuffer[count]=(uint8_t) (bitrank[byte][bit]);
-									count++;
-								}
-								if (count==64)
-								{
-									count=0;
-									usb_write(obuffer,64);
-								}
-							}
-							otime1[0] = (uint8_t) (otime >> 24);  //time used
-							otime1[1] = (uint8_t) (otime >> 16);
-							otime1[2] = (uint8_t) (otime >> 8);
-							otime1[3] = (uint8_t) (otime);
-							usb_write(otime1,4);
+				memset(write_buffer, 0x00, mylen );
+				result = write(address, Nbyte, write_buffer);  //write
+				read(address, Nbyte, read_buffer);  //read lower page
+				for (ii=0;ii<2048;ii=ii+64)   //output
+					usb_write(read_buffer+ii, 64);
+				usb_write((uint8_t *)"Done.", 5); 
+				//wait for the usb transmission to finish
+				insert_delay(99);
+				read(address1, Nbyte, read_buffer);  //read	higher page
+				for (ii=0;ii<2048;ii=ii+64)   //output
+					usb_write(read_buffer+ii, 64);
+				usb_write((uint8_t *)"Done.", 5); 
+				//wait for the usb transmission to finish
+				insert_delay(99);
+				
+				memset(write_buffer, 0x00, mylen );
+				result = write(address, Nbyte, write_buffer);  //write
+				read(address, Nbyte, read_buffer);  //read lower page	
+				for (ii=0;ii<2048;ii=ii+64)   //output
+					usb_write(read_buffer+ii, 64);
+				usb_write((uint8_t *)"Done.", 5); 
+				//wait for the usb transmission to finish
+				insert_delay(99);
+				read(address1, Nbyte, read_buffer);  //read	higher page
+				for (ii=0;ii<2048;ii=ii+64)   //output
+					usb_write(read_buffer+ii, 64);
+				usb_write((uint8_t *)"Done.", 5); 
+				//wait for the usb transmission to finish
+				insert_delay(99);
+				
+				memset(write_buffer, 0xFF, mylen );
+				result = write(address3, Nbyte, write_buffer);  //write
+				read(address3, Nbyte, read_buffer);  //read	
+				for (ii=0;ii<2048;ii=ii+64)   //output
+					usb_write(read_buffer+ii, 64);
+				usb_write((uint8_t *)"Done.", 5); 
+				//wait for the usb transmission to finish
+				insert_delay(99);
 
-							usb_write((uint8_t *) "Done.", 5);	
-							
-							//insert some delay, because hynix chips need this
-							insert_delay(99);				
-						}  //end of characterization
-						result = complete_erase(address);  //complete erase	
-					}  //end of Nblocks
-				} //end of Ntimes		
-			}  //end of if strcomp
+				memset(write_buffer, 0x00, mylen );
+				result = write(address2, Nbyte, write_buffer);  //write
+				read(address2, Nbyte, read_buffer);  //read	lower page
+				memcpy(write_buffer, read_buffer, Nbyte ); //void * memcpy ( void * destination, const void * source, size_t num );
+				for (ii=0;ii<2048;ii=ii+64)   //output
+					usb_write(read_buffer+ii, 64);
+				usb_write((uint8_t *)"Done.", 5); 
+				//wait for the usb transmission to finish
+				insert_delay(99);
+				read(address3, Nbyte, read_buffer);  //read	higher page
+				for (ii=0;ii<2048;ii=ii+64)   //output
+					usb_write(read_buffer+ii, 64);
+				usb_write((uint8_t *)"Done.", 5); 
+				//wait for the usb transmission to finish
+				insert_delay(99);
+				
+				result = write(address2, Nbyte, write_buffer);  //write
+				read(address2, Nbyte, read_buffer);  //read	
+				for (ii=0;ii<2048;ii=ii+64)   //output
+					usb_write(read_buffer+ii, 64);
+				usb_write((uint8_t *)"Done.", 5); 							
+				//wait for the usb transmission to finish
+				insert_delay(99);
+				read(address3, Nbyte, read_buffer);  //read	higher page
+				for (ii=0;ii<2048;ii=ii+64)   //output
+					usb_write(read_buffer+ii, 64);
+				usb_write((uint8_t *)"Done.", 5); 
+				//wait for the usb transmission to finish
+				insert_delay(99);
+			}
 		}
 	}
 
