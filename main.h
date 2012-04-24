@@ -74,7 +74,7 @@ void read(uint32_t address, uint32_t count, uint8_t *dest);
 uint8_t read_status(void);
 void read_electronic_signature(uint8_t *dest);
 uint8_t erase(uint32_t address);
-uint8_t write(uint32_t address, uint32_t count, const uint8_t *src);
+uint8_t write(uint32_t address, uint32_t count, const uint8_t *src, uint8_t *otime1);
 void write_cmd_word(uint8_t cmd);
 void write_address(uint32_t address, uint8_t doErase);
 void reset_io(void);
