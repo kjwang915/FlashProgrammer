@@ -94,8 +94,8 @@ int main(void) {
 							insert_delay(199);
 						}
 						
-						//write different values
-						memset(write_buffer, 0x00, mylen ); 
+						//write the same values
+						//memset(write_buffer, 0x00, mylen ); 
 						for (page=0;page<256;page=page+1)  //256 pages
 						{						
 							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
