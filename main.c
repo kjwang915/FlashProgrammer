@@ -18,24 +18,44 @@
 #include "uart.h"
 #include "usbdesc.h"
 #include "usbcomms.h"
-//#include "hiding.h"
 
-#define mylen 2048  //one page has 2048 bytes
-#define Nbyte 2048   //test 20 bytes
+#define mylen 512  //write for hiding, use 512 bytes, which are 512 bits
+#define Nbyte 512  //read 512 bytes
+#define Nbit 4096 //Nbit=Nbyte*8
+#define myLog2 12  //2^12=4096
+#define Ncount 128  //assign 128 bits to a group
+#define Ngroups 32  //Number of groups Nbit bits are divided into
+#define Nletters 4  //each letter is 8 bits, so Ngroup/8=4 letters
+#define myMsk 0x1F  //for Ngroup 32, the last 5 bits of generated random location is useful
+#define Ntimes 10
+#define strLen 53  //there are 53 letters in hMessage
+#define Npages 14  //the first Npages pages are used in a block
 
 uint8_t write_buffer[mylen];
 uint8_t read_buffer[Nbyte];
+uint16_t bitrank[Nbyte][8];  //record the bit program rank
+uint8_t obuffer[64];  //output buffer
+uint8_t myASG[Nbyte][8];  //group assignment for each bit
+uint8_t myflags[Ngroups];
+uint8_t mycounts[Ngroups];  //counts how many bits are in this group now
 uint32_t tprogram, terase;
+//now, one 512 bytes can hide 32 bits which are four letters
+//then this message need ceil(53/4) 14 pages, just for testing
+const uint8_t hMessage[]="Hello World! ni hao, shi jie! Cornell University, ECE";
 /**
  * Application entry point
  */
 int main(void) {
-	uint32_t i, ii;
-	uint32_t address, address0;
+	uint32_t otime, i;
+	uint8_t ptr,  ptr2;
+	
+	uint32_t address0, address;
 	uint8_t cmd[20];
-	uint8_t otime1[4];   //te is used to print out the actual erase time
-	//uint8_t j, k;  //remember the largest value of j and k is 255, be careful
-	uint16_t block, page;
+	uint8_t otime1[4]; 
+	//sblock is used to store the program speed characterization for the block in 
+	//another block of flash memory (run out of microcontroller SRAM)
+	uint16_t block, byte, j, nn, count;  
+	uint8_t bit, page,  mynum, k, m,  stpage;  
 	
 	uint8_t result;
 	
@@ -45,11 +65,9 @@ int main(void) {
 	USB_Init();
 	USB_Connect(TRUE);
 	
-	memset(write_buffer, 0x00, mylen * sizeof(uint8_t));    //0b11101110   there are three good bits between two bad bits
-	
 	//intialize the chip
 	ASSERT_CHIP_ENABLE;
-	SET_IO_AS_INPUT; 
+	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
 	WAIT_FOR_BUSY;
 	SET_IO_AS_OUTPUT;
 	
@@ -65,58 +83,259 @@ int main(void) {
 			if (strncmp((char *)cmd, "m", 1) == 0) {
 			
 				usb_write((uint8_t *) "Done.", 5);
-				address0 = (((uint32_t) 0x00) << 28) | (((uint32_t) 0x00) << 20) | (((uint32_t) (0x00)) << 12);  //lower page
+				
+				address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12);  //lower page
 				address=address0;
 							
-					for (block=12;block<13;block=block+2)   //
-					{ 
-						address=address0 | (((uint32_t) block) << 20);
-						result = complete_erase(address);  //complete erase	
-						memset(write_buffer, 0xF0, mylen ); 
-						//program all block to 0xFF, hopefully, this would eliminate all the flags
-						for (page=0;page<256;page=page+1)  //256 pages
+				for (block=160;block<161;block=block+1)   //2 blocks
+				{
+					for (i=0;i<Ntimes;i++)
+					{
+						//characterization part
+						address=address0 | (((uint32_t) block) << 18);
+						result = complete_erase(address);  //complete erase
+						memset(write_buffer, 0x00, mylen ); 
+						//complete write all of the block, prevent over erase attack
+						for (page=7;page<8;page=page+1)  //page 7
 						{						
-							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
-							result = write(address, mylen, write_buffer, otime1); 
-							usb_write(otime1, 4);
-							insert_delay(99);
+							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+							result = write(address, mylen, write_buffer); 
 						}
-						
-						//read the whole block
-						for (page=0;page<256;page=page+1)  //256 pages
+						result = complete_erase(address);  //complete erase
+						for (page=7;page<8;page=page+1)  //page 7
 						{						
-							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
-							read(address, Nbyte, read_buffer);  //read	higher page
-							for (ii=0;ii<Nbyte;ii=ii+64)   //output
-								usb_write(read_buffer+ii, 64);
-							usb_write((uint8_t *)"Done.", 5); 
-							//wait for the usb transmission to finish
-							insert_delay(199);
-						}
-						
-						//write the same values
-						//memset(write_buffer, 0x00, mylen ); 
-						for (page=0;page<256;page=page+1)  //256 pages
-						{						
-							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
-							result = write(address, mylen, write_buffer, otime1); 
-							usb_write(otime1, 4);
-							insert_delay(99);
-						}
-						
-						//read the whole block again
-						for (page=0;page<256;page=page+1)  //256 pages
-						{						
-							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
-							read(address, Nbyte, read_buffer);  //read	higher page
-							for (ii=0;ii<Nbyte;ii=ii+64)   //output
-								usb_write(read_buffer+ii, 64);
-							usb_write((uint8_t *)"Done.", 5); 
-							//wait for the usb transmission to finish
-							insert_delay(199);
-						}
+							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
+							
+							
+							T1TCR=2; //stop and reset time				
+							T1TCR=1; //start the timer
+				
+							tprogram=800;   //to be determined  810
+							for (nn=0;nn<800;nn++)
+							{
+								result = incomplete_write(address, mylen, write_buffer);  //program the whole page
+											
+								read(address, Nbyte, read_buffer);  //read while output
+																
+								for (byte=0; byte<Nbyte; byte++)
+								{
+									for (bit=0; bit<8; bit++)
+									{
+										
+										if ( (bitrank[byte][bit]==0x0000) && ((read_buffer[byte] & (0x01<<bit))==0x00))
+										{
+											bitrank[byte][bit]=nn+1;  //this should be nn+1
+										}
+									}
+								}	
+							}
+
+							otime=T1TC;
+							T1TCR=2; //stop and reset time
+							
+							count=0;
+							for (byte=0; byte<Nbyte; byte++)
+							{
+								for (bit=0; bit<8; bit++)
+								{
+									obuffer[count]=(uint8_t) (bitrank[byte][bit]>>8);
+									count++;
+									obuffer[count]=(uint8_t) (bitrank[byte][bit]);
+									count++;
+								}
+								if (count==64)
+								{
+									count=0;
+									usb_write(obuffer,64);
+								}
+							}
+							otime1[0] = (uint8_t) (otime >> 24);  //time used
+							otime1[1] = (uint8_t) (otime >> 16);
+							otime1[2] = (uint8_t) (otime >> 8);
+							otime1[3] = (uint8_t) (otime);
+							usb_write(otime1,4);
+
+							usb_write((uint8_t *) "Done.", 5);	
+							
+							//insert some delay, because hynix chips need this
+							insert_delay(99);	
+						}  //end of page
+					} //end of Ntimes characterization
+					
+					//now the stressing part
+					memset(write_buffer, 0xFF, mylen);
+					for (j=100; j<120; j++)  //program 20 bytes
+					{
+						write_buffer[j]=0x00;
 					}
-			}
+					address=address0 | (((uint32_t) block) << 18) | (((uint32_t) 0x07) << 12);
+					for (j=0;j<10000;j++)
+					{
+						result = complete_erase(address);  //complete erase
+						result = write(address, mylen, write_buffer); 
+					}
+					
+					//second characterization
+					for (i=0;i<Ntimes;i++)
+					{					
+						//characterization part
+						address=address0 | (((uint32_t) block) << 18);
+						result = complete_erase(address);  //complete erase
+						memset(write_buffer, 0x00, mylen ); 
+						//complete write all of the block, prevent over erase attack
+						for (page=7;page<8;page=page+1)  //page 7
+						{						
+							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+							result = write(address, mylen, write_buffer); 
+						}
+						result = complete_erase(address);  //complete erase
+						for (page=7;page<8;page=page+1)  //page 7
+						{						
+							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
+							
+							
+							T1TCR=2; //stop and reset time				
+							T1TCR=1; //start the timer
+				
+							tprogram=800;   //to be determined  810
+							for (nn=0;nn<800;nn++)
+							{
+								result = incomplete_write(address, mylen, write_buffer);  //program the whole page
+											
+								read(address, Nbyte, read_buffer);  //read while output
+																
+								for (byte=0; byte<Nbyte; byte++)
+								{
+									for (bit=0; bit<8; bit++)
+									{
+										
+										if ( (bitrank[byte][bit]==0x0000) && ((read_buffer[byte] & (0x01<<bit))==0x00))
+										{
+											bitrank[byte][bit]=nn+1;  //this should be nn+1
+										}
+									}
+								}	
+							}
+
+							otime=T1TC;
+							T1TCR=2; //stop and reset time
+							
+							count=0;
+							for (byte=0; byte<Nbyte; byte++)
+							{
+								for (bit=0; bit<8; bit++)
+								{
+									obuffer[count]=(uint8_t) (bitrank[byte][bit]>>8);
+									count++;
+									obuffer[count]=(uint8_t) (bitrank[byte][bit]);
+									count++;
+								}
+								if (count==64)
+								{
+									count=0;
+									usb_write(obuffer,64);
+								}
+							}
+							otime1[0] = (uint8_t) (otime >> 24);  //time used
+							otime1[1] = (uint8_t) (otime >> 16);
+							otime1[2] = (uint8_t) (otime >> 8);
+							otime1[3] = (uint8_t) (otime);
+							usb_write(otime1,4);
+
+							usb_write((uint8_t *) "Done.", 5);	
+							
+							//insert some delay, because hynix chips need this
+							insert_delay(99);	
+						}  //end of page
+					} //end of Ntimes characterization					
+							
+					//more stressing on the whole page
+					memset(write_buffer, 0x00, mylen);
+					address=address0 | (((uint32_t) block) << 18) | (((uint32_t) 0x07) << 12);
+					for (j=0;j<10000;j++)
+					{
+						result = complete_erase(address);  //complete erase
+						result = write(address, mylen, write_buffer); 
+					}
+					
+					//third characterization
+					for (i=0;i<Ntimes;i++)
+					{					
+						//characterization part
+						address=address0 | (((uint32_t) block) << 18);
+						result = complete_erase(address);  //complete erase
+						memset(write_buffer, 0x00, mylen ); 
+						//complete write all of the block, prevent over erase attack
+						for (page=7;page<8;page=page+1)  //page 7
+						{						
+							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+							result = write(address, mylen, write_buffer); 
+						}
+						result = complete_erase(address);  //complete erase
+						for (page=7;page<8;page=page+1)  //page 7
+						{						
+							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
+							
+							
+							T1TCR=2; //stop and reset time				
+							T1TCR=1; //start the timer
+				
+							tprogram=800;   //to be determined  810
+							for (nn=0;nn<800;nn++)
+							{
+								result = incomplete_write(address, mylen, write_buffer);  //program the whole page
+											
+								read(address, Nbyte, read_buffer);  //read while output
+																
+								for (byte=0; byte<Nbyte; byte++)
+								{
+									for (bit=0; bit<8; bit++)
+									{
+										
+										if ( (bitrank[byte][bit]==0x0000) && ((read_buffer[byte] & (0x01<<bit))==0x00))
+										{
+											bitrank[byte][bit]=nn+1;  //this should be nn+1
+										}
+									}
+								}	
+							}
+
+							otime=T1TC;
+							T1TCR=2; //stop and reset time
+							
+							count=0;
+							for (byte=0; byte<Nbyte; byte++)
+							{
+								for (bit=0; bit<8; bit++)
+								{
+									obuffer[count]=(uint8_t) (bitrank[byte][bit]>>8);
+									count++;
+									obuffer[count]=(uint8_t) (bitrank[byte][bit]);
+									count++;
+								}
+								if (count==64)
+								{
+									count=0;
+									usb_write(obuffer,64);
+								}
+							}
+							otime1[0] = (uint8_t) (otime >> 24);  //time used
+							otime1[1] = (uint8_t) (otime >> 16);
+							otime1[2] = (uint8_t) (otime >> 8);
+							otime1[3] = (uint8_t) (otime);
+							usb_write(otime1,4);
+
+							usb_write((uint8_t *) "Done.", 5);	
+							
+							//insert some delay, because hynix chips need this
+							insert_delay(99);	
+						}  //end of page
+					} //end of Ntimes characterization
+				}//end of Nblocks
+			}  //end of if strcomp
 		}
 	}
 
@@ -419,13 +638,8 @@ uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 /**
  * Sequentially programs some number of bytes starting at a given address.
  */
-uint8_t write(uint32_t address, uint32_t count, const uint8_t *src, uint8_t *otime1) {
-	uint32_t i, result, otime;
-	
-	//set up timer 0 to moniter the program time latency
-	T0MCR=0x00;  //stop comparing
-	T0PR=0;  //prescaler
-	T0TCR=2; //stop and reset time
+uint8_t write(uint32_t address, uint32_t count, const uint8_t *src) {
+	uint32_t i, result;
 
 	// Activate the chip
 	ASSERT_CHIP_ENABLE;
@@ -451,24 +665,12 @@ uint8_t write(uint32_t address, uint32_t count, const uint8_t *src, uint8_t *oti
 
 	// Now send out the final command to begin programming
 	write_cmd_word(CMD_PAGE_PROGRAM_2);
-	
-	T0TCR=1; //start the timer
 
 	// Just to be safe go back to input mode
 	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
-	
-	
 
 	// Wait for programming to finish
 	WAIT_FOR_BUSY;
-	
-	otime=T0TC;
-	T0TCR=2; //stop and reset time
-	otime1[0] = (uint8_t) (otime >> 24);  //time used
-	otime1[1] = (uint8_t) (otime >> 16);
-	otime1[2] = (uint8_t) (otime >> 8);
-	otime1[3] = (uint8_t) (otime);
-	
 	DEASSERT_CHIP_ENABLE; 
 	reset_io();
 
