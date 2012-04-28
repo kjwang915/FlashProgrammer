@@ -22,26 +22,28 @@
 #define mylen 512  //write for hiding, use 512 bytes, which are 512 bits
 #define Nbyte 512  //read 512 bytes
 #define Nbit 4096 //Nbit=Nbyte*8
-#define myLog2 12  //2^12=4096
 #define Ncount 128  //assign 128 bits to a group
 #define Ngroups 32  //Number of groups Nbit bits are divided into
 #define Nletters 4  //each letter is 8 bits, so Ngroup/8=4 letters
 #define myMsk 0x1F  //for Ngroup 32, the last 5 bits of generated random location is useful
-#define Ntimes 10
-#define strLen 53  //there are 53 letters in hMessage
-#define Npages 14  //the first Npages pages are used in a block
+#define Ntimes 1
+#define strLen 44  //there are 44 letters in hMessage
+#define NP 11//number of used pages
+#define Npages 41  //the first Npages pages are used in a block
+#define Intv 4  //Npages=Intv*(NP-1)+1 or +2
 
-uint8_t write_buffer[mylen];
+uint8_t write_buffer[NP][mylen];
+uint8_t write_buffer2[mylen];
 uint8_t read_buffer[Nbyte];
 uint16_t bitrank[Nbyte][8];  //record the bit program rank
 uint8_t obuffer[64];  //output buffer
 uint8_t myASG[Nbyte][8];  //group assignment for each bit
 uint8_t myflags[Ngroups];
-uint8_t mycounts[Ngroups];  //counts how many bits are in this group now
 uint32_t tprogram, terase;
 //now, one 512 bytes can hide 32 bits which are four letters
-//then this message need ceil(53/4) 14 pages, just for testing
-const uint8_t hMessage[]="Hello World! ni hao, shi jie! Cornell University, ECE";
+//then this message need ceil(44/4) 11 pages, just for testing
+//for this message, there are 44 ascii letters
+const uint8_t hMessage[]="The quick brown fox jumps over the lazy dog.";
 /**
  * Application entry point
  */
@@ -55,7 +57,7 @@ int main(void) {
 	//sblock is used to store the program speed characterization for the block in 
 	//another block of flash memory (run out of microcontroller SRAM)
 	uint16_t block, byte, j, nn, count;  
-	uint8_t bit, page,  mynum, k, m,  stpage;  
+	uint8_t bit, page,  mynum, k, m, zz;  
 	
 	uint8_t result;
 	
@@ -86,23 +88,95 @@ int main(void) {
 				
 				address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12);  //lower page
 				address=address0;
-							
-				for (block=160;block<161;block=block+1)   //2 blocks
+				
+				ptr=0;
+				//set up the write buffers here so that it is fast
+				memset(write_buffer, 0xFF, NP*mylen);
+				for (zz=0;zz<NP; zz++)
 				{
-					for (i=0;i<Ntimes;i++)
+					srand (  zz+100 );  //set up the seed
+													
+					count=0;  //count the number of bits which has been assigned
+					byte=0;
+					bit=0;
+					while(count<Nbit)
 					{
+						mynum= (uint8_t) rand();
+						mynum=mynum & myMsk;  //the range of bit is 0-(Ngroups-1)
+						//here, different groups may have different number of bits
+						count=count+1;
+						myASG[byte][bit]=mynum;  //assign the group number to this bit
+						bit=bit+1;
+						if (bit==8)
+						{
+							byte=byte+1;
+							bit=0;
+						}
+					}
+					
+					//set up the flags for the groups. If the flag is one, this group should be programmed
+					memset(myflags, 0x00, Ngroups);
+					k=0;
+					for (ptr2=ptr;ptr2<(ptr+Nletters);ptr2=ptr2+1)
+					{
+						if (ptr2==strLen)
+						{
+							break;
+						}
+						for (m=0;m<8;m++)
+						{
+							//note that the first 8 bit is the binary expression of the letter
+							myflags[k]=hMessage[ptr2] & (1<<(7-m));  //if the corresponding position is 1, then flag will be one
+							k++;
+						}
+					}
+					ptr=ptr2; //updata ptr	
+								
+					for (byte=0; byte<Nbyte; byte++)
+					{
+						for (bit=0; bit<8; bit++)
+						{
+							if (myflags[myASG[byte][bit]])  //if this bit belongs to a group that should be programmed
+							{
+								write_buffer[zz][byte] = write_buffer[zz][byte] & ~(0x01<<bit);
+							}
+						}
+					}					
+				}
+							
+				for (i=0;i<Ntimes;i++)
+				{
+					for (block=176;block<178;block=block+1)   //2 blocks
+					{									
+						//info hiding by stress	
+						for (j=0; j<5000; j++) //5,000 pe stress now
+						{	
+							address=address0 | (((uint32_t) block) << 18);
+							
+							zz=0;	
+							result = complete_erase(address);  //complete erase
+							//complete write selected pages
+							for (page=0;page<Npages;page=page+Intv)  //the first 14 pages are used to hide the info
+							{						
+								address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+								//hide information by stress
+								result = write(address, mylen, write_buffer[zz]);
+								zz=zz+1;
+							}  //end of a page
+						}  //end of hiding by stress  
+						
+						
 						//characterization part
-						address=address0 | (((uint32_t) block) << 18);
 						result = complete_erase(address);  //complete erase
-						memset(write_buffer, 0x00, mylen ); 
+						memset(write_buffer2, 0x00, mylen ); 
 						//complete write all of the block, prevent over erase attack
-						for (page=7;page<8;page=page+1)  //page 7
+						for (page=0;page<64;page=page+1)  //64 pages
 						{						
 							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							result = write(address, mylen, write_buffer); 
+							result = write(address, mylen, write_buffer2); 
 						}
 						result = complete_erase(address);  //complete erase
-						for (page=7;page<8;page=page+1)  //page 7
+						for (page=0;page<64;page=page+1)  //64 pages
 						{						
 							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
 							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
@@ -111,10 +185,10 @@ int main(void) {
 							T1TCR=2; //stop and reset time				
 							T1TCR=1; //start the timer
 				
-							tprogram=800;   //to be determined  810
-							for (nn=0;nn<800;nn++)
+							tprogram=650;   //to be determined  810
+							for (nn=0;nn<1200;nn++)
 							{
-								result = incomplete_write(address, mylen, write_buffer);  //program the whole page
+								result = incomplete_write(address, mylen, write_buffer2);  //program the whole page
 											
 								read(address, Nbyte, read_buffer);  //read while output
 																
@@ -159,208 +233,17 @@ int main(void) {
 							usb_write((uint8_t *) "Done.", 5);	
 							
 							//insert some delay, because hynix chips need this
-							insert_delay(99);	
-						}  //end of page
-					} //end of Ntimes characterization
-					
-					//now the stressing part
-					memset(write_buffer, 0xFF, mylen);
-					for (j=100; j<120; j++)  //program 20 bytes
-					{
-						write_buffer[j]=0x00;
-					}
-					address=address0 | (((uint32_t) block) << 18) | (((uint32_t) 0x07) << 12);
-					for (j=0;j<10000;j++)
-					{
-						result = complete_erase(address);  //complete erase
-						result = write(address, mylen, write_buffer); 
-					}
-					
-					//second characterization
-					for (i=0;i<Ntimes;i++)
-					{					
-						//characterization part
-						address=address0 | (((uint32_t) block) << 18);
-						result = complete_erase(address);  //complete erase
-						memset(write_buffer, 0x00, mylen ); 
-						//complete write all of the block, prevent over erase attack
-						for (page=7;page<8;page=page+1)  //page 7
-						{						
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							result = write(address, mylen, write_buffer); 
-						}
-						result = complete_erase(address);  //complete erase
-						for (page=7;page<8;page=page+1)  //page 7
-						{						
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
-							
-							
-							T1TCR=2; //stop and reset time				
-							T1TCR=1; //start the timer
-				
-							tprogram=800;   //to be determined  810
-							for (nn=0;nn<800;nn++)
-							{
-								result = incomplete_write(address, mylen, write_buffer);  //program the whole page
-											
-								read(address, Nbyte, read_buffer);  //read while output
-																
-								for (byte=0; byte<Nbyte; byte++)
-								{
-									for (bit=0; bit<8; bit++)
-									{
-										
-										if ( (bitrank[byte][bit]==0x0000) && ((read_buffer[byte] & (0x01<<bit))==0x00))
-										{
-											bitrank[byte][bit]=nn+1;  //this should be nn+1
-										}
-									}
-								}	
-							}
-
-							otime=T1TC;
-							T1TCR=2; //stop and reset time
-							
-							count=0;
-							for (byte=0; byte<Nbyte; byte++)
-							{
-								for (bit=0; bit<8; bit++)
-								{
-									obuffer[count]=(uint8_t) (bitrank[byte][bit]>>8);
-									count++;
-									obuffer[count]=(uint8_t) (bitrank[byte][bit]);
-									count++;
-								}
-								if (count==64)
-								{
-									count=0;
-									usb_write(obuffer,64);
-								}
-							}
-							otime1[0] = (uint8_t) (otime >> 24);  //time used
-							otime1[1] = (uint8_t) (otime >> 16);
-							otime1[2] = (uint8_t) (otime >> 8);
-							otime1[3] = (uint8_t) (otime);
-							usb_write(otime1,4);
-
-							usb_write((uint8_t *) "Done.", 5);	
-							
-							//insert some delay, because hynix chips need this
-							insert_delay(99);	
-						}  //end of page
-					} //end of Ntimes characterization					
-							
-					//more stressing on the whole page
-					memset(write_buffer, 0x00, mylen);
-					address=address0 | (((uint32_t) block) << 18) | (((uint32_t) 0x07) << 12);
-					for (j=0;j<10000;j++)
-					{
-						result = complete_erase(address);  //complete erase
-						result = write(address, mylen, write_buffer); 
-					}
-					
-					//third characterization
-					for (i=0;i<Ntimes;i++)
-					{					
-						//characterization part
-						address=address0 | (((uint32_t) block) << 18);
-						result = complete_erase(address);  //complete erase
-						memset(write_buffer, 0x00, mylen ); 
-						//complete write all of the block, prevent over erase attack
-						for (page=7;page<8;page=page+1)  //page 7
-						{						
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							result = write(address, mylen, write_buffer); 
-						}
-						result = complete_erase(address);  //complete erase
-						for (page=7;page<8;page=page+1)  //page 7
-						{						
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
-							
-							
-							T1TCR=2; //stop and reset time				
-							T1TCR=1; //start the timer
-				
-							tprogram=800;   //to be determined  810
-							for (nn=0;nn<800;nn++)
-							{
-								result = incomplete_write(address, mylen, write_buffer);  //program the whole page
-											
-								read(address, Nbyte, read_buffer);  //read while output
-																
-								for (byte=0; byte<Nbyte; byte++)
-								{
-									for (bit=0; bit<8; bit++)
-									{
-										
-										if ( (bitrank[byte][bit]==0x0000) && ((read_buffer[byte] & (0x01<<bit))==0x00))
-										{
-											bitrank[byte][bit]=nn+1;  //this should be nn+1
-										}
-									}
-								}	
-							}
-
-							otime=T1TC;
-							T1TCR=2; //stop and reset time
-							
-							count=0;
-							for (byte=0; byte<Nbyte; byte++)
-							{
-								for (bit=0; bit<8; bit++)
-								{
-									obuffer[count]=(uint8_t) (bitrank[byte][bit]>>8);
-									count++;
-									obuffer[count]=(uint8_t) (bitrank[byte][bit]);
-									count++;
-								}
-								if (count==64)
-								{
-									count=0;
-									usb_write(obuffer,64);
-								}
-							}
-							otime1[0] = (uint8_t) (otime >> 24);  //time used
-							otime1[1] = (uint8_t) (otime >> 16);
-							otime1[2] = (uint8_t) (otime >> 8);
-							otime1[3] = (uint8_t) (otime);
-							usb_write(otime1,4);
-
-							usb_write((uint8_t *) "Done.", 5);	
-							
-							//insert some delay, because hynix chips need this
-							insert_delay(99);	
-						}  //end of page
-					} //end of Ntimes characterization
-				}//end of Nblocks
+							insert_delay(99);				
+						}  //end of characterization
+						result = complete_erase(address);  //complete erase	
+					}  //end of Nblocks
+				} //end of Ntimes		
 			}  //end of if strcomp
 		}
 	}
 
 	return 0;
 }
-void ini_poweron()
-{
-	//intialize the chip
-	ASSERT_CHIP_ENABLE;
-	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
-	WAIT_FOR_BUSY;
-	SET_IO_AS_OUTPUT;
-	
-	//ASSERT_CHIP_ENABLE;
-	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE | P_ADDR_LATCH;
-	FIO0SET = P_WRITE_PROTECT | P_READ_ENABLE;
-	
-    write_cmd_word(0xFF);  //the first command to initialized the chip
-	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
-	WAIT_FOR_BUSY;
-	DEASSERT_CHIP_ENABLE;
-}
-
-
-
 void readID(uint8_t *dest)
 {
 	uint8_t i;
@@ -573,6 +456,10 @@ uint8_t read_status(void) {
  */
 uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 	uint32_t i, result;
+
+	// Maximum page size that can be written at once is 2k + 64 bytes of spare
+	if (count > 2112)
+		count = 2112;
 		
 	//  *********control timing******
 	T0PR=0;  //one tick is 0.01 ms
@@ -641,6 +528,10 @@ uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 uint8_t write(uint32_t address, uint32_t count, const uint8_t *src) {
 	uint32_t i, result;
 
+	// Maximum page size that can be written at once is 2k + 64 bytes of spare
+	if (count > 2112)
+		count = 2112;
+
 	// Activate the chip
 	ASSERT_CHIP_ENABLE;
 	SET_IO_AS_OUTPUT;
@@ -687,6 +578,9 @@ uint8_t write(uint32_t address, uint32_t count, const uint8_t *src) {
 void read(uint32_t address, uint32_t count, uint8_t *dest) {
 	uint32_t i;
 
+	// Maximum page size is 2k + 64 bytes of spare
+/*	if (count > 2112)
+		count = 2112;*/
 
 	// Activate the chip
 	ASSERT_CHIP_ENABLE;
