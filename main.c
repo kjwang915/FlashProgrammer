@@ -158,7 +158,7 @@ int main(void) {
 							address=address0 | (((uint32_t) block) << 18);
 							
 							zz=0;	
-							result = complete_erase(address);  //complete erase
+							result = complete_erase(address, otime1);  //complete erase
 							//complete write selected pages
 							for (page=0;page<Npages;page=page+Intv)  //the first 14 pages are used to hide the info
 							{						
@@ -171,7 +171,9 @@ int main(void) {
 						
 						
 						//characterization part
-						result = complete_erase(address);  //complete erase
+						result = complete_erase(address, otime1);  //complete erase
+						usb_write(otime1,4);  //output the erase time, this erase time may be different from the second program time
+						insert_delay(99);
 						memset(write_buffer2, 0x00, mylen ); 
 						//complete write all of the block, prevent over erase attack
 						for (page=0;page<64;page=page+1)  //64 pages
@@ -181,7 +183,9 @@ int main(void) {
 							usb_write(otime1,4);  //output the program time for each page
 							insert_delay(99);
 						}
-						result = complete_erase(address);  //complete erase
+						result = complete_erase(address, otime1);  //complete erase
+						usb_write(otime1,4);  //output the erase time again, it may be different from the first erase time
+						insert_delay(99);
 						for (page=0;page<64;page=page+1)  //64 pages
 						{						
 							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
@@ -241,7 +245,7 @@ int main(void) {
 							//insert some delay, because hynix chips need this
 							insert_delay(99);				
 						}  //end of characterization
-						result = complete_erase(address);  //complete erase	
+						result = complete_erase(address, otime1);  //complete erase	
 					}  //end of Nblocks
 				} //end of Ntimes		
 			}  //end of if strcomp
@@ -323,8 +327,14 @@ void reset_io(void) {
 /**
  * Erases an entire block (the smallest granularity possible) from the device
  */
-uint8_t complete_erase(uint32_t address) {
+uint8_t complete_erase(uint32_t address, uint8_t *otime1) {
 	uint8_t result;
+	uint32_t otime;
+	
+	//set up timer 0 to moniter the erase time latency
+	T0MCR=0x00;  //stop comparing
+	T0PR=0;  //prescaler
+	T0TCR=2; //stop and reset time
 	
 	// Activate the chip and set up I/O
 	ASSERT_CHIP_ENABLE;
@@ -343,6 +353,9 @@ uint8_t complete_erase(uint32_t address) {
 
 	// Write second command word
 	write_cmd_word(CMD_BLOCK_ERASE_2);
+	
+	T0TCR=1; //start the timer
+	
 	FIO0CLR = P_READ_ENABLE;
 
 	// Change to input
@@ -350,6 +363,15 @@ uint8_t complete_erase(uint32_t address) {
 	
 	// Wait for erase to finish
 	WAIT_FOR_BUSY;
+	
+	//record the time
+	otime=T0TC;
+	T0TCR=2; //stop and reset time
+	otime1[0] = (uint8_t) (otime >> 24);  //time used
+	otime1[1] = (uint8_t) (otime >> 16);
+	otime1[2] = (uint8_t) (otime >> 8);
+	otime1[3] = (uint8_t) (otime);
+	
 	reset_io();
 	DEASSERT_CHIP_ENABLE;
 
@@ -461,7 +483,8 @@ uint8_t read_status(void) {
  * Sequentially programs some number of bytes starting at a given address.
  */
 uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
-	uint32_t i, result;
+	uint32_t i;
+	uint8_t result;
 
 	//  *********control timing******
 	T0PR=0;  //one tick is 0.01 ms
@@ -528,7 +551,8 @@ uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
  * Sequentially programs some number of bytes starting at a given address.
  */
 uint8_t write(uint32_t address, uint32_t count, const uint8_t *src, uint8_t *otime1) {
-	uint32_t i, result, otime;
+	uint32_t i, otime;
+	uint8_t result;
 	
 	//set up timer 0 to moniter the program time latency
 	T0MCR=0x00;  //stop comparing
