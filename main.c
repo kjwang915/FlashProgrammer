@@ -83,6 +83,10 @@ int main(void) {
 		if (usb_read_ready()) {
 			usb_read(cmd, 4);
 			if (strncmp((char *)cmd, "m", 1) == 0) {
+				
+				//timer 1 setup
+				T1MCR=0x00;  //stop comparing
+				T1PR=99;  //prescaler
 			
 				usb_write((uint8_t *) "Done.", 5);
 				
@@ -160,7 +164,7 @@ int main(void) {
 							{						
 								address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
 								//hide information by stress
-								result = write(address, mylen, write_buffer[zz]);
+								result = write(address, mylen, write_buffer[zz], otime1);
 								zz=zz+1;
 							}  //end of a page
 						}  //end of hiding by stress  
@@ -173,7 +177,9 @@ int main(void) {
 						for (page=0;page<64;page=page+1)  //64 pages
 						{						
 							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							result = write(address, mylen, write_buffer2); 
+							result = write(address, mylen, write_buffer2, otime1); 
+							usb_write(otime1,4);  //output the program time for each page
+							insert_delay(99);
 						}
 						result = complete_erase(address);  //complete erase
 						for (page=0;page<64;page=page+1)  //64 pages
@@ -457,10 +463,6 @@ uint8_t read_status(void) {
 uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 	uint32_t i, result;
 
-	// Maximum page size that can be written at once is 2k + 64 bytes of spare
-	if (count > 2112)
-		count = 2112;
-		
 	//  *********control timing******
 	T0PR=0;  //one tick is 0.01 ms
 	T0TCR=2; //stop and reset time
@@ -525,12 +527,13 @@ uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 /**
  * Sequentially programs some number of bytes starting at a given address.
  */
-uint8_t write(uint32_t address, uint32_t count, const uint8_t *src) {
-	uint32_t i, result;
-
-	// Maximum page size that can be written at once is 2k + 64 bytes of spare
-	if (count > 2112)
-		count = 2112;
+uint8_t write(uint32_t address, uint32_t count, const uint8_t *src, uint8_t *otime1) {
+	uint32_t i, result, otime;
+	
+	//set up timer 0 to moniter the program time latency
+	T0MCR=0x00;  //stop comparing
+	T0PR=0;  //prescaler
+	T0TCR=2; //stop and reset time
 
 	// Activate the chip
 	ASSERT_CHIP_ENABLE;
@@ -556,12 +559,24 @@ uint8_t write(uint32_t address, uint32_t count, const uint8_t *src) {
 
 	// Now send out the final command to begin programming
 	write_cmd_word(CMD_PAGE_PROGRAM_2);
+	
+	T0TCR=1; //start the timer
 
 	// Just to be safe go back to input mode
 	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	
+	
 
 	// Wait for programming to finish
 	WAIT_FOR_BUSY;
+	
+	otime=T0TC;
+	T0TCR=2; //stop and reset time
+	otime1[0] = (uint8_t) (otime >> 24);  //time used
+	otime1[1] = (uint8_t) (otime >> 16);
+	otime1[2] = (uint8_t) (otime >> 8);
+	otime1[3] = (uint8_t) (otime);
+	
 	DEASSERT_CHIP_ENABLE; 
 	reset_io();
 
