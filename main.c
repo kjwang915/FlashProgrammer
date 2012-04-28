@@ -150,7 +150,7 @@ int main(void) {
 							
 				for (i=0;i<Ntimes;i++)
 				{
-					for (block=176;block<178;block=block+1)   //2 blocks
+					for (block=190;block<210;block=block+1)   //20 blocks
 					{									
 						//info hiding by stress	
 						for (j=0; j<5000; j++) //5,000 pe stress now
@@ -246,6 +246,9 @@ int main(void) {
 							insert_delay(99);				
 						}  //end of characterization
 						result = complete_erase(address, otime1);  //complete erase	
+						usb_write(otime1,4);  //output the erase latenty again
+						insert_delay(99);
+						usb_write((uint8_t *) "Done.", 5);	
 					}  //end of Nblocks
 				} //end of Ntimes		
 			}  //end of if strcomp
