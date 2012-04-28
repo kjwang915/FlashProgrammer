@@ -93,6 +93,8 @@ int main(void) {
 				address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12);  //lower page
 				address=address0;
 				
+				memset(write_buffer2, 0x00, mylen ); 
+				
 				ptr=0;
 				//set up the write buffers here so that it is fast
 				memset(write_buffer, 0xFF, NP*mylen);
@@ -150,21 +152,21 @@ int main(void) {
 							
 				for (i=0;i<Ntimes;i++)
 				{
-					for (block=190;block<210;block=block+1)   //20 blocks
+					for (block=280;block<300;block=block+1)   //20 blocks  block 208 209
 					{									
 						//info hiding by stress	
-						for (j=0; j<5000; j++) //5,000 pe stress now
+						for (j=0; j<1000; j++) //5,000 pe stress now, here stress the 20 blocks
 						{	
 							address=address0 | (((uint32_t) block) << 18);
 							
 							zz=0;	
 							result = complete_erase(address, otime1);  //complete erase
 							//complete write selected pages
-							for (page=0;page<Npages;page=page+Intv)  //the first 14 pages are used to hide the info
+							for (page=0;page<64;page=page+1)  //the first 14 pages are used to hide the info
 							{						
 								address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
 								//hide information by stress
-								result = write(address, mylen, write_buffer[zz], otime1);
+								result = write(address, mylen, write_buffer2, otime1);
 								zz=zz+1;
 							}  //end of a page
 						}  //end of hiding by stress  
@@ -250,6 +252,7 @@ int main(void) {
 						insert_delay(99);
 						usb_write((uint8_t *) "Done.", 5);	
 					}  //end of Nblocks
+					usb_write((uint8_t *) "Done.", 5);  //this should not be here, to patch up
 				} //end of Ntimes		
 			}  //end of if strcomp
 		}
