@@ -78,7 +78,7 @@ uint8_t write(uint32_t address, uint32_t count, const uint8_t *src, uint8_t *oti
 void write_cmd_word(uint8_t cmd);
 void write_address(uint32_t address, uint8_t doErase);
 void reset_io(void);
-uint8_t complete_erase(uint32_t address);
+uint8_t complete_erase(uint32_t address, uint8_t *otime1);
 uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src);
 void cache_read(uint32_t address, uint32_t count, uint8_t *dest, uint32_t ntimes);
 #endif
