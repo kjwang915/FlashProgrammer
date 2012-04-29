@@ -96,9 +96,9 @@ int main(void) {
 							
 				for (i=0;i<Ntimes;i++)
 				{
-					for (block=320;block<324;block=block+1)   //4 blocks
+					for (block=340;block<360;block=block+1)   //4 blocks
 					{
-						ptr=0;
+					/*	ptr=0;
 						//set up the write buffers here so that it is fast
 						memset(write_buffer, 0xFF, NP*mylen);
 						for (zz=0;zz<NP; zz++)
@@ -232,7 +232,7 @@ int main(void) {
 								result = write(address, mylen, write_buffer[zz], otime1);
 								zz=zz+1;
 							}  //end of a page
-						}  //end of hiding by stress  
+						}  //end of hiding by stress  */
 						
 						
 						//characterization part
