@@ -22,15 +22,12 @@
 #define mylen 512  //write for hiding, use 512 bytes, which are 512 bits
 #define Nbyte 512  //read 512 bytes
 #define Nbit 4096 //Nbit=Nbyte*8
-#define myLog 12 // log(4096)/log(2)=12
 #define Ncount 128  //assign 128 bits to a group
 #define Ngroups 32  //Number of groups Nbit bits are divided into
-#define Nletters 4  //each letter is 8 bits, so Ngroup/8=4 letters
 #define myMsk 0x1F  //for Ngroup 32, the last 5 bits of generated random location is useful
 #define Ntimes 1
-#define strLen 44  //there are 44 letters in hMessage
-#define NP 11//number of used pages
-#define Npages 41  //the first Npages pages are used in a block
+#define NP 16//number of used pages (64 pages forms 32 rows. In each row, only one page is used (perphaps we can use both of the pages)
+#define Npages 64  //the first Npages pages are used in a block
 #define Intv 4  //Npages=Intv*(NP-1)+1 or +2
 
 uint8_t write_buffer[NP][mylen];
@@ -44,21 +41,18 @@ uint32_t tprogram, terase;
 //now, one 512 bytes can hide 32 bits which are four letters
 //then this message need ceil(44/4) 11 pages, just for testing
 //for this message, there are 44 ascii letters
-const uint8_t hMessage[]="The quick brown fox jumps over the lazy dog.";
+//const uint8_t hMessage[]="The quick brown fox jumps over the lazy dog.";
 /**
  * Application entry point
  */
 int main(void) {
-	uint32_t otime, i, tot;
-	uint8_t ptr,  ptr2;
+	uint32_t otime, i;
 	
 	uint32_t address0, address;
 	uint8_t cmd[20];
 	uint8_t otime1[4]; 
-	//sblock is used to store the program speed characterization for the block in 
-	//another block of flash memory (run out of microcontroller SRAM)
-	uint16_t block, byte, j, nn, count, avg;  
-	uint8_t bit, page,  mynum, k, m, zz;  
+	uint16_t block, byte, j, nn, count, zz;  
+	uint8_t bit, page,  mynum, k;  
 	
 	uint8_t result;
 	
@@ -93,130 +87,58 @@ int main(void) {
 				
 				address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12);  //lower page
 				address=address0;
+				
+				//set up the write buffers here so that it is fast
+				memset(write_buffer, 0xFF, NP*mylen);
+				for (zz=0;zz<NP; zz++)
+				{
+					srand (  zz+100 );  //set up the seed
+													
+					count=0;  //count the number of bits which has been assigned
+					byte=0;
+					bit=0;
+					while(count<Nbit)
+					{
+						mynum= (uint8_t) rand();
+						mynum=mynum & myMsk;  //the range of bit is 0-(Ngroups-1)
+						//here, different groups may have different number of bits
+						count=count+1;
+						myASG[byte][bit]=mynum;  //assign the group number to this bit
+						bit=bit+1;
+						if (bit==8)
+						{
+							byte=byte+1;
+							bit=0;
+						}
+					}
+					
+					
+					//set up the flags for the groups. If the flag is one, this group should be programmed
+					//random data is stored, the data for each page is different, but for each block, it is the same
+					srand (  zz+550 );  //set up the seed
+					memset(myflags, 0x00, Ngroups);
+					for (k=0; k<Ngroups; k++)
+					{
+						//the random stored data
+						myflags[k]=((uint8_t)rand()) & 0x01;  //need to output the flags which are the stored data
+					}
+								
+					for (byte=0; byte<Nbyte; byte++)
+					{
+						for (bit=0; bit<8; bit++)
+						{
+							if (myflags[myASG[byte][bit]])  //if this bit belongs to a group that should be programmed
+							{
+								write_buffer[zz][byte] = write_buffer[zz][byte] & ~(0x01<<bit);
+							}
+						}
+					}					
+				}
 							
 				for (i=0;i<Ntimes;i++)
 				{
-					for (block=340;block<360;block=block+1)   //4 blocks
-					{
-					/*	ptr=0;
-						//set up the write buffers here so that it is fast
-						memset(write_buffer, 0xFF, NP*mylen);
-						for (zz=0;zz<NP; zz++)
-						{
-							srand (  zz+100 );  //set up the seed
-															
-							count=0;  //count the number of bits which has been assigned
-							byte=0;
-							bit=0;
-							while(count<Nbit)
-							{
-								mynum= (uint8_t) rand();
-								mynum=mynum & myMsk;  //the range of bit is 0-(Ngroups-1)
-								//here, different groups may have different number of bits
-								count=count+1;
-								myASG[byte][bit]=mynum;  //assign the group number to this bit
-								bit=bit+1;
-								if (bit==8)
-								{
-									byte=byte+1;
-									bit=0;
-								}
-							}
-							
-							//set up the flags for the groups. If the flag is one, this group should be programmed
-							memset(myflags, 0x00, Ngroups);
-							k=0;
-							for (ptr2=ptr;ptr2<(ptr+Nletters);ptr2=ptr2+1)
-							{
-								if (ptr2==strLen)
-								{
-									break;
-								}
-								for (m=0;m<8;m++)
-								{
-									//note that the first 8 bit is the binary expression of the letter
-									myflags[k]=hMessage[ptr2] & (1<<(7-m));  //if the corresponding position is 1, then flag will be one
-									k++;
-								}
-							}
-							ptr=ptr2; //updata ptr	
-										
-							for (byte=0; byte<Nbyte; byte++)
-							{
-								for (bit=0; bit<8; bit++)
-								{
-									if (myflags[myASG[byte][bit]])  //if this bit belongs to a group that should be programmed
-									{
-										write_buffer[zz][byte] = write_buffer[zz][byte] & ~(0x01<<bit);
-									}
-								}
-							}					
-						}					
-			
-						address=address0 | (((uint32_t) block) << 18);
-						//before we stress it, we characterize it first, for only those pages to be stressed
-						result = complete_erase(address, otime1);  //complete erase
-						usb_write(otime1,4);  //output the erase time, this erase time may be different from the second program time
-						insert_delay(99);
-						memset(write_buffer2, 0x00, mylen ); 
-						//complete write all of the block, prevent over erase attack
-						for (page=0;page<Npages;page=page+Intv)  //64 pages
-						{						
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							result = write(address, mylen, write_buffer2, otime1); 
-							usb_write(otime1,4);  //output the program time for each page
-							insert_delay(99);
-						}
-						result = complete_erase(address, otime1);  //complete erase
-						usb_write(otime1,4);  //output the erase time again, it may be different from the first erase time
-						insert_delay(99);
-						usb_write((uint8_t *) "Done.", 5);	
-						zz=0;
-						for (page=0;page<Npages;page=page+Intv)  //64 pages
-						{
-							tot=0; //initialize tot here
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
-							
-							
-							T1TCR=2; //stop and reset time				
-							T1TCR=1; //start the timer
-				
-							tprogram=650;   //to be determined  810
-							for (nn=0;nn<1200;nn++)
-							{
-								result = incomplete_write(address, mylen, write_buffer2);  //program the whole page
-											
-								read(address, Nbyte, read_buffer);  //read while output
-																
-								for (byte=0; byte<Nbyte; byte++)
-								{
-									for (bit=0; bit<8; bit++)
-									{
-										
-										if ( (bitrank[byte][bit]==0x0000) && ((read_buffer[byte] & (0x01<<bit))==0x00))
-										{
-											bitrank[byte][bit]=nn+1;  //this should be nn+1
-											tot=tot+nn+1;  //add up
-										}
-									}
-								}	
-							}
-
-							avg=tot>>(myLog+2);  //avg=tot/Nbit/4;
-							
-							for (byte=0; byte<Nbyte; byte++)
-							{
-								for (bit=0;bit<8;bit++)
-								{
-									if (bitrank[byte][bit]<avg)
-									{
-										write_buffer[zz][byte]=write_buffer[zz][byte] | (0x01<<bit);  //if the program number is too small, we don't stress it
-									}
-								}
-							}
-							zz=zz+1;
-						}
+					for (block=800;block<810;block=block+1)   //10 blocks
+					{									
 						//info hiding by stress	
 						for (j=0; j<5000; j++) //5,000 pe stress now
 						{	
@@ -232,7 +154,7 @@ int main(void) {
 								result = write(address, mylen, write_buffer[zz], otime1);
 								zz=zz+1;
 							}  //end of a page
-						}  //end of hiding by stress  */
+						}  //end of hiding by stress  
 						
 						
 						//characterization part
