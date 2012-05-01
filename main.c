@@ -122,6 +122,10 @@ int main(void) {
 						//the random stored data
 						myflags[k]=((uint8_t)rand()) & 0x01;  //need to output the flags which are the stored data
 					}
+					//   *****out put the hidden information
+					usb_write(myflags, 32);
+					continue;
+					//   *******end of outputing hidden information
 								
 					for (byte=0; byte<Nbyte; byte++)
 					{
@@ -134,7 +138,9 @@ int main(void) {
 						}
 					}					
 				}
-							
+				
+				usb_write((uint8_t *) "Done.", 5);
+				continue;  //  *****use for outputing hidden information
 				for (i=0;i<Ntimes;i++)
 				{
 					for (block=800;block<810;block=block+1)   //10 blocks
