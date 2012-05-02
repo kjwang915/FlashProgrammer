@@ -122,10 +122,6 @@ int main(void) {
 						//the random stored data
 						myflags[k]=((uint8_t)rand()) & 0x01;  //need to output the flags which are the stored data
 					}
-					//   *****out put the hidden information
-					usb_write(myflags, 32);
-					continue;
-					//   *******end of outputing hidden information
 								
 					for (byte=0; byte<Nbyte; byte++)
 					{
@@ -138,36 +134,34 @@ int main(void) {
 						}
 					}					
 				}
+							
+				//stress part
+				for (block=1350;block<1420;block=block+51)   //2 blocks, each characterize 10 times, which is equal to 20 blocks in time
+				{									
+					//info hiding by stress	
+					for (j=0; j<5000; j++) //5,000 pe stress now, perhaps at such high stress, we should use a shorter program time
+					{	
+						address=address0 | (((uint32_t) block) << 18);
+							
+						zz=0;	
+						result = complete_erase(address, otime1);  //complete erase
+						//complete write selected pages
+						for (page=0;page<Npages;page=page+Intv)  //the first 14 pages are used to hide the info
+						{						
+							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+							//hide information by stress
+							result = write(address, mylen, write_buffer[zz], otime1);
+							zz=zz+1;
+						}  //end of a page
+					}  //end of hiding by stress  
+				}
 				
-				usb_write((uint8_t *) "Done.", 5);
-				continue;  //  *****use for outputing hidden information
+				memset(write_buffer2, 0x00, mylen ); 
+				//characterization part	
 				for (i=0;i<Ntimes;i++)
 				{
-					for (block=800;block<810;block=block+1)   //10 blocks
-					{									
-						//info hiding by stress	
-						for (j=0; j<5000; j++) //5,000 pe stress now
-						{	
-							address=address0 | (((uint32_t) block) << 18);
-							
-							zz=0;	
-							result = complete_erase(address, otime1);  //complete erase
-							//complete write selected pages
-							for (page=0;page<Npages;page=page+Intv)  //the first 14 pages are used to hide the info
-							{						
-								address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-								//hide information by stress
-								result = write(address, mylen, write_buffer[zz], otime1);
-								zz=zz+1;
-							}  //end of a page
-						}  //end of hiding by stress  
-						
-						
-						//characterization part
-						result = complete_erase(address, otime1);  //complete erase
-						usb_write(otime1,4);  //output the erase time, this erase time may be different from the second program time
-						insert_delay(99);
-						memset(write_buffer2, 0x00, mylen ); 
+					for (block=1350;block<1420;block=block+51)
+					{
 						//complete write all of the block, prevent over erase attack
 						for (page=0;page<64;page=page+1)  //64 pages
 						{						
@@ -175,10 +169,13 @@ int main(void) {
 							result = write(address, mylen, write_buffer2, otime1); 
 							usb_write(otime1,4);  //output the program time for each page
 							insert_delay(99);
-						}
+						}  
+						//erase
+						address=address=address0 | (((uint32_t) block) << 18);
 						result = complete_erase(address, otime1);  //complete erase
 						usb_write(otime1,4);  //output the erase time again, it may be different from the first erase time
 						insert_delay(99);
+						//characterization, which is another program
 						for (page=0;page<64;page=page+1)  //64 pages
 						{						
 							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
@@ -237,13 +234,16 @@ int main(void) {
 							
 							//insert some delay, because hynix chips need this
 							insert_delay(99);				
-						}  //end of characterization
+						}  //end of pages
+						//erase
+						address=address=address0 | (((uint32_t) block) << 18);
 						result = complete_erase(address, otime1);  //complete erase	
 						usb_write(otime1,4);  //output the erase latenty again
 						insert_delay(99);
 						usb_write((uint8_t *) "Done.", 5);	
 					}  //end of Nblocks
-				} //end of Ntimes		
+				} //end of Ntimes	
+				usb_write((uint8_t *) "Fini.", 5);	
 			}  //end of if strcomp
 		}
 	}
