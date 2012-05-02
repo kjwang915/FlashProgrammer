@@ -171,7 +171,7 @@ int main(void) {
 							insert_delay(99);
 						}  
 						//erase
-						address=address=address0 | (((uint32_t) block) << 18);
+						address=address0 | (((uint32_t) block) << 18);
 						result = complete_erase(address, otime1);  //complete erase
 						usb_write(otime1,4);  //output the erase time again, it may be different from the first erase time
 						insert_delay(99);
@@ -236,7 +236,7 @@ int main(void) {
 							insert_delay(99);				
 						}  //end of pages
 						//erase
-						address=address=address0 | (((uint32_t) block) << 18);
+						address=address0 | (((uint32_t) block) << 18);
 						result = complete_erase(address, otime1);  //complete erase	
 						usb_write(otime1,4);  //output the erase latenty again
 						insert_delay(99);
