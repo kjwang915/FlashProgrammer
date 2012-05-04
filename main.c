@@ -25,7 +25,7 @@
 #define Ncount 128  //assign 128 bits to a group
 #define Ngroups 32  //Number of groups Nbit bits are divided into
 #define myMsk 0x1F  //for Ngroup 32, the last 5 bits of generated random location is useful
-#define Ntimes 10
+#define Ntimes 11
 #define NP 16//number of used pages (64 pages forms 32 rows. In each row, only one page is used (perphaps we can use both of the pages)
 #define Npages 64  //the first Npages pages are used in a block
 #define Intv 4  //Npages=Intv*(NP-1)+1 or +2
@@ -136,10 +136,10 @@ int main(void) {
 				}
 							
 				//stress part
-				for (block=940; block<950;block=block+1)   //2 blocks, each characterize 10 times, which is equal to 20 blocks in time
+				for (block=1100; block<1105;block=block+1)   //5 blocks, each characterize 10 times, which is equal to 20 blocks in time
 				{									
 					//info hiding by stress	
-					for (j=0; j<10000; j++) //5,000 pe stress now, perhaps at such high stress, we should use a shorter program time
+					for (j=0; j<5000; j++) //5,000 pe stress now, perhaps at such high stress, we should use a shorter program time
 					{	
 						address=address0 | (((uint32_t) block) << 18);
 							
@@ -160,10 +160,10 @@ int main(void) {
 				//characterization part	
 				for (i=0;i<Ntimes;i++)
 				{
-					for (block=940;block<950;block=block+1)
+					for (block=1100; block<1105;block=block+1)
 					{
 						//complete write all of the block, prevent over erase attack
-						for (page=0;page<64;page=page+1)  //64 pages
+						for (page=0;page<64;page=page+1)  //64 pages    program 1
 						{						
 							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
 							result = write(address, mylen, write_buffer2, otime1); 
@@ -172,10 +172,10 @@ int main(void) {
 						}  
 						//erase
 						address=address0 | (((uint32_t) block) << 18);
-						result = complete_erase(address, otime1);  //complete erase
+						result = complete_erase(address, otime1);  //complete erase  erase 1
 						usb_write(otime1,4);  //output the erase time again, it may be different from the first erase time
 						insert_delay(99);
-						//characterization, which is another program
+						//characterization, which is another program   program 2 (I think I will show this as after one program and erase)
 						for (page=0;page<64;page=page+Intv)  //64 pages
 						{						
 							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
@@ -236,11 +236,25 @@ int main(void) {
 							insert_delay(99);				
 						}  //end of pages
 						//erase
-						address=address0 | (((uint32_t) block) << 18);
+						address=address0 | (((uint32_t) block) << 18);   //erase 2
 						result = complete_erase(address, otime1);  //complete erase	
 						usb_write(otime1,4);  //output the erase latenty again
 						insert_delay(99);
 						usb_write((uint8_t *) "Done.", 5);	
+						
+						//put on extra stress
+						for (j=0; j<18; j++)   //program and erase 3-20
+						{
+							//complete write all of the block, prevent over erase attack
+							for (page=0;page<64;page=page+1)  //64 pages
+							{						
+								address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+								result = write(address, mylen, write_buffer2, otime1); 
+							}  
+							//erase
+							address=address0 | (((uint32_t) block) << 18);
+							result = complete_erase(address, otime1);  //complete erase
+						}
 					}  //end of Nblocks
 				} //end of Ntimes	
 				usb_write((uint8_t *) "Fini.", 5);	
