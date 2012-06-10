@@ -25,7 +25,7 @@
 #define Ncount 128  //assign 128 bits to a group
 #define Ngroups 32  //Number of groups Nbit bits are divided into
 #define myMsk 0x1F  //for Ngroup 32, the last 5 bits of generated random location is useful
-#define Ntimes 11
+#define Ntimes 1
 #define NP 16//number of used pages (64 pages forms 32 rows. In each row, only one page is used (perphaps we can use both of the pages)
 #define Npages 64  //the first Npages pages are used in a block
 #define Intv 4  //Npages=Intv*(NP-1)+1 or +2
@@ -134,12 +134,14 @@ int main(void) {
 						}
 					}					
 				}
-							
+				
+				T1TCR=2; //stop and reset time				
+				T1TCR=1; //start the timer
 				//stress part
-				for (block=1100; block<1105;block=block+1)   //5 blocks, each characterize 10 times, which is equal to 20 blocks in time
+				for (block=1820; block<1830;block=block+1)   //5 blocks, each characterize 10 times, which is equal to 20 blocks in time
 				{									
 					//info hiding by stress	
-					for (j=0; j<5000; j++) //5,000 pe stress now, perhaps at such high stress, we should use a shorter program time
+					for (j=0; j<10000; j++) //5,000 pe stress now, perhaps at such high stress, we should use a shorter program time
 					{	
 						address=address0 | (((uint32_t) block) << 18);
 							
@@ -154,13 +156,26 @@ int main(void) {
 							zz=zz+1;
 						}  //end of a page
 					}  //end of hiding by stress  
-				}
+				} 
+							otime=T1TC;
+							T1TCR=2; //stop and reset time
+							otime1[0] = (uint8_t) (otime >> 24);  //time used
+							otime1[1] = (uint8_t) (otime >> 16);
+							otime1[2] = (uint8_t) (otime >> 8);
+							otime1[3] = (uint8_t) (otime);
+							usb_write(otime1,4);
+
+							usb_write((uint8_t *) "Fini.", 5);	
+							
+							//insert some delay, because hynix chips need this
+							insert_delay(99);
+							continue;
 				
 				memset(write_buffer2, 0x00, mylen ); 
 				//characterization part	
 				for (i=0;i<Ntimes;i++)
 				{
-					for (block=1100; block<1105;block=block+1)
+					for (block=1800; block<1810;block=block+1)
 					{
 						//complete write all of the block, prevent over erase attack
 						for (page=0;page<64;page=page+1)  //64 pages    program 1
@@ -185,7 +200,7 @@ int main(void) {
 							T1TCR=2; //stop and reset time				
 							T1TCR=1; //start the timer
 				
-							tprogram=850;   //to be determined  810
+							tprogram=950;   //to be determined  810
 							for (nn=0;nn<1200;nn++)
 							{
 								result = incomplete_write(address, mylen, write_buffer2);  //program the whole page
@@ -243,7 +258,7 @@ int main(void) {
 						usb_write((uint8_t *) "Done.", 5);	
 						
 						//put on extra stress
-						for (j=0; j<18; j++)   //program and erase 3-20
+					/*	for (j=0; j<18; j++)   //program and erase 3-20
 						{
 							//complete write all of the block, prevent over erase attack
 							for (page=0;page<64;page=page+1)  //64 pages
@@ -254,7 +269,7 @@ int main(void) {
 							//erase
 							address=address0 | (((uint32_t) block) << 18);
 							result = complete_erase(address, otime1);  //complete erase
-						}
+						} */
 					}  //end of Nblocks
 				} //end of Ntimes	
 				usb_write((uint8_t *) "Fini.", 5);	
