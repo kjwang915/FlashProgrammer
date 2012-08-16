@@ -77,8 +77,8 @@ int main(void) {
     write_cmd_word(0xFF);  //the first command to initialized the chip
 	
 	//some initialization, all higher pages
-	pages[0]=8;  //lower page number = higher page number - 6;
-	pages[1]=61;
+	pages[0]=61;  //lower page number = higher page number - 6;
+	pages[1]=92;
 	
 	while (1) {
 		if (usb_read_ready()) {
@@ -194,13 +194,13 @@ int main(void) {
 				continue;	*/
 				
 				//block start number and block finish number
-				blocks=1858;  //test
-				blockf=1859;
+				blocks=1880;  //test
+				blockf=1885;
 				
 				//hiding by stress
 				for (i=0;i<Ntimes;i++)
 				{
-				/*	for (block=blocks;block<blockf;block=block+1)  //5 blocks
+					for (block=blocks;block<blockf;block=block+1)  //5 blocks
 					{									
 						//info hiding by stress	
 						for (j=0; j<2000; j++) //the endurance cycle for this mlc is 3,000 pe cycles
@@ -211,19 +211,19 @@ int main(void) {
 							//complete write selected pages
 							for (zz=0;zz<NP;zz=zz+1)  //the first 14 pages are used to hide the info
 							{	
-								page=pages[zz]-6;  //lower page number
+								page=pages[zz];  //lower page number
 								address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
-								//hide information by stress, write lower page 0
+								//hide information by stress, write higher page selected pattern
 								result = write(address, mylen, write_buffer[zz], otime1);
-								page=pages[zz]; //higher pages
-								address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
+								//page=pages[zz]; //higher pages
+								//address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
 								//hide information by stress, for higher pages, all write 1 so that lower page 0 continue to be programmed
 								//to highest threshold voltage distribution and previously lower page 1 will stay at the lowest threshold
 								//voltage distribution
 								result = write(address, mylen, write_buffer3, otime1);
 							}  //end of a page
 						}  //end of hiding by stress  
-					} */
+					} 
 					
 					memset(write_buffer2, 0x00, mylen ); 
 					for (block=blocks;block<blockf;block=block+1)    //10 blocks
@@ -235,7 +235,7 @@ int main(void) {
 						insert_delay(99);
 						
 						//complete write all of the block, prevent over erase attack
-						for (page=0;page<64;page=page+1)  //64 pages
+						for (page=0;page<120;page=page+1)  //64 pages
 						{						
 							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
 							result = write(address, mylen, write_buffer2, otime1); 
@@ -248,7 +248,7 @@ int main(void) {
 						insert_delay(99);
 						for (zz=0;zz<NP;zz++)  //only measure 16 pages now
 						{	
-							page=pages[zz]-6;
+							page=pages[zz];
 							address=address0 | (((uint32_t) block) << 20) | (((uint32_t) page) << 12);
 							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
 							result = write(address, Nbyte, write_buffer3, otime1);  //write 0xFF, try to setup the flag	
