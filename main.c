@@ -88,8 +88,10 @@ int main(void) {
 				address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12);  //lower page
 				address=address0;
 				
-				blocks=610;
-				blockf=690;
+				blocks=950;
+				blockf=970;
+				
+				//c10_block950_970_add128pe.bin
 				
 				memset(write_buffer2, 0x00, mylen ); 
 				//characterization part	
