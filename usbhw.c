@@ -426,7 +426,7 @@ DWORD USB_ReadEP (DWORD EPNum, BYTE *pData) {
  *    Return Value:    Number of bytes written
  */
 
-DWORD USB_WriteEP (DWORD EPNum, BYTE *pData, DWORD cnt) {
+DWORD USB_WriteEP (DWORD EPNum, const BYTE *pData, DWORD cnt) {
   DWORD n;
   DWORD data;
 

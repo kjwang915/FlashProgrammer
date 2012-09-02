@@ -95,7 +95,7 @@ extern void  USB_ResetEP    (DWORD EPNum);
 extern void  USB_SetStallEP (DWORD EPNum);
 extern void  USB_ClrStallEP (DWORD EPNum);
 extern DWORD USB_ReadEP     (DWORD EPNum, BYTE *pData);
-extern DWORD USB_WriteEP    (DWORD EPNum, BYTE *pData, DWORD cnt);
+extern DWORD USB_WriteEP    (DWORD EPNum, const BYTE *pData, DWORD cnt);
 extern BOOL  USB_DMA_Setup  (DWORD EPNum, USB_DMA_DESCRIPTOR *pDD);
 extern void  USB_DMA_Enable (DWORD EPNum);
 extern void  USB_DMA_Disable(DWORD EPNum);

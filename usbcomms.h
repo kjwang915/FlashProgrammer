@@ -31,7 +31,7 @@ void usb_user_init();
 uint8_t usb_read_ready();
 uint8_t usb_send_empty();
 void usb_read(uint8_t *dest, uint32_t len);
-void usb_write(uint8_t *src, uint32_t len);
+void usb_write(const uint8_t *src, uint32_t len);
 
 // Backend functions called by the usbuser library
 void usb_bulkIn();

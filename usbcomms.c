@@ -60,7 +60,7 @@ void usb_read(uint8_t *dest, uint32_t len) {
  * Write data into the USB buffer, breaking things apart into multiple buffers
  * if there is not enough room
  */
-void usb_write(uint8_t *src, uint32_t len) {
+void usb_write(const uint8_t *src, uint32_t len) {
 	int16_t space;
 	int32_t transferSize;
 	uint8_t i;
