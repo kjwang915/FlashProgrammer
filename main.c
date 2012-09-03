@@ -183,7 +183,7 @@ int main(void) {
 				
 				//put on random stress on continuous blocks, each stress level have 5 blocks
 				pecycle=1;
-				for (dd=0; dd<12; dd++)  //2^11=2048 random pe cycles, which also means 5*11=55 blocks, 60 blocks in total
+				for (dd=0; dd<11; dd++)  //2^11=1024 random pe cycles, which also means 5*11=55 blocks, 60 blocks in total
 				{
 					blocks=blocks+5;  //begin address for 1 pe cycles
 					//put on random stress
