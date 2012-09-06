@@ -19,7 +19,7 @@
 #include "usbdesc.h"
 #include "usbcomms.h"
 
-#define mylen 512  //write for hiding, use 512 bytes, which are 512 bits
+#define mylen 512  //write for hiding, use 512 bytes
 #define Nbyte 512  //read 512 bytes
 #define Nbit 4096 //Nbit=Nbyte*8
 #define Ncount 128  //assign 128 bits to a group
@@ -48,11 +48,11 @@ uint32_t tprogram, terase;
 int main(void) {
 	uint32_t otime, i;
 	
-	uint32_t address0, address, pecycle;
+	uint32_t address0, address, pecycles ;
 	uint8_t cmd[20];
 	uint8_t otime1[4]; 
-	uint16_t block, byte, j, nn, count, zz, blocks, blockf;  
-	uint8_t bit, page,  mynum, k, dd;  
+	uint16_t block, byte, j, nn, count, zz, blocks;  
+	uint8_t bit, page,  mynum, k, uu;  
 	
 	uint8_t result;
 	
@@ -87,130 +87,81 @@ int main(void) {
 				
 				address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12);  //lower page
 				address=address0;
-				
-				blocks=1600;  //begin address of fresh blocks
-				
-				//charaterize fresh blocks
-				
-				memset(write_buffer2, 0x00, mylen ); 
-				//characterization part	
-				for (i=0;i<1;i++)
-				{
-					for (block=blocks;block<(blocks+5);block=block+1)
-					{
-						//complete write all of the block, prevent over erase attack
-						for (page=0;page<64;page=page+1)  //64 pages
-						{						
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							result = write(address, mylen, write_buffer2, otime1); 
-							usb_write(otime1,4);  //output the program time for each page
-							insert_delay(99);
-						}  
-						//erase
-						address=address0 | (((uint32_t) block) << 18);
-						result = complete_erase(address, otime1);  //complete erase
-						usb_write(otime1,4);  //output the erase time again, it may be different from the first erase time
-						insert_delay(99);
-						//characterization, which is another program
-						for (page=0;page<64;page=page+1)  //64 pages
-						{						
-							address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-							memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
-							
-							
-							T1TCR=2; //stop and reset time				
-							T1TCR=1; //start the timer
-				
-							tprogram=850;   //to be determined  810
-							for (nn=0;nn<1200;nn++)
-							{
-								result = incomplete_write(address, mylen, write_buffer2);  //program the whole page
-											
-								read(address, Nbyte, read_buffer);  //read while output
-																
-								for (byte=0; byte<Nbyte; byte++)
-								{
-									for (bit=0; bit<8; bit++)
-									{
-										
-										if ( (bitrank[byte][bit]==0x0000) && ((read_buffer[byte] & (0x01<<bit))==0x00))
-										{
-											bitrank[byte][bit]=nn+1;  //this should be nn+1
-										}
-									}
-								}	
-							}
 
-							otime=T1TC;
-							T1TCR=2; //stop and reset time
-							
-							count=0;
-							for (byte=0; byte<Nbyte; byte++)
-							{
-								for (bit=0; bit<8; bit++)
-								{
-									obuffer[count]=(uint8_t) (bitrank[byte][bit]>>8);
-									count++;
-									obuffer[count]=(uint8_t) (bitrank[byte][bit]);
-									count++;
-								}
-								if (count==64)
-								{
-									count=0;
-									usb_write(obuffer,64);
-								}
-							}
-							otime1[0] = (uint8_t) (otime >> 24);  //time used
-							otime1[1] = (uint8_t) (otime >> 16);
-							otime1[2] = (uint8_t) (otime >> 8);
-							otime1[3] = (uint8_t) (otime);
-							usb_write(otime1,4);
-
-							usb_write((uint8_t *) "Done.", 5);	
-							
-							//insert some delay, because hynix chips need this
-							insert_delay(99);				
-						}  //end of pages
-						//erase
-						address=address0 | (((uint32_t) block) << 18);
-						result = complete_erase(address, otime1);  //complete erase	
-						usb_write(otime1,4);  //output the erase latenty again
-						insert_delay(99);
-						usb_write((uint8_t *) "Done.", 5);	
-					}  //end of Nblocks
-				} //end of Ntimes	
-				
-				
-				//put on random stress on continuous blocks, each stress level have 5 blocks
-				pecycle=1;
-				for (dd=0; dd<11; dd++)  //2^11=1024 random pe cycles, which also means 5*11=55 blocks, 60 blocks in total
+				//set up the write buffers here so that it is fast
+				memset(write_buffer, 0xFF, NP*mylen);
+				for (zz=0;zz<NP; zz++)
 				{
-					blocks=blocks+5;  //begin address for 1 pe cycles
-					//put on random stress
-					for (i=0;i<pecycle;i++) //1 times
+					srand (  zz+100 );  //set up the seed
+													
+					count=0;  //count the number of bits which has been assigned
+					byte=0;
+					bit=0;
+					while(count<Nbit)
 					{
-						for (block=blocks;block<(blocks+5);block=block+1)   //these three must be consistent
+						mynum= (uint8_t) rand();
+						mynum=mynum & myMsk;  //the range of bit is 0-(Ngroups-1)
+						//here, different groups may have different number of bits
+						count=count+1;
+						myASG[byte][bit]=mynum;  //assign the group number to this bit
+						bit=bit+1;
+						if (bit==8)
 						{
-							address=address0 | (((uint32_t) block) << 18);
-
-							result = complete_erase(address, otime1);  //complete erase
-							
-							for (page=0;page<64;page++)
-							{
-								address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
-								for (j=0;j<Nbyte;j++)
-								{
-									write_buffer2[j]= (uint8_t) rand();
-								}
-								
-								result = write(address, mylen, write_buffer2, otime1); 
-							}
-							
+							byte=byte+1;
+							bit=0;
 						}
 					}
-					pecycle=pecycle<<1;
+					
+					
+					//set up the flags for the groups. If the flag is one, this group should be programmed
+					//random data is stored, the data for each page is different, but for each block, it is the same
+					srand (  zz+550 );  //set up the seed
+					memset(myflags, 0x00, Ngroups);
+					for (k=0; k<Ngroups; k++)
+					{
+						//the random stored data
+						myflags[k]=((uint8_t)rand()) & 0x01;  //need to output the flags which are the stored data
+					}
+								
+					for (byte=0; byte<Nbyte; byte++)
+					{
+						for (bit=0; bit<8; bit++)
+						{
+							if (myflags[myASG[byte][bit]])  //if this bit belongs to a group that should be programmed
+							{
+								write_buffer[zz][byte] = write_buffer[zz][byte] & ~(0x01<<bit);
+							}
+						}
+					}					
 				}
 				
+				blocks=1700;
+				pecycles=625;
+				for (uu=0; uu<3; uu++)
+				{
+					//stress part
+					for (block=blocks; block<(blocks+10);block=block+1)   //2 blocks, each characterize 10 times, which is equal to 20 blocks in time
+					{									
+						//info hiding by stress	
+						for (j=0; j<pecycles; j++) //5,000 pe stress now, perhaps at such high stress, we should use a shorter program time
+						{	
+							address=address0 | (((uint32_t) block) << 18);
+								
+							zz=0;	
+							result = complete_erase(address, otime1);  //complete erase
+							//complete write selected pages
+							for (page=0;page<Npages;page=page+Intv)  //the first 14 pages are used to hide the info
+							{						
+								address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+								//hide information by stress
+								result = write(address, mylen, write_buffer[zz], otime1);
+								zz=zz+1;
+							}  //end of a page
+						}  //end of hiding by stress  
+					}
+					blocks=blocks+10;
+					pecycles=pecycles<<1;
+				}
 				usb_write((uint8_t *) "Fini.", 5);	
 			}  //end of if strcomp
 		}
