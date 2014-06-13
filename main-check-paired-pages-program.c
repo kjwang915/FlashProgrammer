@@ -24,22 +24,84 @@
  *   This code checks if partial programming a page will mess up the paired pages
  */
 
-// 4Gb SLC Hynix
-#define Nbyte 2112
-#define Nbytebase 2048
-#define Nbytespare 64
-#define Nbit 16896  //Nbit=Nbyte*8
-#define Nblocks 4096 // number of blocks in a Hynix 4gbit part
-#define Npages 1 // number pages per block
-#define BLOCKOFFSET 18
-#define PAGEOFFSET 12
+// 16Gb MLC Hynix
+#define Nbyte 8640  // 8k bytes + 448 spare
+#define Nbytebase 8192
+#define Nbytespare 448
+#define Nbit 69120  //Nbit=Nbyte*8
+#define Nblocks 1024 // number of blocks in a Hynix 4gbit part
+#define Npages 256 // number pages per block
+#define BLOCKOFFSET 22
+#define PAGEOFFSET 14
 
-#define pagestotest 63
+#define blocklistsize 10
+uint16_t blocklist[blocklistsize] = {12, 23, 56, 68, 199, 345, 500, 670, 800, 988};
 
-#define blocklistsize 3
-
-//this is which pages in the block to write to
-uint16_t blocklist[blocklistsize] = {69,70,71};
+uint8_t pageprogramtimes[Npages] = {11,11,
+                                    11,11,30,60, // 6
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 22
+                                    11,11,30,60,
+                                    11,11,30,60, // 30
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 42
+                                    11,11,30,60,
+                                    11,11,30,60, // 50
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 62
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 74
+                                    11,11,30,60,
+                                    11,11,30,60, 
+                                    11,11,30,60, // 86
+                                    11,11,30,60, // 90
+                                    11,11,30,60, 
+                                    11,11,30,60,
+                                    11,11,30,60, // 102
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 114
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 126
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 138
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 150
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 162
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 174
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 186
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 198
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 210
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 222
+                                    11,11,30,60,
+                                    11,11,30,60, 
+                                    11,11,30,60, // 234
+                                    11,11,30,60,
+                                    11,11,30,60,
+                                    11,11,30,60, // 246
+                                    11,11,30,60, // 250
+                                    11,11,30,60, // 254
+                                    30,60}
 
 /**************************************
 ** Global read/write buffers         **
@@ -63,18 +125,14 @@ uint8_t otimep[4];
 uint8_t otimee[4]; 
 uint8_t addressout[4];
 
-
 /**
  * Application entry point
  */
 int main(void) {
 
-	//page
-	uint8_t page;
 
-    uint8_t cmd[20];
-
-    uint32_t address;
+ 	uint32_t address;
+ 	uint8_t cmd[20];
 
  	uint32_t j;
 
@@ -99,84 +157,173 @@ int main(void) {
     write_cmd_word(0xFF);  //the first command to initialized the chip
 
     while (1) {
+    	if (usb_read_ready()) {
+    		usb_read(cmd, 4);
+            usb_write(cmd, 4);
+            //insertdelay
 
-    	//before starting, take in command from user 
-    	//do not want program to start running immediately
-    	if(usb_read_ready()){
-    		usb_read(cmd,4);
-
-    		if (strncmp((char *) cmd, "test", 4) == 0){
-    			
-    			for (j = 0; j < blocklistsize; j++){
+    
+            if (strncmp((char *) cmd, "cppp", 4) == 0) {
 
 
-    				block = blocklist[j];
+                for (j = 0; j < blocklistsize; j++) {
 
+                    block = blocklist[j];
+
+                    // determine block and output block number
                     uint8_t blockout[2];
-                    blockout[0] = (uint8_t) (block>>8);
-                    blockout[1] = (uint8_t) (block);
+                    blockout[0] = (uint8_t) (blocklist[j]>>8);
+                    blockout[1] = (uint8_t) (blocklist[j]);
                     usb_write(blockout,2);
                     //insertdelay
 
                     // address of block
+                    address = address0 | (((uint32_t) block ) << BLOCKOFFSET ) | (((uint32_t) 0) << PAGEOFFSET );
+
+                    // do an erase first
+                    complete_erase(address, otimee);
+
+                    // program pages 0-1. 
+                    // partial program page 2
+                    // paired pages are 2 3 8 9
+                    // read out pages 2 3 8 9
+
+                    memset(write_buffer, 0x55, Nbyte); // write this
+
+                    uint32_t ik;
+
+                    for (ik = 0; ik < 9; ik++) {
+
+                        address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) ik) << PAGEOFFSET);
+                        
+                        complete_write(address, Nbyte, write_buffer, otimep);
+                                                
+                        //usb_write(otimep, 4);
+
+                    }
+
+                    //partial program page 9
+                    memset(write_buffer, 0x00, Nbyte);
+                    address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 9) << PAGEOFFSET);
+                    partial_write(address, Nbyte, write_buffer, 20000); // page 2 should be fast
+                
+                    // address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 3) << PAGEOFFSET);
+                    // partial_write(address, Nbyte, write_buffer, 6000); // page 2 should be fast
+
+
+                    //read out pages 9 2 3 8
+
+                    address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 9) << PAGEOFFSET);
+                    read(address, Nbyte, read_buffer);
+                    read(address, Nbyte, read_buffer);
+                    usb_write(read_buffer, Nbyte);
+                    //usb_write(readbufNbytebaseptr, Nbytespare);
+                    usb_write((uint8_t *) "Done.", 5);
+
+                    address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 2) << PAGEOFFSET);
+                    read(address, Nbyte, read_buffer);
+                    read(address, Nbyte, read_buffer);
+                    usb_write(read_buffer, Nbyte);
+                    //usb_write(readbufNbytebaseptr, Nbytespare);
+                    usb_write((uint8_t *) "Done.", 5);
+
+                    address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 3) << PAGEOFFSET);
+                    read(address, Nbyte, read_buffer);
+                    usb_write(read_buffer, Nbyte);
+                    //usb_write(readbufNbytebaseptr, Nbytespare);
+                    usb_write((uint8_t *) "Done.", 5);
+
+                    address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 8) << PAGEOFFSET);
+                    read(address, Nbyte, read_buffer);
+                    usb_write(read_buffer, Nbyte);
+                    //usb_write(readbufNbytebaseptr, Nbytespare);
+                    usb_write((uint8_t *) "Done.", 5);
+
+                    
+                }
+
+                usb_write((uint8_t *) "DONEDONEDONE", 12);
+
+            } // end if (cppp)            
+
+/*            else if (strncmp((char *) cmd, "cpp1", 4) == 0) {
+
+
+                for (j = 0; j < blocklistsize; j++) {
+
+                    block = blocklist[j];
+
+                    // determine block and output block number
+                    uint8_t blockout[2];
+                    blockout[0] = (uint8_t) (blocklist[j]>>8);
+                    blockout[1] = (uint8_t) (blocklist[j]);
+                    usb_write(blockout,2);
+                    //insertdelay
+
+                    // address of block
+                    address = address0 | (((uint32_t) blocklist[j] ) << BLOCKOFFSET ) | (((uint32_t) 0) << PAGEOFFSET );
+
+                    // do an erase first
+                    complete_erase(address, otimee);
+
+                    // program pages 0-8. 
+                    // partial program page 9
+                    // paired pages are 2 3 8
+                    // read out pages 2 3 8
+
+                    memset(write_buffer, 0x55, Nbyte); // write this
+
+                    for (i = 0; i < 9; i++) {
+
+                        address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) i) << PAGEOFFSET);
+                        complete_write(address, Nbyte, write_buffer, otimep);
+
+                    }
+
+                    // partial program page 9
+                    memset(write_buffer, 0x00, Nbyte);
+                    address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 9) << PAGEOFFSET);
+                    partial_write(address, Nbyte, write_buffer, 18000);
+
+                    // read out pages 9 2 3 8
+                    address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 9) << PAGEOFFSET);
+                    read(address, Nbyte, read_buffer);
+                    read(address, Nbyte, read_buffer);
+                    usb_write(read_buffer, Nbyte);
+                    //usb_write(readbufNbytebaseptr, Nbytespare);
+                    usb_write((uint8_t *) "Done.", 5);
+                    
+                    address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 2) << PAGEOFFSET);
+                    read(address, Nbyte, read_buffer);
+                    read(address, Nbyte, read_buffer);
+                    usb_write(read_buffer, Nbyte);
+                    //usb_write(readbufNbytebaseptr, Nbytespare);
+                    usb_write((uint8_t *) "Done.", 5);
+                    
+                    address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 3) << PAGEOFFSET);
+                    read(address, Nbyte, read_buffer);
+                    read(address, Nbyte, read_buffer);
+                    usb_write(read_buffer, Nbyte);
+                    //usb_write(readbufNbytebaseptr, Nbytespare);
+                    usb_write((uint8_t *) "Done.", 5);
+
+                    address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 8) << PAGEOFFSET);
+                    read(address, Nbyte, read_buffer);
+                    read(address, Nbyte, read_buffer);
+                    usb_write(read_buffer, Nbyte);
+                    //usb_write(readbufNbytebaseptr, Nbytespare);
+                    usb_write((uint8_t *) "Done.", 5);
                     
 
-                    usb_write((uint8_t *) "init",4);
-					for (page = 59; page < 64; page++){
-						
-							address = address0 | (((uint32_t) block ) << BLOCKOFFSET ) | (((uint32_t) page) << PAGEOFFSET );
+                    
+                }
 
-						read(address, 8, read_buffer);  //read 
-	                    //usb_write(&block,1);
-	                    insert_delay(99);
-	                    usb_write(&page,1);
-	                    insert_delay(99);
-	                    usb_write((uint8_t *)"A",1);
-	                    insert_delay(99);
-	                    usb_write(read_buffer,8);
-	                    insert_delay(99);
-					}
+                usb_write((uint8_t *) "DONEDONEDONE", 12);
 
+            } // end if (cppp)*/
 
-
-	    			usb_write((uint8_t *) "erase",5);
-	    			complete_erase(address, otimee);	//do complete erase
-					memset(write_buffer, 0x00, Nbyte); // write this
-
-					uint32_t ik;
-
-					for (ik = 60; ik < pagestotest; ik++){
-						address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) ik) << PAGEOFFSET);
-
-						usb_write((uint8_t *) "write",5);
-						complete_write(address, Nbyte, write_buffer, otimep);
-
-						usb_write((uint8_t *) "done",4);
-					}
-
-					usb_write((uint8_t *) "read",4);
-					for (page = 59; page < 64; page++){
-						
-						address = address0 | (((uint32_t) block ) << BLOCKOFFSET ) | (((uint32_t) page) << PAGEOFFSET );
-						
-						read(address, 8, read_buffer);  //read 
-	                    //usb_write(&block,1);
-	                    insert_delay(99);
-	                    usb_write(&page,1);
-	                    insert_delay(99);
-	                    usb_write((uint8_t *)"A",1);
-	                    insert_delay(99);
-	                    usb_write(read_buffer,8);
-	                    insert_delay(99);
-					}
-				}
-
-				usb_write((uint8_t *) "end",4);
-
-    		}
-
-    	}
- 	}	
+		} // end if (usb_read_ready())
+	} // end while(1)
 
 	return 0;
 }
@@ -206,6 +353,21 @@ void readID(uint8_t *dest)
 		FIO0SET = P_READ_ENABLE; //WAIT;
 	}
 	DEASSERT_CHIP_ENABLE;
+}
+
+void insert_delay(uint32_t Nprescaler)  //Nprescaler=99 means 0.1 seconds
+{
+	// insert delay for the usb transmittion to finish
+	T0PR=Nprescaler;  //7 2 0.1 second delay
+	T0TCR=2; //stop and reset time
+	T0MCR=0x20;
+	T0MR1=T0TC+30000;  //30e6,
+	T0PC=0; //reset prescale counter register
+	T0TCR=1; //start the timer
+	while ((T0TCR&1)==1)
+	{
+		WAIT;
+	}
 }
 
 /**
@@ -246,7 +408,6 @@ uint8_t complete_erase(uint32_t address, uint8_t *otime1) {
 	T0MCR=0x00;  //stop comparing
 	T0PR=0;  //prescaler
 	T0TCR=2; //stop and reset time
-	/*this should be a 1!!!!*/
 	
 	// Activate the chip and set up I/O
 	ASSERT_CHIP_ENABLE;
@@ -278,7 +439,7 @@ uint8_t complete_erase(uint32_t address, uint8_t *otime1) {
 	
 	//record the time
 	otime=T0TC;
-	T0TCR=2; //stop and reset time  /*this should be a 1!!!!*/
+	T0TCR=2; //stop and reset time
 	otime1[0] = (uint8_t) (otime >> 24);  //time used
 	otime1[1] = (uint8_t) (otime >> 16);
 	otime1[2] = (uint8_t) (otime >> 8);

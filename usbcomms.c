@@ -18,6 +18,26 @@ volatile uint8_t usb_recv_buf[USB_RECV_BUFFER_SIZE];
 volatile uint16_t usb_send_r, usb_send_w, usb_recv_r, usb_recv_w;
 volatile uint8_t inTransfer;
 
+
+/**
+ * Inserts delay.
+ */
+void insert_delay(uint32_t Nprescaler)  //Nprescaler=99 means 0.1 seconds
+{
+	// insert delay for the usb transmittion to finish
+	T0PR=Nprescaler;  //7 2 0.1 second delay
+	T0TCR=2; //stop and reset time
+	T0MCR=0x20;
+	T0MR1=T0TC+30000;  //30e6,
+	T0PC=0; //reset prescale counter register
+	T0TCR=1; //start the timer
+	while ((T0TCR&1)==1)
+	{
+		WAIT;
+	}
+}
+
+
 /**
  * Properly initialize the data
  */
@@ -61,9 +81,9 @@ void usb_read(uint8_t *dest, uint32_t len) {
  * if there is not enough room
  */
 void usb_write(const uint8_t *src, uint32_t len) {
-	int16_t space;
-	int32_t transferSize;
-	uint8_t i;
+	uint16_t space;  
+	uint32_t transferSize;
+	uint16_t i;
 
 	// Dodge null writes
 	if (len == 0)
@@ -90,8 +110,8 @@ void usb_write(const uint8_t *src, uint32_t len) {
 
 	// Check for space first
 	space = USB_SEND_BUFFER_MASK - ((usb_send_w - usb_send_r) & USB_SEND_BUFFER_MASK);
-	if (space < len) {
-		usb_write(src, space);
+	if (space < len) {  
+		usb_write(src, space);  
 		while(!usb_send_empty()) { ; }
 		usb_write(src+space, len-space);
 		return;
@@ -102,6 +122,9 @@ void usb_write(const uint8_t *src, uint32_t len) {
 		usb_send_buf[usb_send_w] = src[i];
 		usb_send_w = (usb_send_w + 1) & USB_SEND_BUFFER_MASK;
 	}
+	
+	// Call insert_delay here
+	insert_delay(99);
 }
 
 /**

@@ -21,7 +21,7 @@
 #include "usbcomms.h"
 
 /*
- *   This code checks if partial programming a page will mess up the paired pages
+ *   Sweeps partial erase times
  */
 
 // 4Gb SLC Hynix
@@ -30,16 +30,14 @@
 #define Nbytespare 64
 #define Nbit 16896  //Nbit=Nbyte*8
 #define Nblocks 4096 // number of blocks in a Hynix 4gbit part
-#define Npages 1 // number pages per block
+#define Npages 64 // number pages per block
 #define BLOCKOFFSET 18
 #define PAGEOFFSET 12
 
-#define pagestotest 63
+#define pagestotest 64
 
-#define blocklistsize 3
-
-//this is which pages in the block to write to
-uint16_t blocklist[blocklistsize] = {69,70,71};
+#define blocklistsize 10
+uint16_t blocklist[blocklistsize] = {12, 91, 225, 518, 808, 1356, 1891, 2544, 3218, 3980};
 
 /**************************************
 ** Global read/write buffers         **
@@ -69,8 +67,6 @@ uint8_t addressout[4];
  */
 int main(void) {
 
-	//page
-	uint8_t page;
 
     uint8_t cmd[20];
 
@@ -99,18 +95,46 @@ int main(void) {
     write_cmd_word(0xFF);  //the first command to initialized the chip
 
     while (1) {
+    	if (usb_read_ready()) {
+    		usb_read(cmd, 4);
+            usb_write(cmd, 4);
+            //insertdelay
 
-    	//before starting, take in command from user 
-    	//do not want program to start running immediately
-    	if(usb_read_ready()){
-    		usb_read(cmd,4);
+    
+            if (strncmp((char *) cmd, "ppa", 3) == 0) {
 
-    		if (strncmp((char *) cmd, "test", 4) == 0){
-    			
-    			for (j = 0; j < blocklistsize; j++){
+                uint32_t erase = 0;
+
+                if (strncmp((char *) cmd, "ppae", 4) == 0) {
+                    erase = 1;
+                }
+
+                //uint32_t blockyes = 0;
+                uint32_t petime = 0;
+
+                while( 1 ) {
 
 
-    				block = blocklist[j];
+                    if (usb_read_ready()) {
+                        usb_read(cmd, 5); // read in pptime
+
+                        if (!petime) {
+                            petime = atoi(cmd);
+                        }
+                        
+                    }
+
+                    if ( ( petime || !erase) ) {
+                        usb_write((uint8_t *) "PEFRAC", 6); // block and page are successfully read from input
+                        break; // exit while loop
+                    }
+
+                }
+
+
+                for (j = 0; j < blocklistsize; j++) {
+
+                    block = blocklist[j];
 
                     uint8_t blockout[2];
                     blockout[0] = (uint8_t) (block>>8);
@@ -119,64 +143,92 @@ int main(void) {
                     //insertdelay
 
                     // address of block
+                    address = address0 | (((uint32_t) block ) << BLOCKOFFSET ) | (((uint32_t) 0) << PAGEOFFSET );
+
+                    // do an erase first
+                    if (erase) {
+                        complete_erase(address, otimee);
+                        memset(write_buffer, 0x00, Nbyte); // write this
+                    }
+
+
+
+                    uint8_t petimeout[4];
+                    petimeout[0] = (uint8_t) (petime>>24);
+                    petimeout[1] = (uint8_t) (petime>>16);
+                    petimeout[2] = (uint8_t) (petime>>8);
+                    petimeout[3] = (uint8_t) (petime);
+                    usb_write(petimeout,4);
                     
 
-                    usb_write((uint8_t *) "init",4);
-					for (page = 59; page < 64; page++){
-						
-							address = address0 | (((uint32_t) block ) << BLOCKOFFSET ) | (((uint32_t) page) << PAGEOFFSET );
 
-						read(address, 8, read_buffer);  //read 
-	                    //usb_write(&block,1);
-	                    insert_delay(99);
-	                    usb_write(&page,1);
-	                    insert_delay(99);
-	                    usb_write((uint8_t *)"A",1);
-	                    insert_delay(99);
-	                    usb_write(read_buffer,8);
-	                    insert_delay(99);
-					}
+                    uint32_t ik;
+                    if (erase) {
+                        for (ik = 0; ik < pagestotest; ik++) {
+
+                            address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) ik) << PAGEOFFSET);
+                            
+                            
+                            
+                            // if (pageprogramtimes[ik] == 11) {
+                            //     pptime = ppfractionl * pageprogramtimes[ik] * 10;
+                            //     usb_write((uint8_t *) "L",1);
+                            // }
+                            // else if (pageprogramtimes[ik] == 30) {
+                            //     pptime = ppfractionm * pageprogramtimes[ik] * 10;
+                            //     usb_write((uint8_t *) "M",1);
+                            // }
+                            // else if (pageprogramtimes[ik] == 60) {
+                            //     pptime = ppfractionh * pageprogramtimes[ik] * 10;
+                            //     usb_write((uint8_t *) "H",1);
+                            // }
+                            // else {
+                            //     pptime = 70000;
+                            // }
+
+                            complete_write(address, Nbyte, write_buffer, otimep);
+                                
+                            
+                        }
+
+                        address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) 0) << PAGEOFFSET);
+
+                        // the actual partial erase
+                        partial_erase(address, petime);
+                    }
 
 
 
-	    			usb_write((uint8_t *) "erase",5);
-	    			complete_erase(address, otimee);	//do complete erase
-					memset(write_buffer, 0x00, Nbyte); // write this
+                    // read everything out
+                    for (ik = 0; ik < pagestotest; ik++) {
+                        //page number
+                        uint8_t ikout = (uint8_t) (ik);
+                        usb_write(&ikout,1);
+                        
+                        read(address, Nbyte, read_buffer);
+                        usb_write(read_buffer, Nbyte);
+                        usb_write((uint8_t *) "Done.", 5);
 
-					uint32_t ik;
+                    }
 
-					for (ik = 60; ik < pagestotest; ik++){
-						address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) ik) << PAGEOFFSET);
 
-						usb_write((uint8_t *) "write",5);
-						complete_write(address, Nbyte, write_buffer, otimep);
 
-						usb_write((uint8_t *) "done",4);
-					}
+                    if (erase) {
+                        usb_write((uint8_t *) "!<3<3<3!", 8);
+                    }
+                    else {
+                        usb_write((uint8_t *) "!=)=)=)!", 8);
+                    }
 
-					usb_write((uint8_t *) "read",4);
-					for (page = 59; page < 64; page++){
-						
-						address = address0 | (((uint32_t) block ) << BLOCKOFFSET ) | (((uint32_t) page) << PAGEOFFSET );
-						
-						read(address, 8, read_buffer);  //read 
-	                    //usb_write(&block,1);
-	                    insert_delay(99);
-	                    usb_write(&page,1);
-	                    insert_delay(99);
-	                    usb_write((uint8_t *)"A",1);
-	                    insert_delay(99);
-	                    usb_write(read_buffer,8);
-	                    insert_delay(99);
-					}
-				}
+                }
 
-				usb_write((uint8_t *) "end",4);
+                
+                usb_write((uint8_t *) "DONEDONEDONE", 12);
 
-    		}
+            }
 
-    	}
- 	}	
+		} // end if (usb_read_ready())
+	} // end while(1)
 
 	return 0;
 }
@@ -246,7 +298,6 @@ uint8_t complete_erase(uint32_t address, uint8_t *otime1) {
 	T0MCR=0x00;  //stop comparing
 	T0PR=0;  //prescaler
 	T0TCR=2; //stop and reset time
-	/*this should be a 1!!!!*/
 	
 	// Activate the chip and set up I/O
 	ASSERT_CHIP_ENABLE;
@@ -278,7 +329,7 @@ uint8_t complete_erase(uint32_t address, uint8_t *otime1) {
 	
 	//record the time
 	otime=T0TC;
-	T0TCR=2; //stop and reset time  /*this should be a 1!!!!*/
+	T0TCR=2; //stop and reset time
 	otime1[0] = (uint8_t) (otime >> 24);  //time used
 	otime1[1] = (uint8_t) (otime >> 16);
 	otime1[2] = (uint8_t) (otime >> 8);

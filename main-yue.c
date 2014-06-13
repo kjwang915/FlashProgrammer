@@ -1,5 +1,5 @@
 /**
- * Flash programmer main entry point
+ * Flash programmer main entry point 
  */
 
 // Standard headers
@@ -18,153 +18,131 @@
 #include "uart.h"
 #include "usbdesc.h"
 #include "usbcomms.h"
-//#include "hiding.h"
 
-// Block 1, page 0
-#define HIDING_ADDRESS ((1 << 26) + (0 << 12))
+#define mylen 2112  //write for hiding, use 512 bytes, which are 512 bits
+#define Nbyte 2112  //read 2112 bytes but only record every 4 bytes
+#define Nbyte2 528 //for bitrank recording
+#define Nbit 4224 //Nbit=Nbyte*8
+#define Ncount 128  //assign 128 bits to a group
+#define Ngroups 32  //Number of groups Nbit bits are divided into
+#define myMsk 0x1F  //for Ngroup 32, the last 5 bits of generated random location is useful
+#define Ntimes 1
+#define NP 1//number of used pages (64 pages forms 32 rows. In each row, only one page is used (perphaps we can use both of the pages)
+#define Npages 64  //the first Npages pages are used in a block
+#define Intv 1  //when Intv is 1, you characterize every page in a block, stuck at intv=1
+#define pagelen 2112
 
-//uint8_t test_pattern[2048];
-//uint8_t results[2048];
-
-#define mylen 2048  //one page has 2048 bytes
-#define Nbyte 20
-
-uint8_t write_buffer[mylen];
+uint8_t write_buffer[NP][mylen];
+uint8_t write_buffer4[pagelen];
+uint8_t write_buffer2[mylen];
 uint8_t read_buffer[Nbyte];
+uint16_t bitrank[Nbyte2][8];  //record the bit program rank
+uint8_t obuffer[64];  //output buffer
+uint8_t myASG[Nbyte2][8];  //group assignment for each bit
+uint8_t myflags[Ngroups];
+uint32_t tprogram, terase;
+//now, one 512 bytes can hide 32 bits which are four letters
+//then this message need ceil(44/4) 11 pages, just for testing
+//for this message, there are 44 ascii letters
+//const uint8_t hMessage[]="The quick brown fox jumps over the lazy dog.";
 /**
  * Application entry point
  */
 int main(void) {
-	uint32_t buffer_r;
-	uint32_t i, otime;
-	uint32_t address;
-	uint32_t count;
+	uint32_t otime, i;
+	
+	uint32_t address0, address;
 	uint8_t cmd[20];
-	uint8_t otime1[4];
+	uint8_t otime1[4]; 
+	uint16_t block, byte, nn, count, blocks, byte2;  
+	uint8_t bit, page, dd;  
 	
 	uint8_t result;
-
+	
 	init();
 	usb_user_init();
 
 	USB_Init();
 	USB_Connect(TRUE);
 	
-	memset(write_buffer, 0x00, mylen * sizeof(uint8_t));
-
+	//intialize the chip
+	ASSERT_CHIP_ENABLE;
+	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	WAIT_FOR_BUSY;
+	SET_IO_AS_OUTPUT;
+	
+	//ASSERT_CHIP_ENABLE;
+	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE | P_ADDR_LATCH;
+	FIO0SET = P_WRITE_PROTECT | P_READ_ENABLE;
+    write_cmd_word(0xFF);  //the first command to initialized the chip
+	memset(write_buffer2, 0x00, mylen ); 
 	while (1) {
 		if (usb_read_ready()) {
 			usb_read(cmd, 4);
 			if (strncmp((char *)cmd, "m", 1) == 0) {
-			
-				//*************debug*************
-				FIO1DIR = 0x00ff0000;
-				FIO1CLR = 0xffffffff;
-				//*******************************
-				usb_write((uint8_t *) "Done.", 5);
-				address = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x63) << 18) | (((uint32_t) (0x0a)) << 12);  //the block with 10 million stress
+				address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12);  //lower page
+				block = 200;  // block number
+				address = address0 | (((uint32_t) block) << 18);
+			    result = complete_erase(address, otime1);  //complete erase		
+                insert_delay(99);				
+				//complete_write(address, pagelen, write_buffer2, otime1);
+				//insert_delay(99);	
 				
-				T1MCR=0x00;  //stop comparing
-				T1PR=999;  //prescaler
-				T1TCR=2; //stop and reset time
-
-				//restore some stress
-			/*	for (i=0;i<1000;i++)  //totoal 1e3
-				{
-					result = write(address, mylen, write_buffer);
-					result = complete_erase(address);
-				}  */
-				result = write(address, mylen, write_buffer);
-				result = erase(address);  //partial erase
+				read(address, pagelen, read_buffer);  //read while output
+				usb_write(read_buffer, 5);
+				insert_delay(99);
 				
-				
-				T1TCR=1; //start the timer
-				
-				for (i=0;i<100000;i++)
-				{
-					read(address, Nbyte, read_buffer);
-					usb_write(read_buffer, Nbyte);
-				}
-	
-				otime=T1TC;
-				T1TCR=2; //stop and reset time
-				otime1[0] = (uint8_t) (otime >> 24);  //time used
-				otime1[1] = (uint8_t) (otime >> 16);
-				otime1[2] = (uint8_t) (otime >> 8);
-				otime1[3] = (uint8_t) (otime);
-				usb_write(otime1,4);
-				read(address, Nbyte, read_buffer);//to waste some time only 
-				usb_write((uint8_t *)"Done.", 5); 
-				FIO1SET=0x00ff0000;
-			}			
-		/*	if (strncmp((char *)cmd, "ih_w", 4) == 0) {
-				// Do information hiding wear out
-				hiding_pattern_test_fill(test_pattern);
-				usb_write((uint8_t *)"IHW Start", 9);
-				for (i = 1; i < 100001; ++i) {
-					erase(HIDING_ADDRESS);
-					write(HIDING_ADDRESS, 2048, test_pattern);
-					if (i % 100 == 0)
-						usb_write((uint8_t *)".", 1);
-				}
-				usb_write((uint8_t *)"Done.", 5);
-			}
-			if (strncmp((char *)cmd, "mr", 2) == 0) {
-				address = (((uint32_t) cmd[2]) << 26) | (((uint32_t) cmd[3]) << 18) | (((uint32_t) (cmd[4])) << 12);
-				count = (((uint32_t) cmd[5]) << 24) & 0xff000000;
-				count += (((uint32_t) cmd[6] << 16)) & 0x00ff0000;
-				count += (((uint32_t) cmd[7]) << 8) & 0x0000ff00;
-				count += ((uint32_t) cmd[8]) & 0x000000ff;
-
-				// Erase to start things off
-				results[0] = erase(0);
-				if (results[0] != 0) {
-					usb_write((uint8_t *) "Error.", 6);
-					continue;
-				}
-
-				// Now, read as many times as were requested, and return the first byte every time.
-				buffer_r = 0;
-				memset(buffer, 0, sizeof(buffer));
-				for (i = 0; i < count; ++i) {
-					read(0, 1, results);
-					buffer[buffer_r++] = results[0];
-					if (buffer_r >= 64) {
-						usb_write(buffer, 64);
-						memset(buffer, 0, sizeof(buffer));
-						buffer_r = 0;
-					}
-				}
-				if (buffer_r > 0) {
-					usb_write(buffer, buffer_r);
-				}
-				usb_write((uint8_t *)"Done.", 5);
-			}
-			else if (strncmp((char *)cmd, "p", 1) == 0) {
-				for (i = 0; i < 10; ++i) {
-					buffer[i] = cmd[1];
-				}
-				results[0] = write(0, 10, buffer);
-				usb_write((uint8_t *)"Program result: ", 15);
-				usb_write(results, 1);
-			}
-			else if (strncmp((char *)cmd, "r", 1) == 0) {
-				// Read command
-				memset(buffer, 0, 64);
-				//read(0, 64, buffer);
-				usb_write((uint8_t *)"Read result: ", 12);
-				usb_write(buffer, 64);
-			}
-			else if (strncmp((char *)cmd, "e", 1) == 0) {
-				results[0] = erase(0);
-				usb_write((uint8_t *)"Erase result: ", 13);
-				usb_write(results, 1);
-			} */
+			    readID(read_buffer);
+				usb_write(read_buffer, 4);
+				insert_delay(99);
+			}  //end of if strcomp
 		}
 	}
-
 	return 0;
 }
+
+void readID(uint8_t *dest)
+{
+	uint8_t i;
+	// Activate the chip and set up I/O
+	ASSERT_CHIP_ENABLE;
+	SET_IO_AS_OUTPUT;
+	//cmd input
+	write_cmd_word(CMD_READ_SIGNATURE);
+	
+	//address input
+	FIO0SET = P_ADDR_LATCH | P_READ_ENABLE;
+	FIO0CLR = P_CMD_LATCH;// | P_WRITE_ENABLE;	
+	
+	WRITE_WITH_FLOP(0x20); // changed from 0x00 to read out ONFI tag
+	
+	FIO0CLR = P_ADDR_LATCH;
+	//tAR and tWHR
+	WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	
+	for (i = 0; i < 4; ++i) { // changed from 5
+		FIO0CLR = P_READ_ENABLE; //WAIT;
+		*(dest+i) = FIO0PIN2;// WAIT;
+		FIO0SET = P_READ_ENABLE; //WAIT;
+	}
+	DEASSERT_CHIP_ENABLE;
+}
+
+void insert_delay(uint32_t Nprescaler)  //Nprescaler=99 means 0.1 seconds
+{
+	// insert delay for the usb transmittion to finish
+	T0PR=Nprescaler;  //7 2 0.1 second delay
+	T0TCR=2; //stop and reset time
+	T0MCR=0x20;
+	T0MR1=T0TC+30000;  //30e6,
+	T0PC=0; //reset prescale counter register
+	T0TCR=1; //start the timer
+	while ((T0TCR&1)==1)
+	{
+		WAIT;
+	}
+}
+
 
 /**
  * Initializes interrupt controller, port pins, and all modules not configured in Startup.S
@@ -189,7 +167,6 @@ void reset_io(void) {
 	FIO0DIR = P_CHIP_ENABLE | P_ADDR_LATCH | P_CMD_LATCH | P_READ_ENABLE | P_WRITE_ENABLE | P_WRITE_PROTECT;
 	FIO0SET = P_CHIP_ENABLE | P_WRITE_ENABLE | P_WRITE_PROTECT | P_READ_ENABLE;
 	FIO0CLR = P_ADDR_LATCH | P_CMD_LATCH;
-	WAIT; WAIT; WAIT;
 	DEASSERT_CHIP_ENABLE;
 	SET_IO_AS_OUTPUT;
 }
@@ -197,8 +174,14 @@ void reset_io(void) {
 /**
  * Erases an entire block (the smallest granularity possible) from the device
  */
-uint8_t complete_erase(uint32_t address) {
+uint8_t complete_erase(uint32_t address, uint8_t *otime1) {
 	uint8_t result;
+	uint32_t otime;
+	
+	//set up timer 0 to moniter the erase time latency
+	T0MCR=0x00;  //stop comparing
+	T0PR=0;  //prescaler
+	T0TCR=2; //stop and reset time
 	
 	// Activate the chip and set up I/O
 	ASSERT_CHIP_ENABLE;
@@ -208,7 +191,6 @@ uint8_t complete_erase(uint32_t address) {
 	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE | P_ADDR_LATCH;
 	FIO0SET = P_WRITE_PROTECT | P_READ_ENABLE;
 
-	WAIT; WAIT;
 	
 	// Write the first word for erase
 	write_cmd_word(CMD_BLOCK_ERASE_1);
@@ -218,6 +200,9 @@ uint8_t complete_erase(uint32_t address) {
 
 	// Write second command word
 	write_cmd_word(CMD_BLOCK_ERASE_2);
+	
+	T0TCR=1; //start the timer
+	
 	FIO0CLR = P_READ_ENABLE;
 
 	// Change to input
@@ -225,8 +210,17 @@ uint8_t complete_erase(uint32_t address) {
 	
 	// Wait for erase to finish
 	WAIT_FOR_BUSY;
+	
+	//record the time
+	otime=T0TC;
+	T0TCR=2; //stop and reset time
+	otime1[0] = (uint8_t) (otime >> 24);  //time used
+	otime1[1] = (uint8_t) (otime >> 16);
+	otime1[2] = (uint8_t) (otime >> 8);
+	otime1[3] = (uint8_t) (otime);
+	
 	reset_io();
-	DEASSERT_CHIP_ENABLE; WAIT;
+	DEASSERT_CHIP_ENABLE;
 
 	// Read status and find out if the program was successful, returning status
 	result = read_status();
@@ -238,12 +232,12 @@ uint8_t complete_erase(uint32_t address) {
 /**
  * Erases an entire block (the smallest granularity possible) from the device
  */
-uint8_t erase(uint32_t address) {
+uint8_t partial_erase(uint32_t address) {
 	//  *********control timing******
 	T0PR=0;  //one tick is 0.01 ms
 	T0TCR=2; //stop and reset time
 	T0MCR=0x20;
-	T0MR1=T1TC+2090;  //make a 0.7ms delay, almost half of the erase time 2082 2084 2080 last time    2088  last 90 last time 92
+	T0MR1=terase;  //make a 0.7ms delay, almost half of the erase time 2082 2084 2080 last time    2088  last 90 last time 92
 	//  *********************************************
 
 	uint8_t result;
@@ -256,7 +250,6 @@ uint8_t erase(uint32_t address) {
 	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE | P_ADDR_LATCH;
 	FIO0SET = P_WRITE_PROTECT | P_READ_ENABLE;
 
-	WAIT; WAIT;
 	
 	// Write the first word for erase
 	write_cmd_word(CMD_BLOCK_ERASE_1);
@@ -269,7 +262,7 @@ uint8_t erase(uint32_t address) {
 	FIO0CLR = P_READ_ENABLE;
 
 	// Change to input
-	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	SET_IO_AS_INPUT; 
 	
 	// **********control the timing*************
 	T0TCR=1; //start the timer
@@ -282,20 +275,19 @@ uint8_t erase(uint32_t address) {
 	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE | P_ADDR_LATCH;
 	FIO0SET = P_WRITE_PROTECT | P_READ_ENABLE;
 
-	WAIT; WAIT;
 	
 	// Write the first word for erase
 	write_cmd_word(0xFF);  //reset to abort the erase
 	FIO0CLR = P_READ_ENABLE;
 
 	// Change to input
-	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	SET_IO_AS_INPUT;  WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
 	// *************end of what I add*********************
 	
 	// Wait for erase to finish
 	WAIT_FOR_BUSY;
 	reset_io();
-	DEASSERT_CHIP_ENABLE; WAIT;
+	DEASSERT_CHIP_ENABLE; 
 
 	// Read status and find out if the program was successful, returning status
 	result = read_status();
@@ -322,14 +314,14 @@ uint8_t read_status(void) {
 	write_cmd_word(CMD_READ_STATUS);
 
 	// Change to input
-	SET_IO_AS_INPUT; WAIT; WAIT; WAIT;
+	SET_IO_AS_INPUT; 
 
 	// Drive Read low to load the status register onto the I/O pins
 	FIO0CLR = P_READ_ENABLE; WAIT;
 	result = FIO0PIN2;
 
 	// Clear chip enable and return results
-	DEASSERT_CHIP_ENABLE; WAIT;
+	DEASSERT_CHIP_ENABLE; 
 	reset_io();
 	return result;
 }
@@ -337,26 +329,21 @@ uint8_t read_status(void) {
 /**
  * Sequentially programs some number of bytes starting at a given address.
  */
-uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
-	uint32_t i, result;
+uint8_t partial_write(uint32_t address, uint32_t count, const uint8_t *src) {
+	uint32_t i;
+	uint8_t result;
 
-	// Maximum page size that can be written at once is 2k + 64 bytes of spare
-	if (count > 2112)
-		count = 2112;
-		
 	//  *********control timing******
-	T0PR=29;  //one tick is 0.01 ms
+	T0PR=0;  //one tick is 0.01 ms
 	T0TCR=2; //stop and reset time
 	T0MCR=0x20;
-	T0MR1=T1TC+30;  //make a 0.7ms delay, almost half of the erase time
+	T0MR1=tprogram;  //make a 0.7ms delay, almost half of the erase time
 	//  *********************************************
 
 	// Activate the chip
 	ASSERT_CHIP_ENABLE;
 	SET_IO_AS_OUTPUT;
-	FIO0SET = P_WRITE_ENABLE; WAIT;
-
-	WAIT; WAIT;
+	FIO0SET = P_WRITE_ENABLE; 
 	
 	// Send the first half of the page program command
 	write_cmd_word(CMD_PAGE_PROGRAM_1);
@@ -370,9 +357,9 @@ uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 
 	// Actually send out the data
 	for (i = 0; i < count; ++i) {
-		FIO0CLR = P_WRITE_ENABLE; WAIT;
+		FIO0CLR = P_WRITE_ENABLE; 
 		WRITE_VALUE(*(src+i));
-		FIO0SET = P_WRITE_ENABLE; WAIT;
+		FIO0SET = P_WRITE_ENABLE; 
 	}
 
 	// Now send out the final command to begin programming
@@ -387,7 +374,6 @@ uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 	//  **************end of control the timing***************
 	// ***********what I add*******
 	SET_IO_AS_OUTPUT;
-		WAIT; WAIT;
 	
 	// Write the first word for erase
 	write_cmd_word(0xFF);  //reset to abort the erase
@@ -398,7 +384,7 @@ uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 
 	// Wait for programming to finish
 	WAIT_FOR_BUSY;
-	DEASSERT_CHIP_ENABLE; WAIT;
+	DEASSERT_CHIP_ENABLE; 
 	reset_io();
 
 	// Read status and find out if the program was successful, returning status
@@ -411,19 +397,19 @@ uint8_t incomplete_write(uint32_t address, uint32_t count, const uint8_t *src) {
 /**
  * Sequentially programs some number of bytes starting at a given address.
  */
-uint8_t write(uint32_t address, uint32_t count, const uint8_t *src) {
-	uint32_t i, result;
-
-	// Maximum page size that can be written at once is 2k + 64 bytes of spare
-	if (count > 2112)
-		count = 2112;
+uint8_t complete_write(uint32_t address, uint32_t count, const uint8_t *src, uint8_t *otime1) {
+	uint32_t i, otime;
+	uint8_t result;
+	
+	//set up timer 0 to moniter the program time latency
+	T0MCR=0x00;  //stop comparing
+	T0PR=0;  //prescaler
+	T0TCR=2; //stop and reset time
 
 	// Activate the chip
 	ASSERT_CHIP_ENABLE;
 	SET_IO_AS_OUTPUT;
-	FIO0SET = P_WRITE_ENABLE; WAIT;
-
-	WAIT; WAIT;
+	FIO0SET = P_WRITE_ENABLE; 
 	
 	// Send the first half of the page program command
 	write_cmd_word(CMD_PAGE_PROGRAM_1);
@@ -437,20 +423,32 @@ uint8_t write(uint32_t address, uint32_t count, const uint8_t *src) {
 
 	// Actually send out the data
 	for (i = 0; i < count; ++i) {
-		FIO0CLR = P_WRITE_ENABLE; WAIT;
+		FIO0CLR = P_WRITE_ENABLE; 
 		WRITE_VALUE(*(src+i));
-		FIO0SET = P_WRITE_ENABLE; WAIT;
+		FIO0SET = P_WRITE_ENABLE; 
 	}
 
 	// Now send out the final command to begin programming
 	write_cmd_word(CMD_PAGE_PROGRAM_2);
+	
+	T0TCR=1; //start the timer
 
 	// Just to be safe go back to input mode
-	SET_IO_AS_INPUT;
+	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	
+	
 
 	// Wait for programming to finish
 	WAIT_FOR_BUSY;
-	DEASSERT_CHIP_ENABLE; WAIT;
+	
+	otime=T0TC;
+	T0TCR=2; //stop and reset time
+	otime1[0] = (uint8_t) (otime >> 24);  //time used
+	otime1[1] = (uint8_t) (otime >> 16);
+	otime1[2] = (uint8_t) (otime >> 8);
+	otime1[3] = (uint8_t) (otime);
+	
+	DEASSERT_CHIP_ENABLE; 
 	reset_io();
 
 	// Read status and find out if the program was successful, returning status
@@ -467,14 +465,13 @@ void read(uint32_t address, uint32_t count, uint8_t *dest) {
 	uint32_t i;
 
 	// Maximum page size is 2k + 64 bytes of spare
-	if (count > 2112)
-		count = 2112;
+/*	if (count > 2112)
+		count = 2112;*/
 
 	// Activate the chip
 	ASSERT_CHIP_ENABLE;
 	SET_IO_AS_OUTPUT;
 
-	WAIT; WAIT;
 	
 	// Send first half of the read command
 	write_cmd_word(CMD_READ_1);
@@ -486,27 +483,110 @@ void read(uint32_t address, uint32_t count, uint8_t *dest) {
 	write_cmd_word(CMD_READ_2);
 	
 	// Change to input type pins
-	SET_IO_AS_INPUT;
+	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
 
 	// Now, wait for the busy signal to become de-asserted
 	WAIT_FOR_BUSY;
 
-	// Burn some time before reading, it improves results for some reason
-	for (i = 0; i < 100; ++i) {
-		WAIT;
-	}
 	
-	// Strobe /R to read out the data, for as many bytes as we want to read
-	for (i = 0; i < count; ++i) {
-		FIO0CLR = P_READ_ENABLE; WAIT;
-		*(dest+i) = FIO0PIN2;
-		FIO0SET = P_READ_ENABLE; WAIT;
-	}
-
+		for (i = 0; i < count; ++i) {
+			FIO0CLR = P_READ_ENABLE; WAIT;
+			*(dest+i) = FIO0PIN2; WAIT;
+			FIO0SET = P_READ_ENABLE; WAIT;
+		}
+	
 	// Disable the chip once we are done
 	DEASSERT_CHIP_ENABLE;
 	reset_io();
 }
+
+/**
+ * read the same page ntimes using cache read mode
+ */
+void cache_read(uint32_t address, uint32_t count, uint8_t *dest, uint32_t ntimes) {
+	uint32_t i, j;
+
+	// Activate the chip
+	ASSERT_CHIP_ENABLE;
+	SET_IO_AS_OUTPUT;
+
+	// ***************************
+	// The first part is normal read
+	// ***************************
+	// Send first half of the read command
+	write_cmd_word(CMD_READ_1);
+
+	// Send the address (multiple bus cycles)
+	write_address(address, 0);
+
+	// With the address loaded, write the read confirm command
+	write_cmd_word(CMD_READ_2);
+	
+	// Change to input type pins, needed for check busy?
+	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+
+	// Now, wait for the busy signal to become de-asserted
+	WAIT_FOR_BUSY;
+	
+	for (j=0;j<(ntimes-1);j++)
+	{
+		SET_IO_AS_OUTPUT;
+		// **************************
+		// Now enter enhanced cache read mode
+		// ****************************
+		// Send first half of the read command
+		write_cmd_word(CMD_CACHE_READ_1);
+
+		// Send the address (multiple bus cycles)
+		write_address(address, 0);	
+		
+		// With the address loaded, write the read confirm command
+		write_cmd_word(CMD_CACHE_READ_2);
+
+		// Change to input type pins
+		SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+		
+		// Now, wait for the busy signal to become de-asserted
+		WAIT_FOR_BUSY;
+		
+		//pulse the R_ to output data
+		for (i = 0; i < count; ++i) {
+			FIO0CLR = P_READ_ENABLE; WAIT;
+			*(dest+i) = FIO0PIN2; WAIT;
+			FIO0SET = P_READ_ENABLE; WAIT;
+		}
+		
+		//this means that when using the cache read function, count should be smaller than 64
+		usb_write(dest, count);
+	}
+	
+	// *****************************
+	// got the last read data and exit cache read mode
+	// *****************************
+	SET_IO_AS_OUTPUT;
+	write_cmd_word(CMD_EXIT_CACHE_READ);
+	
+	// Change to input type pins
+	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+		
+	// Now, wait for the busy signal to become de-asserted
+	WAIT_FOR_BUSY;
+		
+	//pulse the R_ to output data
+	for (i = 0; i < count; ++i) {
+		FIO0CLR = P_READ_ENABLE; WAIT;
+		*(dest+i) = FIO0PIN2; WAIT;
+		FIO0SET = P_READ_ENABLE; WAIT;
+	}
+		
+	//this means that when using the cache read function, count should be smaller than 64
+	usb_write(dest, count);
+	
+	// Disable the chip once we are done
+	DEASSERT_CHIP_ENABLE;
+	reset_io();
+}
+
 
 /**
  * Helper function that writes a command word and asserts all the proper control signals
@@ -515,23 +595,22 @@ void write_cmd_word(uint8_t cmd) {
 	// Set control signals to load command word
 	FIO0SET = P_CMD_LATCH | P_READ_ENABLE;
 	FIO0CLR = P_ADDR_LATCH | P_WRITE_ENABLE;
-	WAIT; WAIT;
 
 	// Send the suggested command
 	WRITE_WITH_FLOP(cmd);
 
 	// Clear the command latch so we don't have any weird timing problems
-	FIO0CLR = P_CMD_LATCH; WAIT; WAIT;
+	FIO0CLR = P_CMD_LATCH; 
 }
 
 /**
  * Helper function that writes an address to the bus
+ * Example reference: Page 16, Micron datasheet
  */
 void write_address(uint32_t address, uint8_t doErase) {
 	// Set up for address input, according to table 4 on page 16
-	FIO0SET = P_ADDR_LATCH; // | P_READ_ENABLE
+	FIO0SET = P_ADDR_LATCH| P_READ_ENABLE;
 	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE;
-	WAIT;
 
 	// The address is loaded in 8-bit segments in the sequence specified on page 16, table 5
 

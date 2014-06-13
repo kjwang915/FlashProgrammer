@@ -68,7 +68,7 @@
 
 // Function prototypes
 void ini_poweron();
-//void insert_delay(uint32_t Nprescaler);
+void insert_delay(uint32_t Nprescaler);
 void init(void);
 void read(uint32_t address, uint32_t count, uint8_t *dest);
 uint8_t read_status(void);

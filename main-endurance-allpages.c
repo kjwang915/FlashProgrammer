@@ -10,7 +10,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include <time.h>
 
 // Definitions
 #include "main.h"
@@ -20,164 +19,186 @@
 #include "usbdesc.h"
 #include "usbcomms.h"
 
-/*
- *   This code checks if partial programming a page will mess up the paired pages
+/*   
+ *   This code runs the endurance tests 
  */
 
-// 4Gb SLC Hynix
-#define Nbyte 2112
-#define Nbytebase 2048
-#define Nbytespare 64
+
+#define Nbyte 2112  //read 2112 bytes but only record every 4 bytes
 #define Nbit 16896  //Nbit=Nbyte*8
 #define Nblocks 4096 // number of blocks in a Hynix 4gbit part
-#define Npages 1 // number pages per block
-#define BLOCKOFFSET 18
-#define PAGEOFFSET 12
+#define Npages 64 // number pages per block
+#define blocktoprogram 567 // block 567
+#define pagetoprogram 32 // let's wear out page 32 I guess
+#define pptimetoprogram 6000
+// 6000 is to represent complete program. in loop below, 6000 is detected then complete_write is used, not partial_write
+#define intervaltocheck 100  // 100k
+#define pecyclestotry 20000000 // 20 million
 
-#define pagestotest 63
-
-#define blocklistsize 3
-
-//this is which pages in the block to write to
-uint16_t blocklist[blocklistsize] = {69,70,71};
-
-/**************************************
-** Global read/write buffers         **
-** Keep these global, not in main()  **
-** unsure what the compiler is doing **
-** but programs break when you have  **
-** these big buffers in functions    **
-**************************************/
 uint8_t write_buffer[Nbyte];
 uint8_t read_buffer[Nbyte];
-//uint8_t * readbufNbytebaseptr = (read_buffer + Nbytebase);
-
-// address from which things are derived. I'm pretty sure this is all 0
-// I'm not sure why we have this
-uint32_t address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << BLOCKOFFSET) | (((uint32_t) (0x00)) << PAGEOFFSET); 
-
-// timer
-//clock_t timer;
-
-uint8_t otimep[4]; 
-uint8_t otimee[4]; 
-uint8_t addressout[4];
-
 
 /**
  * Application entry point
  */
 int main(void) {
+	
+	uint8_t i, j, k;
 
-	//page
+	
+	uint32_t address0, address;
+	uint8_t cmd[20];
+	uint8_t otime1[4]; 
+	
+	uint8_t result;
+
+	uint16_t block, pptime;
 	uint8_t page;
 
-    uint8_t cmd[20];
+	uint32_t pecycles = 0;
+	uint32_t interval = 0;
+	
+	init();
+	usb_user_init();
 
-    uint32_t address;
-
- 	uint32_t j;
-
- 	uint32_t block;
-
- 	init();
- 	usb_user_init();
-
- 	USB_Init();
- 	USB_Connect(TRUE);
-
+	USB_Init();
+	USB_Connect(TRUE);
+	
 	//intialize the chip
- 	ASSERT_CHIP_ENABLE;
- 	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
- 	WAIT_FOR_BUSY;
- 	SET_IO_AS_OUTPUT;
-
+	ASSERT_CHIP_ENABLE;
+	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	WAIT_FOR_BUSY;
+	SET_IO_AS_OUTPUT;
+	
 	//ASSERT_CHIP_ENABLE;
- 	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE | P_ADDR_LATCH;
- 	FIO0SET = P_WRITE_PROTECT | P_READ_ENABLE;
-
+	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE | P_ADDR_LATCH;
+	FIO0SET = P_WRITE_PROTECT | P_READ_ENABLE;
+	
     write_cmd_word(0xFF);  //the first command to initialized the chip
+	
+	while (1) {
+		if (usb_read_ready()) {
+			usb_read(cmd, 4);
+			
+			// o for wear OUT!
+			if (strncmp((char *)cmd, "o", 1) == 0) { // if "o***" sent to chip, then this is what happens. *** can be anything; it is ignored. Only the 'o' is important.
+				
+				// initial base address
+				address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12); 
 
-    while (1) {
+				// partial program 0
+				memset(write_buffer, 0x00, 2112);
 
-    	//before starting, take in command from user 
-    	//do not want program to start running immediately
-    	if(usb_read_ready()){
-    		usb_read(cmd,4);
+				// determine block and output block number
+				block = blocktoprogram;
 
-    		if (strncmp((char *) cmd, "test", 4) == 0){
-    			
-    			for (j = 0; j < blocklistsize; j++){
+				uint8_t blockout[2];
+				blockout[0] = (uint8_t) (block>>8);
+				blockout[1] = (uint8_t) (block);
+				usb_write(blockout,2);
+				// insert delay just to be safe
+				insert_delay(99);
+
+				page = pagetoprogram;
+				usb_write(&page,1);
+				insert_delay(99);
 
 
-    				block = blocklist[j];
+				// write partial program time
+				pptime = pptimetoprogram;
 
-                    uint8_t blockout[2];
-                    blockout[0] = (uint8_t) (block>>8);
-                    blockout[1] = (uint8_t) (block);
-                    usb_write(blockout,2);
-                    //insertdelay
+				uint8_t pptimeout[2];
+				pptimeout[0] = (uint8_t) (pptime>>8);
+				pptimeout[1] = (uint8_t) (pptime);
+				usb_write(pptimeout,2);
+				insert_delay(99);
 
-                    // address of block
-                    
+				// address to wear out
+				address = address0 | (((uint32_t) block ) << 18 ) | (((uint32_t) page) << 12 );
 
-                    usb_write((uint8_t *) "init",4);
-					for (page = 59; page < 64; page++){
+				// for the desired program time
+				// program a page (32) in the block, then erase it.
+				while (pecycles < pecyclestotry) {
+
+					if (usb_read_ready()) {
+						usb_read(cmd,4);
+
+						if (strncmp((char *)cmd, "stop", 4) == 0) {
+							
+							break;// stop!
+
+						}
+
+					}
+
+					if (interval == intervaltocheck) {
+
+						usb_write((uint8_t *) "PECYCLES", 8);
+						//insert_delay(99);
+						uint8_t pecyclesout[4];
+						pecyclesout[0] = (uint8_t) (pecycles>>24);
+						pecyclesout[1] = (uint8_t) (pecycles>>16);
+						pecyclesout[2] = (uint8_t) (pecycles>>8);
+						pecyclesout[3] = (uint8_t) (pecycles);
+						usb_write(pecyclesout, 4);
+						//insert_delay(99);
+
+						// print out page
+						read(address, 123, read_buffer);
+						usb_write(read_buffer, 123);
+						insert_delay(99);
 						
-							address = address0 | (((uint32_t) block ) << BLOCKOFFSET ) | (((uint32_t) page) << PAGEOFFSET );
-
-						read(address, 8, read_buffer);  //read 
-	                    //usb_write(&block,1);
-	                    insert_delay(99);
-	                    usb_write(&page,1);
-	                    insert_delay(99);
-	                    usb_write((uint8_t *)"A",1);
-	                    insert_delay(99);
-	                    usb_write(read_buffer,8);
-	                    insert_delay(99);
+						interval = 0; // reset to 0
+			
 					}
 
 
+					
+					
+					// do an erase first
+					result = complete_erase(address, otime1);
 
-	    			usb_write((uint8_t *) "erase",5);
-	    			complete_erase(address, otimee);	//do complete erase
-					memset(write_buffer, 0x00, Nbyte); // write this
+					// do the partial program
+					//result = complete_write(address, 2112, write_buffer, otime1); // NOTE FOR COMPLETE_WRITE!!
 
-					uint32_t ik;
-
-					for (ik = 60; ik < pagestotest; ik++){
-						address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) ik) << PAGEOFFSET);
-
-						usb_write((uint8_t *) "write",5);
-						complete_write(address, Nbyte, write_buffer, otimep);
-
-						usb_write((uint8_t *) "done",4);
+					for (j = 0; j < Npages; j++) {
+						address = address0 | (((uint32_t) block ) << 18 ) | (((uint32_t) j ) << 12 );
+						result = complete_write(address, 2112, write_buffer, otime1); 
+						if (result) {
+							usb_write((uint8_t *) "ERROR", 5);
+							usb_write(&j,1);
+							break;
+						}
 					}
 
-					usb_write((uint8_t *) "read",4);
-					for (page = 59; page < 64; page++){
-						
-						address = address0 | (((uint32_t) block ) << BLOCKOFFSET ) | (((uint32_t) page) << PAGEOFFSET );
-						
-						read(address, 8, read_buffer);  //read 
-	                    //usb_write(&block,1);
-	                    insert_delay(99);
-	                    usb_write(&page,1);
-	                    insert_delay(99);
-	                    usb_write((uint8_t *)"A",1);
-	                    insert_delay(99);
-	                    usb_write(read_buffer,8);
-	                    insert_delay(99);
-					}
+					pecycles++;
+					interval++;
+
 				}
 
-				usb_write((uint8_t *) "end",4);
 
-    		}
+				usb_write((uint8_t *) "PECYCLES", 8);
+				insert_delay(99);
+				uint8_t pecyclesoutfinal[4];
+				pecyclesoutfinal[0] = (uint8_t) (pecycles>>24);
+				pecyclesoutfinal[1] = (uint8_t) (pecycles>>16);
+				pecyclesoutfinal[2] = (uint8_t) (pecycles>>8);
+				pecyclesoutfinal[3] = (uint8_t) (pecycles);
+				usb_write(pecyclesoutfinal, 4);
+				insert_delay(99);
 
-    	}
- 	}	
+				// print out page
+				read(address, 123, read_buffer);
+				usb_write(read_buffer, 123);
+				insert_delay(99);
 
+				usb_write((uint8_t *) "DONEDONEDONE", 12); // all done!
+				insert_delay(99);
+
+			}
+			
+		}
+	}
 	return 0;
 }
 
@@ -206,6 +227,21 @@ void readID(uint8_t *dest)
 		FIO0SET = P_READ_ENABLE; //WAIT;
 	}
 	DEASSERT_CHIP_ENABLE;
+}
+
+void insert_delay(uint32_t Nprescaler)  //Nprescaler=99 means 0.1 seconds
+{
+	// insert delay for the usb transmittion to finish
+	T0PR=Nprescaler;  //7 2 0.1 second delay
+	T0TCR=2; //stop and reset time
+	T0MCR=0x20;
+	T0MR1=T0TC+30000;  //30e6,
+	T0PC=0; //reset prescale counter register
+	T0TCR=1; //start the timer
+	while ((T0TCR&1)==1)
+	{
+		WAIT;
+	}
 }
 
 /**
@@ -246,7 +282,6 @@ uint8_t complete_erase(uint32_t address, uint8_t *otime1) {
 	T0MCR=0x00;  //stop comparing
 	T0PR=0;  //prescaler
 	T0TCR=2; //stop and reset time
-	/*this should be a 1!!!!*/
 	
 	// Activate the chip and set up I/O
 	ASSERT_CHIP_ENABLE;
@@ -278,7 +313,7 @@ uint8_t complete_erase(uint32_t address, uint8_t *otime1) {
 	
 	//record the time
 	otime=T0TC;
-	T0TCR=2; //stop and reset time  /*this should be a 1!!!!*/
+	T0TCR=2; //stop and reset time
 	otime1[0] = (uint8_t) (otime >> 24);  //time used
 	otime1[1] = (uint8_t) (otime >> 16);
 	otime1[2] = (uint8_t) (otime >> 8);
@@ -683,25 +718,25 @@ void write_address(uint32_t address, uint8_t doErase) {
 	FIO0SET = P_ADDR_LATCH| P_READ_ENABLE;
 	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE;
 
-	// The address is loaded in 8-bit segments in the sequence specified on page 9, section 1.6
+	// The address is loaded in 8-bit segments in the sequence specified on page 16, table 5
 
 	// These two blocks are only loaded if we need a full address
 	if (!doErase) {
 		// First, load the lowest 8 bytes
 		WRITE_WITH_FLOP((uint8_t)(address & 0x000000ff));
 	
-		// Next load in 2 zeros along with the 6 next MSBs
-		WRITE_WITH_FLOP((uint8_t)((address & 0x00003f00) >> 8));
+		// Next load in four zeros along with the four next MSBs
+		WRITE_WITH_FLOP((uint8_t)((address & 0x00000f00) >> 8));
 	}
 	
-	// Next, load in the next eight bits (14-21)
-	WRITE_WITH_FLOP((uint8_t)((address & 0x003fc000) >> 14));
+	// Next, load in the next eight bits (12-19)
+	WRITE_WITH_FLOP((uint8_t)((address & 0x000ff000) >> 12));
 
-	// Next eight bits (22-29)
-	WRITE_WITH_FLOP((uint8_t)((address & 0x3fc00000) >> 22));
+	// Next eight bits (20-27)
+	WRITE_WITH_FLOP((uint8_t)((address & 0x0ff00000) >> 20));
 
-	// Last 2 bits (30-31)
-	WRITE_WITH_FLOP((uint8_t)((address & 0xc0000000) >> 30));
+	// Last few remaining bits, which do not extend to a full 32 bits (only 31 for 8 Gb, and only 30 for 4 Gb!)
+	WRITE_WITH_FLOP((uint8_t)((address & 0x70000000) >> 28));
 
 	// De-assert the address latch now, just in case
 	FIO0CLR = P_ADDR_LATCH;

@@ -1,0 +1,16 @@
+				for (i=0;i<10;i++)
+				{
+					srand ( i+100 );
+					
+					for (j=0;j<50; j++)
+					{
+						bit= (uint8_t) rand();
+						bit=bit & Msk;
+						usb_write(&bit, 1);
+					}
+					memset(otime1, 0x00, 4);
+					usb_write(otime1, 4);  //as a marker
+
+				}
+				usb_write((uint8_t *) "Done.", 5);
+				continue;

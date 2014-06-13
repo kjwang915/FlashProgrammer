@@ -10,7 +10,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include <time.h>
 
 // Definitions
 #include "main.h"
@@ -20,167 +19,225 @@
 #include "usbdesc.h"
 #include "usbcomms.h"
 
-/*
- *   This code checks if partial programming a page will mess up the paired pages
- */
-
-// 4Gb SLC Hynix
-#define Nbyte 2112
-#define Nbytebase 2048
-#define Nbytespare 64
-#define Nbit 16896  //Nbit=Nbyte*8
+#define mylen 2112  //write for hiding, use 512 bytes, which are 512 bits
+#define Nbyte 2112  //read 2112 bytes but only record every 4 bytes
+#define Nbyte2 528 //for bitrank recording
+#define Nbit 4224 //Nbit=Nbyte*8
+#define Ncount 128  //assign 128 bits to a group
+#define Ngroups 32  //Number of groups Nbit bits are divided into
+#define myMsk 0x1F  //for Ngroup 32, the last 5 bits of generated random location is useful
+#define Ntimes 1
+#define NP 1//number of used pages (64 pages forms 32 rows. In each row, only one page is used (perphaps we can use both of the pages)
+#define Npages 64  //the first Npages pages are used in a block
+#define Intv 1  //when Intv is 1, you characterize every page in a block, stuck at intv=1
+#define pagelen 2112
 #define Nblocks 4096 // number of blocks in a Hynix 4gbit part
-#define Npages 1 // number pages per block
-#define BLOCKOFFSET 18
-#define PAGEOFFSET 12
 
-#define pagestotest 63
-
-#define blocklistsize 3
-
-//this is which pages in the block to write to
-uint16_t blocklist[blocklistsize] = {69,70,71};
-
-/**************************************
-** Global read/write buffers         **
-** Keep these global, not in main()  **
-** unsure what the compiler is doing **
-** but programs break when you have  **
-** these big buffers in functions    **
-**************************************/
-uint8_t write_buffer[Nbyte];
+uint8_t write_buffer[NP][mylen];
+uint8_t write_buffer4[pagelen];
+uint8_t write_buffer2[mylen];
 uint8_t read_buffer[Nbyte];
-//uint8_t * readbufNbytebaseptr = (read_buffer + Nbytebase);
-
-// address from which things are derived. I'm pretty sure this is all 0
-// I'm not sure why we have this
-uint32_t address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << BLOCKOFFSET) | (((uint32_t) (0x00)) << PAGEOFFSET); 
-
-// timer
-//clock_t timer;
-
-uint8_t otimep[4]; 
-uint8_t otimee[4]; 
-uint8_t addressout[4];
-
-
+uint16_t bitrank[Nbyte2][8];  //record the bit program rank
+uint8_t obuffer[64];  //output buffer
+uint8_t myASG[Nbyte2][8];  //group assignment for each bit
+uint8_t myflags[Ngroups];
+uint32_t tprogram, terase;
+//now, one 512 bytes can hide 32 bits which are four letters
+//then this message need ceil(44/4) 11 pages, just for testing
+//for this message, there are 44 ascii letters
+//const uint8_t hMessage[]="The quick brown fox jumps over the lazy dog.";
 /**
  * Application entry point
  */
 int main(void) {
+	uint32_t otime, i;
+	
+	uint32_t address0, address;
+	uint8_t cmd[20];
+	uint8_t otime1[4]; 
+	uint16_t block, byte, nn, count, blocks, byte2;  
+	uint8_t bit, page, dd;  
+	
+	uint8_t result;
+	
+	init();
+	usb_user_init();
 
-	//page
-	uint8_t page;
-
-    uint8_t cmd[20];
-
-    uint32_t address;
-
- 	uint32_t j;
-
- 	uint32_t block;
-
- 	init();
- 	usb_user_init();
-
- 	USB_Init();
- 	USB_Connect(TRUE);
-
+	USB_Init();
+	USB_Connect(TRUE);
+	
 	//intialize the chip
- 	ASSERT_CHIP_ENABLE;
- 	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
- 	WAIT_FOR_BUSY;
- 	SET_IO_AS_OUTPUT;
-
+	ASSERT_CHIP_ENABLE;
+	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
+	WAIT_FOR_BUSY;
+	SET_IO_AS_OUTPUT;
+	
 	//ASSERT_CHIP_ENABLE;
- 	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE | P_ADDR_LATCH;
- 	FIO0SET = P_WRITE_PROTECT | P_READ_ENABLE;
-
+	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE | P_ADDR_LATCH;
+	FIO0SET = P_WRITE_PROTECT | P_READ_ENABLE;
+	
     write_cmd_word(0xFF);  //the first command to initialized the chip
-
-    while (1) {
-
-    	//before starting, take in command from user 
-    	//do not want program to start running immediately
-    	if(usb_read_ready()){
-    		usb_read(cmd,4);
-
-    		if (strncmp((char *) cmd, "test", 4) == 0){
-    			
-    			for (j = 0; j < blocklistsize; j++){
-
-
-    				block = blocklist[j];
-
-                    uint8_t blockout[2];
-                    blockout[0] = (uint8_t) (block>>8);
-                    blockout[1] = (uint8_t) (block);
-                    usb_write(blockout,2);
-                    //insertdelay
-
-                    // address of block
-                    
-
-                    usb_write((uint8_t *) "init",4);
-					for (page = 59; page < 64; page++){
+	
+	while (1) {
+		if (usb_read_ready()) {
+			usb_read(cmd, 4);
+			
+			if (strncmp((char *)cmd, "m", 1) == 0) {
+				
+				//timer 1 setup
+				//T1MCR=0x00;  //stop comparing
+				//T1PR=99;  //prescaler
+			
+				usb_write((uint8_t *) "Done.", 5);
+				insert_delay(99);
+				address0 = (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12);  //lower page
+				//address=address0;
+                address = address0 | (((uint32_t) 0x00) << 26) | (((uint32_t) 0x00) << 18) | (((uint32_t) (0x00)) << 12);
+				
+				//blocks=0;  //starting block number
+				
+				// Read out everything!
+				// For Hynix 4gbit, we have 4096 blocks
+				// 64 pages each
+				// 2112 bytes in page (2048 + 64 spare)
+				// 200us write
+				// 1.5ms erase
+				// 25ns cycle time per byte read => 52800 ns, 52.8 us read page
+				for (block=0;block<Nblocks;block=block+1) {
+					for (page=0;page<Npages;page=page+1) {
+						// read!
 						
-							address = address0 | (((uint32_t) block ) << BLOCKOFFSET ) | (((uint32_t) page) << PAGEOFFSET );
-
+						address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
 						read(address, 8, read_buffer);  //read 
-	                    //usb_write(&block,1);
-	                    insert_delay(99);
-	                    usb_write(&page,1);
-	                    insert_delay(99);
-	                    usb_write((uint8_t *)"A",1);
-	                    insert_delay(99);
-	                    usb_write(read_buffer,8);
-	                    insert_delay(99);
-					}
-
-
-
-	    			usb_write((uint8_t *) "erase",5);
-	    			complete_erase(address, otimee);	//do complete erase
-					memset(write_buffer, 0x00, Nbyte); // write this
-
-					uint32_t ik;
-
-					for (ik = 60; ik < pagestotest; ik++){
-						address = address0 | (((uint32_t) block) << BLOCKOFFSET) | (((uint32_t) ik) << PAGEOFFSET);
-
-						usb_write((uint8_t *) "write",5);
-						complete_write(address, Nbyte, write_buffer, otimep);
-
-						usb_write((uint8_t *) "done",4);
-					}
-
-					usb_write((uint8_t *) "read",4);
-					for (page = 59; page < 64; page++){
+						//usb_write(&block,1);
+						insert_delay(99);
+						usb_write(&page,1);
+						insert_delay(99);
+						usb_write((uint8_t *)"A",1);
+						insert_delay(99);
+						usb_write(read_buffer,8);
+						insert_delay(99);
 						
-						address = address0 | (((uint32_t) block ) << BLOCKOFFSET ) | (((uint32_t) page) << PAGEOFFSET );
-						
-						read(address, 8, read_buffer);  //read 
-	                    //usb_write(&block,1);
-	                    insert_delay(99);
-	                    usb_write(&page,1);
-	                    insert_delay(99);
-	                    usb_write((uint8_t *)"A",1);
-	                    insert_delay(99);
-	                    usb_write(read_buffer,8);
-	                    insert_delay(99);
 					}
 				}
+				//usb_write((uint8_t *)"Done.",5);
+				
+				
+				
+				
+				
+				
+				
+				//characterize blocks
+				//memset(write_buffer2, 0x00, mylen ); 
+				//memset(write_buffer4, 0x00, pagelen ); 
 
-				usb_write((uint8_t *) "end",4);
-
-    		}
-
-    	}
- 	}	
+					//characterization part	
+					/* for (i=0;i<1;i++)
+					{
+						for (block=blocks;block<(blocks+2);block=block+5)
+						{
+							//erase 1
+							address=address0 | (((uint32_t) block) << 18);
+							result = complete_erase(address, otime1);  //complete erase
+							usb_write(otime1,4);  //output the erase time the first time
+							insert_delay(99);
+							//complete write all of the block, prevent over erase attack
+							for (page=0;page<64;page=page+64)  //8 pages, stuck when want to do all 64 pages
+							{						
+								address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+								result = complete_write(address, pagelen, write_buffer4, otime1); 
+								usb_write(otime1,4);  //output the program time for each page
+								insert_delay(99);
+							}  
+							//erase 2
+							address=address0 | (((uint32_t) block) << 18);
+							result = complete_erase(address, otime1);  //complete erase
+							usb_write(otime1,4);  //output the 2nd erase time, it may be different from the first erase time
+							insert_delay(99);
+							
+							//characterization, which is another program
+							for (page=0;page<64;page=page+Intv)  //8 pages, stuck when want to do all 64 pages
+							{						
+								address=address0 | (((uint32_t) block) << 18) | (((uint32_t) page) << 12);
+								memset(bitrank, 0x00, Nbit * 2);  //bitrank is uint16_t
+								usb_write((uint8_t *) "Done.", 5);
+								
+								T1TCR=2; //stop and reset time				
+								T1TCR=1; //start the timer
+					
+								tprogram=850;   //to be determined  810
+								
+								for (nn=0;nn<1200;nn++)
+								{
+									result = partial_write(address, mylen, write_buffer2);  //program the whole page
+												
+									read(address, Nbyte, read_buffer);  //read while output
+									byte2=0;
+									//usb_write((uint8_t *) "Done.", 5);								
+									for (byte=0; byte<Nbyte; byte=byte+4)
+									{
+										for (bit=0; bit<8; bit++)
+										{
+											
+											if ( (bitrank[byte2][bit]==0x0000) && ((read_buffer[byte] & (0x01<<bit))==0x00))
+											{
+												bitrank[byte2][bit]=nn+1;  //this should be nn+1
+											}
+										}
+										byte2=byte2+1;
+									}	
+								}
+								usb_write((uint8_t *) "Done.", 5);
+								insert_delay(99);
+								otime=T1TC;
+								T1TCR=2; //stop and reset time
+								
+								count=0;
+								byte2=0;
+								for (byte=0; byte<Nbyte; byte=byte+4)
+								{
+									for (bit=0; bit<8; bit++)
+									{
+										obuffer[count]=(uint8_t) (bitrank[byte2][bit]>>8);
+										count++;
+										obuffer[count]=(uint8_t) (bitrank[byte2][bit]);
+										count++;
+									}
+									if (count==64)
+									{
+										count=0;
+										usb_write(obuffer,64);
+									}
+									byte2=byte2+1;
+								}
+								otime1[0] = (uint8_t) (otime >> 24);  //time used
+								otime1[1] = (uint8_t) (otime >> 16);
+								otime1[2] = (uint8_t) (otime >> 8);
+								otime1[3] = (uint8_t) (otime);
+								usb_write(otime1,4);
+								insert_delay(99);
+								usb_write((uint8_t *) "Done.", 5);	
+								
+								//insert some delay
+								insert_delay(99);								
+							}  //end of pages
+							//erase
+							address=address0 | (((uint32_t) block) << 18);
+							result = complete_erase(address, otime1);  //complete erase	
+							usb_write(otime1,4);  //output the erase latenty again
+							usb_write((uint8_t *) "Done.", 5);	
+							insert_delay(99);
+						}  //end of Nblocks
+					} //end of Ntimes								
+				*/
+				//usb_write((uint8_t *) "Fini.", 5);	
+			}  //end of if strcomp
+		}
+	}
 
 	return 0;
 }
-
 void readID(uint8_t *dest)
 {
 	uint8_t i;
@@ -207,6 +264,22 @@ void readID(uint8_t *dest)
 	}
 	DEASSERT_CHIP_ENABLE;
 }
+
+// void insert_delay(uint32_t Nprescaler)  //Nprescaler=99 means 0.1 seconds
+// {
+//	insert delay for the usb transmittion to finish
+	// T0PR=Nprescaler;  //7 2 0.1 second delay
+	// T0TCR=2; //stop and reset time
+	// T0MCR=0x20;
+	// T0MR1=T0TC+30000;  //30e6,
+	// T0PC=0; //reset prescale counter register
+	// T0TCR=1; //start the timer
+	// while ((T0TCR&1)==1)
+	// {
+		// WAIT;
+	// }
+// }
+
 
 /**
  * Initializes interrupt controller, port pins, and all modules not configured in Startup.S
@@ -246,7 +319,6 @@ uint8_t complete_erase(uint32_t address, uint8_t *otime1) {
 	T0MCR=0x00;  //stop comparing
 	T0PR=0;  //prescaler
 	T0TCR=2; //stop and reset time
-	/*this should be a 1!!!!*/
 	
 	// Activate the chip and set up I/O
 	ASSERT_CHIP_ENABLE;
@@ -278,7 +350,7 @@ uint8_t complete_erase(uint32_t address, uint8_t *otime1) {
 	
 	//record the time
 	otime=T0TC;
-	T0TCR=2; //stop and reset time  /*this should be a 1!!!!*/
+	T0TCR=2; //stop and reset time
 	otime1[0] = (uint8_t) (otime >> 24);  //time used
 	otime1[1] = (uint8_t) (otime >> 16);
 	otime1[2] = (uint8_t) (otime >> 8);
@@ -392,10 +464,7 @@ uint8_t read_status(void) {
 }
 
 /**
- * Partial program write. Takes tprogram which is an integer. 
- * This time is the time (divided by 30 MHz) that will be used for programming.
- * The other program function takes a timer to report program time (otime1). 
- * For this, since we specify a tprogram, that is what the timer will report.
+ * Sequentially programs some number of bytes starting at a given address.
  */
 uint8_t partial_write(uint32_t address, uint32_t count, const uint8_t *src, uint32_t tprogram) {
 	uint32_t i;
@@ -405,7 +474,7 @@ uint8_t partial_write(uint32_t address, uint32_t count, const uint8_t *src, uint
 	T0PR=0;  //one tick is 0.01 ms
 	T0TCR=2; //stop and reset time
 	T0MCR=0x20;
-	T0MR1=tprogram;  
+	T0MR1=tprogram;  //make a 0.7ms delay, almost half of the erase time
 	//  *********************************************
 
 	// Activate the chip
@@ -443,10 +512,8 @@ uint8_t partial_write(uint32_t address, uint32_t count, const uint8_t *src, uint
 	// ***********what I add*******
 	SET_IO_AS_OUTPUT;
 	
-	// Reset 
-	
-
-	write_cmd_word(0xFF);  //reset to abort the program
+	// Write the first word for erase
+	write_cmd_word(0xFF);  //reset to abort the erase
 
 	// Change to input
 	SET_IO_AS_INPUT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT; WAIT;
@@ -454,8 +521,6 @@ uint8_t partial_write(uint32_t address, uint32_t count, const uint8_t *src, uint
 
 	// Wait for programming to finish
 	WAIT_FOR_BUSY;
-	T0TCR=2; //stop and reset time
-	
 	DEASSERT_CHIP_ENABLE; 
 	reset_io();
 
@@ -683,25 +748,25 @@ void write_address(uint32_t address, uint8_t doErase) {
 	FIO0SET = P_ADDR_LATCH| P_READ_ENABLE;
 	FIO0CLR = P_CMD_LATCH | P_WRITE_ENABLE;
 
-	// The address is loaded in 8-bit segments in the sequence specified on page 9, section 1.6
+	// The address is loaded in 8-bit segments in the sequence specified on page 16, table 5
 
 	// These two blocks are only loaded if we need a full address
 	if (!doErase) {
 		// First, load the lowest 8 bytes
 		WRITE_WITH_FLOP((uint8_t)(address & 0x000000ff));
 	
-		// Next load in 2 zeros along with the 6 next MSBs
-		WRITE_WITH_FLOP((uint8_t)((address & 0x00003f00) >> 8));
+		// Next load in four zeros along with the four next MSBs
+		WRITE_WITH_FLOP((uint8_t)((address & 0x00000f00) >> 8));
 	}
 	
-	// Next, load in the next eight bits (14-21)
-	WRITE_WITH_FLOP((uint8_t)((address & 0x003fc000) >> 14));
+	// Next, load in the next eight bits (12-19)
+	WRITE_WITH_FLOP((uint8_t)((address & 0x000ff000) >> 12));
 
-	// Next eight bits (22-29)
-	WRITE_WITH_FLOP((uint8_t)((address & 0x3fc00000) >> 22));
+	// Next eight bits (20-27)
+	WRITE_WITH_FLOP((uint8_t)((address & 0x0ff00000) >> 20));
 
-	// Last 2 bits (30-31)
-	WRITE_WITH_FLOP((uint8_t)((address & 0xc0000000) >> 30));
+	// Last few remaining bits, which do not extend to a full 32 bits (only 31 for 8 Gb, and only 30 for 4 Gb!)
+	WRITE_WITH_FLOP((uint8_t)((address & 0x70000000) >> 28));
 
 	// De-assert the address latch now, just in case
 	FIO0CLR = P_ADDR_LATCH;

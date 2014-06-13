@@ -1,0 +1,563 @@
+Archive member included because of file (symbol)
+
+c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(memset.o)
+                              main.o (memset)
+c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(strncmp.o)
+                              main.o (strncmp)
+
+Allocating common symbols
+Common symbol       size              file
+
+usb_recv_w          0x2               usbcomms.o
+USB_AltSetting      0x4               usbcore.o
+usb_recv_buf        0x800             usbcomms.o
+EP0Buf              0x40              usbcore.o
+otimep              0x4               main.o
+USB_EndPointMask    0x4               usbcore.o
+USB_DeviceAddress   0x1               usbcore.o
+usb_send_w          0x2               usbcomms.o
+otimee              0x4               main.o
+inTransfer          0x1               usbcomms.o
+USB_EndPointHalt    0x4               usbcore.o
+read_buffer         0x840             main.o
+USB_Configuration   0x1               usbcore.o
+usb_send_r          0x2               usbcomms.o
+addressout          0x4               main.o
+usb_recv_r          0x2               usbcomms.o
+SetupPacket         0x8               usbcore.o
+USB_NumInterfaces   0x1               usbcore.o
+usb_send_buf        0x800             usbcomms.o
+write_buffer        0x840             main.o
+EP0Data             0x8               usbcore.o
+USB_DeviceStatus    0x2               usbcore.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ROM              0x00000000         0x00080000         xr
+RAM              0x40000000         0x0000a000         rw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a
+LOAD c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libm.a
+LOAD c:/winarm/bin/../lib/gcc/arm-elf/4.1.1\libgcc.a
+LOAD main.o
+LOAD usbcore.o
+LOAD usbdesc.o
+LOAD usbhw.o
+LOAD usbuser.o
+LOAD usbcomms.o
+LOAD irq.o
+LOAD Startup.o
+LOAD swi_handler.o
+START GROUP
+LOAD c:/winarm/bin/../lib/gcc/arm-elf/4.1.1\libgcc.a
+LOAD c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a
+END GROUP
+
+.text           0x00000000     0x276c
+ *(.vectorg)
+ .vectorg       0x00000000       0x98 Startup.o
+                0x00000050                __IRQ_Wrapper
+ .vectorg       0x00000098       0xd0 swi_handler.o
+                0x00000098                SoftwareInterrupt
+                0x00000168                . = ALIGN (0x4)
+ *(.init)
+ .init          0x00000168      0x168 Startup.o
+                0x00000294                __exit_THUMB
+                0x00000168                __startup
+                0x00000290                __exit_ARM
+ *(.text .text.*)
+ .text          0x000002d0      0xcd0 main.o
+                0x000003c4                readID
+                0x00000aa0                cache_read
+                0x00000310                write_cmd_word
+                0x0000087c                partial_erase
+                0x0000099c                complete_erase
+                0x0000072c                partial_write
+                0x00000514                read
+                0x00000c88                init
+                0x00000354                read_status
+                0x00000cbc                main
+                0x00000478                write_address
+                0x000002d0                reset_io
+                0x000005e8                complete_write
+ .text          0x00000fa0      0xa58 usbcore.o
+                0x00001790                USB_EndPoint0
+                0x000014e4                USB_DataOutStage
+                0x00001578                USB_GetDescriptor
+                0x00001528                USB_StatusInStage
+                0x00000fa0                USB_ResetCore
+                0x00001538                USB_DataInStage
+                0x00000fec                USB_SetInterface
+                0x00001198                USB_SetConfiguration
+                0x000014d4                USB_StatusOutStage
+                0x00001518                USB_SetupStage
+                0x000013b8                USB_SetClrFeature
+                0x00001668                USB_GetStatus
+ .text          0x000019f8        0x0 usbdesc.o
+ .text          0x000019f8      0x638 usbhw.o
+                0x00001e60                USB_Init
+                0x00001b44                USB_SetAddress
+                0x00001ef0                USB_ISR
+                0x00001ac0                USB_Reset
+                0x00001a34                WrCmdDat
+                0x000019f8                EPAdr
+                0x00001cc8                USB_ReadEP
+                0x00001b18                USB_WakeUp
+                0x00001c40                USB_DisableEP
+                0x00001c84                USB_SetStallEP
+                0x00001e2c                USB_GetFrame
+                0x00001a0c                WrCmd
+                0x00001b10                USB_Suspend
+                0x00001b78                USB_Configure
+                0x00001b40                USB_WakeUpCfg
+                0x00001aa4                USB_Connect
+                0x00001c64                USB_ResetEP
+                0x00001bc4                USB_ConfigEP
+                0x00001c1c                USB_DirCtrlEP
+                0x00001d8c                USB_WriteEP
+                0x00001a78                RdCmdDat
+                0x00001b14                USB_Resume
+                0x00001ca8                USB_ClrStallEP
+                0x00001c20                USB_EnableEP
+ .text          0x00002030       0xa0 usbuser.o
+                0x00002074                USB_EndPoint7
+                0x00002064                USB_EndPoint3
+                0x00002070                USB_EndPoint6
+                0x00002090                USB_EndPoint14
+                0x0000207c                USB_EndPoint9
+                0x00002084                USB_EndPoint11
+                0x00002068                USB_EndPoint4
+                0x000020b4                USB_Reset_Event
+                0x0000208c                USB_EndPoint13
+                0x0000206c                USB_EndPoint5
+                0x00002078                USB_EndPoint8
+                0x00002098                USB_EndPoint2
+                0x00002080                USB_EndPoint10
+                0x00002088                USB_EndPoint12
+                0x00002030                USB_Configure_Event
+                0x00002060                USB_EndPoint1
+                0x00002094                USB_EndPoint15
+ .text          0x000020d0      0x3c4 usbcomms.o
+                0x0000219c                usb_send_empty
+                0x00002128                usb_user_init
+                0x00002230                usb_bulkIn
+                0x00002178                usb_read_ready
+                0x000020d0                insert_delay
+                0x000021c4                usb_bulkOut
+                0x00002308                usb_write
+                0x00002430                usb_read
+ .text          0x00002494      0x114 irq.o
+                0x000024e8                install_irq
+                0x00002548                uninstall_irq
+                0x000024a4                init_VIC
+ .text          0x000025a8        0x0 Startup.o
+ .text          0x000025a8       0x38 swi_handler.o
+                0x000025b8                IntGetCPSR
+                0x000025d8                FiqDisable
+                0x000025a8                IntRestore
+                0x000025c8                IntDisable
+                0x000025b0                FiqRestore
+                0x000025c0                IntEnable
+                0x000025d0                FiqEnable
+ .text          0x000025e0       0x1c c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(memset.o)
+                0x000025e0                memset
+ .text          0x000025fc       0x50 c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(strncmp.o)
+                0x000025fc                strncmp
+ *(.gnu.linkonce.t.*)
+ *(.glue_7)
+ .glue_7        0x0000264c        0x0 main.o
+ .glue_7        0x0000264c        0x0 usbcore.o
+ .glue_7        0x0000264c        0x0 usbdesc.o
+ .glue_7        0x0000264c        0x0 usbhw.o
+ .glue_7        0x0000264c        0x0 usbuser.o
+ .glue_7        0x0000264c        0x0 usbcomms.o
+ .glue_7        0x0000264c        0x0 irq.o
+ .glue_7        0x0000264c        0x0 Startup.o
+ .glue_7        0x0000264c        0x0 swi_handler.o
+ .glue_7        0x0000264c        0x0 c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(memset.o)
+ .glue_7        0x0000264c        0x0 c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(strncmp.o)
+ *(.glue_7t)
+ .glue_7t       0x0000264c        0x0 main.o
+ .glue_7t       0x0000264c        0x0 usbcore.o
+ .glue_7t       0x0000264c        0x0 usbdesc.o
+ .glue_7t       0x0000264c        0x0 usbhw.o
+ .glue_7t       0x0000264c        0x0 usbuser.o
+ .glue_7t       0x0000264c        0x0 usbcomms.o
+ .glue_7t       0x0000264c        0x0 irq.o
+ .glue_7t       0x0000264c        0x0 Startup.o
+ .glue_7t       0x0000264c        0x0 swi_handler.o
+ .glue_7t       0x0000264c        0x0 c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(memset.o)
+ .glue_7t       0x0000264c        0x0 c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(strncmp.o)
+ *(.gcc_except_table)
+ *(.rodata)
+ .rodata        0x0000264c       0xa7 usbdesc.o
+                0x0000267f                USB_StringDescriptor
+                0x0000264c                USB_DeviceDescriptor
+                0x0000265e                USB_ConfigDescriptor
+ *fill*         0x000026f3        0x1 00
+ .rodata        0x000026f4       0x40 usbuser.o
+                0x000026f4                USB_P_EP
+ *(.rodata*)
+ .rodata.str1.4
+                0x00002734       0x38 main.o
+ *(.gnu.linkonce.r.*)
+                0x0000276c                . = ALIGN (0x4)
+                0x0000276c                . = ALIGN (0x4)
+
+.ctors          0x0000276c        0x0
+                0x0000276c                PROVIDE (__ctors_start__, .)
+ *(SORT(.ctors.*))
+ *(.ctors)
+                0x0000276c                . = ALIGN (0x4)
+                0x0000276c                PROVIDE (__ctors_end__, .)
+                0x0000276c                . = ALIGN (0x4)
+
+.dtors          0x0000276c        0x0
+                0x0000276c                PROVIDE (__dtors_start__, .)
+ *(SORT(.dtors.*))
+ *(.dtors)
+                0x0000276c                . = ALIGN (0x4)
+                0x0000276c                PROVIDE (__dtors_end__, .)
+                0x0000276c                . = ALIGN (0x4)
+                0x0000276c                . = ALIGN (0x4)
+                0x0000276c                _etext = .
+                0x0000276c                PROVIDE (etext, .)
+
+.data           0x40000000        0x8 load address 0x0000276c
+                0x40000000                _data = .
+ *(.vectmapped)
+                0x40000000                . = ALIGN (0x4)
+ *(.fastrun)
+                0x40000000                . = ALIGN (0x4)
+                0x40000000                . = ALIGN (0x4)
+ *(.data)
+ .data          0x40000000        0x6 main.o
+                0x40000000                blocklist
+ .data          0x40000006        0x0 usbcore.o
+ .data          0x40000006        0x0 usbdesc.o
+ .data          0x40000006        0x0 usbhw.o
+ .data          0x40000006        0x0 usbuser.o
+ .data          0x40000006        0x0 usbcomms.o
+ .data          0x40000006        0x0 irq.o
+ .data          0x40000006        0x0 Startup.o
+ .data          0x40000006        0x0 swi_handler.o
+ .data          0x40000006        0x0 c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(memset.o)
+ .data          0x40000006        0x0 c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(strncmp.o)
+ *(.data.*)
+ *(.gnu.linkonce.d*)
+                0x40000008                . = ALIGN (0x4)
+ *fill*         0x40000006        0x2 00
+                0x40000008                . = ALIGN (0x4)
+                0x40000008                _edata = .
+                0x40000008                PROVIDE (edata, .)
+
+.bss            0x40000008     0x2104
+                0x40000008                __bss_start = .
+                0x40000008                __bss_start__ = .
+ *(.bss)
+ .bss           0x40000008        0x4 main.o
+                0x40000008                address0
+ .bss           0x4000000c        0x0 usbcore.o
+ .bss           0x4000000c        0x0 usbdesc.o
+ .bss           0x4000000c        0x0 usbhw.o
+ .bss           0x4000000c        0x0 usbuser.o
+ .bss           0x4000000c        0x0 usbcomms.o
+ .bss           0x4000000c        0x0 irq.o
+ .bss           0x4000000c        0x0 Startup.o
+ .bss           0x4000000c        0x0 swi_handler.o
+ .bss           0x4000000c        0x0 c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(memset.o)
+ .bss           0x4000000c        0x0 c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(strncmp.o)
+ *(.gnu.linkonce.b*)
+ *(COMMON)
+ COMMON         0x4000000c     0x108c main.o
+                0x4000000c                otimep
+                0x40000010                otimee
+                0x40000014                read_buffer
+                0x40000854                addressout
+                0x40000858                write_buffer
+ COMMON         0x40001098       0x6a usbcore.o
+                0x40001098                USB_AltSetting
+                0x4000109c                EP0Buf
+                0x400010dc                USB_EndPointMask
+                0x400010e0                USB_DeviceAddress
+                0x400010e4                USB_EndPointHalt
+                0x400010e8                USB_Configuration
+                0x400010ec                SetupPacket
+                0x400010f4                USB_NumInterfaces
+                0x400010f8                EP0Data
+                0x40001100                USB_DeviceStatus
+ COMMON         0x40001102     0x100a usbcomms.o
+                0x40001102                usb_recv_w
+                0x40001104                usb_recv_buf
+                0x40001904                usb_send_w
+                0x40001906                inTransfer
+                0x40001908                usb_send_r
+                0x4000190a                usb_recv_r
+                0x4000190c                usb_send_buf
+                0x4000210c                . = ALIGN (0x4)
+                0x4000210c                . = ALIGN (0x4)
+                0x4000210c                __bss_end__ = .
+                0x4000210c                PROVIDE (__bss_end, .)
+
+.stack          0x40002200      0xc00
+ *(.stack)
+ .stack         0x40002200      0xc00 Startup.o
+                0x40002e00                PROVIDE (_stack, .)
+                0x40002e00                . = ALIGN (0x4)
+                0x40002e00                _end = .
+                0x40002e00                PROVIDE (end, .)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x00000000       0xf3
+ *(.comment)
+ .comment       0x00000000       0x1b main.o
+ .comment       0x0000001b       0x1b usbcore.o
+ .comment       0x00000036       0x1b usbdesc.o
+ .comment       0x00000051       0x1b usbhw.o
+ .comment       0x0000006c       0x1b usbuser.o
+ .comment       0x00000087       0x1b usbcomms.o
+ .comment       0x000000a2       0x1b irq.o
+ .comment       0x000000bd       0x1b c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(memset.o)
+ .comment       0x000000d8       0x1b c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(strncmp.o)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges
+ *(.debug_aranges)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info
+ *(.debug_info .gnu.linkonce.wi.*)
+
+.debug_abbrev
+ *(.debug_abbrev)
+
+.debug_line
+ *(.debug_line)
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str
+ *(.debug_str)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+OUTPUT(usbtest.elf elf32-littlearm)
+
+Cross Reference Table
+
+Symbol                                            File
+EP0Buf                                            usbcore.o
+EP0Data                                           usbcore.o
+EPAdr                                             usbhw.o
+FiqDisable                                        swi_handler.o
+FiqEnable                                         swi_handler.o
+FiqRestore                                        swi_handler.o
+IntDisable                                        swi_handler.o
+IntEnable                                         swi_handler.o
+IntGetCPSR                                        swi_handler.o
+IntRestore                                        swi_handler.o
+RdCmdDat                                          usbhw.o
+SetupPacket                                       usbcore.o
+SoftwareInterrupt                                 swi_handler.o
+                                                  Startup.o
+USB_AltSetting                                    usbcore.o
+USB_ClrStallEP                                    usbhw.o
+                                                  usbcore.o
+USB_ConfigDescriptor                              usbdesc.o
+                                                  usbcore.o
+USB_ConfigEP                                      usbhw.o
+                                                  usbcore.o
+USB_Configuration                                 usbuser.o
+                                                  usbcore.o
+USB_Configure                                     usbhw.o
+                                                  usbcore.o
+USB_Configure_Event                               usbuser.o
+                                                  usbcore.o
+USB_Connect                                       usbhw.o
+                                                  main.o
+USB_DataInStage                                   usbcore.o
+USB_DataOutStage                                  usbcore.o
+USB_DeviceAddress                                 usbcore.o
+USB_DeviceDescriptor                              usbdesc.o
+                                                  usbcore.o
+USB_DeviceStatus                                  usbhw.o
+                                                  usbcore.o
+USB_DirCtrlEP                                     usbhw.o
+                                                  usbcore.o
+USB_DisableEP                                     usbhw.o
+                                                  usbcore.o
+USB_EnableEP                                      usbhw.o
+                                                  usbcore.o
+USB_EndPoint0                                     usbcore.o
+                                                  usbuser.o
+USB_EndPoint1                                     usbuser.o
+USB_EndPoint10                                    usbuser.o
+USB_EndPoint11                                    usbuser.o
+USB_EndPoint12                                    usbuser.o
+USB_EndPoint13                                    usbuser.o
+USB_EndPoint14                                    usbuser.o
+USB_EndPoint15                                    usbuser.o
+USB_EndPoint2                                     usbuser.o
+USB_EndPoint3                                     usbuser.o
+USB_EndPoint4                                     usbuser.o
+USB_EndPoint5                                     usbuser.o
+USB_EndPoint6                                     usbuser.o
+USB_EndPoint7                                     usbuser.o
+USB_EndPoint8                                     usbuser.o
+USB_EndPoint9                                     usbuser.o
+USB_EndPointHalt                                  usbcore.o
+USB_EndPointMask                                  usbcore.o
+USB_GetDescriptor                                 usbcore.o
+USB_GetFrame                                      usbhw.o
+USB_GetStatus                                     usbcore.o
+USB_ISR                                           usbhw.o
+USB_Init                                          usbhw.o
+                                                  main.o
+USB_NumInterfaces                                 usbcore.o
+USB_P_EP                                          usbuser.o
+                                                  usbhw.o
+USB_ReadEP                                        usbhw.o
+                                                  usbcomms.o
+                                                  usbcore.o
+USB_Reset                                         usbhw.o
+USB_ResetCore                                     usbcore.o
+                                                  usbuser.o
+USB_ResetEP                                       usbhw.o
+                                                  usbcore.o
+USB_Reset_Event                                   usbuser.o
+                                                  usbhw.o
+USB_Resume                                        usbhw.o
+USB_SetAddress                                    usbhw.o
+                                                  usbcore.o
+USB_SetClrFeature                                 usbcore.o
+USB_SetConfiguration                              usbcore.o
+USB_SetInterface                                  usbcore.o
+USB_SetStallEP                                    usbhw.o
+                                                  usbcore.o
+USB_SetupStage                                    usbcore.o
+USB_StatusInStage                                 usbcore.o
+USB_StatusOutStage                                usbcore.o
+USB_StringDescriptor                              usbdesc.o
+                                                  usbcore.o
+USB_Suspend                                       usbhw.o
+USB_WakeUp                                        usbhw.o
+USB_WakeUpCfg                                     usbhw.o
+                                                  usbcore.o
+USB_WriteEP                                       usbhw.o
+                                                  usbcomms.o
+                                                  usbcore.o
+WrCmd                                             usbhw.o
+WrCmdDat                                          usbhw.o
+__IRQ_Wrapper                                     Startup.o
+__bss_end__                                       Startup.o
+__bss_start__                                     Startup.o
+__ctors_end__                                     Startup.o
+__ctors_start__                                   Startup.o
+__exit_ARM                                        Startup.o
+__exit_THUMB                                      Startup.o
+__startup                                         Startup.o
+_data                                             Startup.o
+_edata                                            Startup.o
+_etext                                            Startup.o
+address0                                          main.o
+addressout                                        main.o
+blocklist                                         main.o
+cache_read                                        main.o
+complete_erase                                    main.o
+complete_write                                    main.o
+inTransfer                                        usbcomms.o
+init                                              main.o
+init_VIC                                          irq.o
+                                                  main.o
+insert_delay                                      usbcomms.o
+                                                  main.o
+install_irq                                       irq.o
+                                                  usbhw.o
+main                                              main.o
+                                                  Startup.o
+memset                                            c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(memset.o)
+                                                  main.o
+otimee                                            main.o
+otimep                                            main.o
+partial_erase                                     main.o
+partial_write                                     main.o
+read                                              main.o
+readID                                            main.o
+read_buffer                                       main.o
+read_status                                       main.o
+reset_io                                          main.o
+strncmp                                           c:/winarm/bin/../lib/gcc/arm-elf/4.1.1/../../../../arm-elf/lib\libc.a(strncmp.o)
+                                                  main.o
+uninstall_irq                                     irq.o
+usb_bulkIn                                        usbcomms.o
+                                                  usbuser.o
+usb_bulkOut                                       usbcomms.o
+                                                  usbuser.o
+usb_read                                          usbcomms.o
+                                                  main.o
+usb_read_ready                                    usbcomms.o
+                                                  main.o
+usb_recv_buf                                      usbcomms.o
+usb_recv_r                                        usbcomms.o
+usb_recv_w                                        usbcomms.o
+usb_send_buf                                      usbcomms.o
+usb_send_empty                                    usbcomms.o
+usb_send_r                                        usbcomms.o
+usb_send_w                                        usbcomms.o
+usb_user_init                                     usbcomms.o
+                                                  main.o
+usb_write                                         usbcomms.o
+                                                  main.o
+write_address                                     main.o
+write_buffer                                      main.o
+write_cmd_word                                    main.o

@@ -1,0 +1,30 @@
+# gnuplot template
+
+# set title "BER" 
+# title will be in caption of figure
+
+set auto x
+set xlabel "Program Time"
+set xlabel offset 0,0
+set ylabel "Bit Error Rate"
+set ylabel offset -1,0
+set logscale y
+set bmargin 6
+
+set style data linespoints
+set pointsize 3
+
+#set datafile missing "0"
+
+#plot 'gnuplot.test' using 2:xtic(1) title columnheader(2), '' u 3 ti col, '' u 4 ti col
+#
+
+set output 'BERchip2-1day.png'
+plot 'BERchip2-1day.dat' using 2:xtic(1) notitle
+
+set output 'BERchip4-1day.png'
+plot 'BERchip4-1day.dat' using 2:xtic(1) notitle
+
+clear
+
+set output 'temp.png'

@@ -4,7 +4,7 @@
 
 # Source files
 # TODO: Clean up the hack to get the core common library files
-ARMELFPATH=C:/gjm76/WinARM/arm-elf/src/
+ARMELFPATH=C:/WinARM/arm-elf/src/
 
 SRC=main.c usbcore.c usbdesc.c usbhw.c usbuser.c usbcomms.c
 SRC+=$(ARMELFPATH)irq.c
@@ -17,7 +17,8 @@ OBJS+=irq.o Startup.o swi_handler.o
 TARGET=usbtest
 
 # Parameters for flash utility
-COMPORT=com3
+COMPORT=com1
+BAUDRATE=38400
 FOSC=12000
 
 # Model information
@@ -56,16 +57,19 @@ LDFLAGS+=$(LIBDIRS)
 LDFLAGS+=-T$(SUBMDL)-ROM.ld
 
 # Workhorse programs
+MAKEPATH = C:/WinARM/bin/
+WBIN = C:/Program Files (x86)/GnuWin32/usr/local/wbin/
+
 SHELL=sh
-CC=arm-elf-gcc
-CPP=arm-elf-g++
-OBJCOPY=arm-elf-objcopy
-OBJDUMP=arm-elf-objdump
-SIZE=arm-elf-size
-NM=arm-elf-nm
-RM=rm -f
-COPY=cp
-LPCISP=lpc21isp_old
+CC=$(MAKEPATH)arm-elf-gcc
+CPP=$(MAKEPATH)arm-elf-g++
+OBJCOPY=$(MAKEPATH)arm-elf-objcopy
+OBJDUMP=$(MAKEPATH)arm-elf-objdump
+SIZE=$(MAKEPATH)arm-elf-size
+NM=$(MAKEPATH)arm-elf-nm
+RM=$(WBIN)rm -f
+COPY=$(WBIN)cp
+LPCISP=$(MAKEPATH)lpc21isp_old
 
 # Now the real make targets
 hex: image
@@ -83,6 +87,6 @@ clean:
 	$(RM) *.o $(TARGET).elf $(TARGET).hex $(TARGET).map
 
 flash:image
-	$(LPCISP) -control $(TARGET).hex $(COMPORT) 14400 $(FOSC)
+	$(LPCISP) -control $(TARGET).hex $(COMPORT) $(BAUDRATE) $(FOSC)
 
 all: image

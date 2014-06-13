@@ -1,0 +1,2970 @@
+
+usbtest.elf:     file format elf32-littlearm
+
+SYMBOL TABLE:
+00000000 l    d  .text	00000000 .text
+40000000 l    d  .bss	00000000 .bss
+40003900 l    d  .stack	00000000 .stack
+00000000 l    d  .comment	00000000 .comment
+00000000 l    df *ABS*	00000000 Startup.S
+00000000 l       *ABS*	00000000 EXTMEM_MODE
+00000000 l       *ABS*	00000000 RAM_MODE
+00000000 l       *ABS*	00000000 REMAP
+00000000 l       *ABS*	00000000 VECTREMAPPED
+00000010 l       *ABS*	00000000 Mode_USR
+00000011 l       *ABS*	00000000 Mode_FIQ
+00000012 l       *ABS*	00000000 Mode_IRQ
+00000013 l       *ABS*	00000000 Mode_SVC
+00000017 l       *ABS*	00000000 Mode_ABT
+0000001b l       *ABS*	00000000 Mode_UND
+0000001f l       *ABS*	00000000 Mode_SYS
+00000080 l       *ABS*	00000000 I_Bit
+00000040 l       *ABS*	00000000 F_Bit
+00000080 l       *ABS*	00000000 UND_Stack_Size
+00000080 l       *ABS*	00000000 SVC_Stack_Size
+00000080 l       *ABS*	00000000 ABT_Stack_Size
+00000080 l       *ABS*	00000000 FIQ_Stack_Size
+00000200 l       *ABS*	00000000 IRQ_Stack_Size
+00000800 l       *ABS*	00000000 USR_Stack_Size
+40004500 l       .stack	00000000 Top_Stack
+e01fc100 l       *ABS*	00000000 VPBDIV
+00000001 l       *ABS*	00000000 VPBDIV_SETUP
+00000002 l       *ABS*	00000000 VPBDIV_Val
+e01fc080 l       *ABS*	00000000 PLL_BASE
+00000000 l       *ABS*	00000000 PLLCON_OFS
+00000004 l       *ABS*	00000000 PLLCFG_OFS
+00000008 l       *ABS*	00000000 PLLSTAT_OFS
+0000000c l       *ABS*	00000000 PLLFEED_OFS
+00000001 l       *ABS*	00000000 PLLCON_PLLE
+00000002 l       *ABS*	00000000 PLLCON_PLLC
+0000001f l       *ABS*	00000000 PLLCFG_MSEL
+00000060 l       *ABS*	00000000 PLLCFG_PSEL
+00000400 l       *ABS*	00000000 PLLSTAT_PLOCK
+00000001 l       *ABS*	00000000 PLL_SETUP
+00000024 l       *ABS*	00000000 PLLCFG_Val
+e01fc000 l       *ABS*	00000000 MAM_BASE
+00000000 l       *ABS*	00000000 MAMCR_OFS
+00000004 l       *ABS*	00000000 MAMTIM_OFS
+00000001 l       *ABS*	00000000 MAM_SETUP
+00000002 l       *ABS*	00000000 MAMCR_Val
+00000004 l       *ABS*	00000000 MAMTIM_Val
+00000000 l       *ABS*	00000000 CODE_BASE
+00000000 l       .text	00000050 __Vectors
+00000020 l       .text	00000000 Reset_Addr
+00000024 l       .text	00000000 Undef_Addr
+00000028 l       .text	00000000 SWI_Addr
+0000002c l       .text	00000000 PAbt_Addr
+00000030 l       .text	00000000 DAbt_Addr
+00000038 l       .text	00000000 IRQ_Wrapper_Addr
+0000003c l       .text	00000000 FIQ_Addr
+00000168 l       .text	00000000 Reset_Handler
+00000040 l       .text	00000000 Undef_Handler
+00000044 l       .text	00000000 PAbt_Handler
+00000048 l       .text	00000000 DAbt_Handler
+0000004c l       .text	00000000 FIQ_Handler
+00000198 l       .text	00000000 PLL_Loop
+e01fc040 l       *ABS*	00000000 MEMMAP
+00000234 l       .text	00000000 DataIsEmpty
+00000224 l       .text	00000000 LoopRel
+00000254 l       .text	00000000 BSSIsEmpty
+00000248 l       .text	00000000 LoopZI
+0000025c l       .text	00000000 ctor_loop
+0000027c l       .text	00000000 ctor_end
+fffff000 l       *ABS*	00000000 VIC_base_addr
+00000030 l       *ABS*	00000000 VIC_vect_offs
+00000000 l    df *ABS*	00000000 C:/gjm76/WinARM/arm-elf/src/swi_handler.S
+00000000 l       *ABS*	00000000 SWI_IRQ_DIS
+00000001 l       *ABS*	00000000 SWI_IRQ_EN
+00000002 l       *ABS*	00000000 SWI_FIQ_DIS
+00000003 l       *ABS*	00000000 SWI_FIQ_EN
+00000004 l       *ABS*	00000000 SWI_GET_CPSR
+00000005 l       *ABS*	00000000 SWI_IRQ_REST
+00000006 l       *ABS*	00000000 SWI_FIQ_REST
+00000080 l       *ABS*	00000000 I_Bit
+00000040 l       *ABS*	00000000 F_Bit
+00000020 l       *ABS*	00000000 T_Bit
+00000000 l       *ABS*	00000000 VECTREMAPPED
+00000098 l       .text	00000000 SWI_HandlerMT
+00000006 l       *ABS*	00000000 MAX_SWI
+000000bc l       .text	00000000 SWIOutOfRange
+000000c0 l       .text	00000000 SwiTableStart
+000000dc l       .text	00000000 IRQDisable
+000000ec l       .text	00000000 IRQEnable
+000000fc l       .text	00000000 FIQDisable
+00000110 l       .text	00000000 FIQEnable
+00000124 l       .text	00000000 CPSRget
+0000012c l       .text	00000000 IRQRestore
+00000148 l       .text	00000000 FIQRestore
+000000dc l       .text	00000000 SwiTableEnd
+00000164 l       .text	00000000 EndofSWI
+00000000 l    df *ABS*	00000000 main.c
+00000000 l    df *ABS*	00000000 usbcore.c
+00000000 l    df *ABS*	00000000 usbdesc.c
+00000000 l    df *ABS*	00000000 usbhw.c
+00000000 l    df *ABS*	00000000 usbuser.c
+00000000 l    df *ABS*	00000000 usbcomms.c
+00000000 l    df *ABS*	00000000 irq.c
+000024f4 l     F .text	00000010 DefaultVICHandler
+00000000 l    df *ABS*	00000000 memset.c
+400028b2 g     O .bss	00000002 usb_recv_w
+40002848 g     O .bss	00000004 USB_AltSetting
+00001850 g     F .text	00000268 USB_EndPoint0
+000015a4 g     F .text	00000034 USB_DataOutStage
+00002204 g     F .text	00000028 usb_send_empty
+400028b4 g     O .bss	00000800 usb_recv_buf
+00001f20 g     F .text	00000090 USB_Init
+00002134 g     F .text	00000004 USB_EndPoint7
+40000000 g     O .bss	00000004 terase
+00001c04 g     F .text	00000034 USB_SetAddress
+00001638 g     F .text	000000f0 USB_GetDescriptor
+4000284c g     O .bss	00000040 EP0Buf
+00002124 g     F .text	00000004 USB_EndPoint3
+00001fb0 g     F .text	00000140 USB_ISR
+00001b80 g     F .text	00000050 USB_Reset
+00001af4 g     F .text	00000044 WrCmdDat
+00000488 g     F .text	00000208 cache_read
+00002750 g       *ABS*	00000000 _etext
+00001ab8 g     F .text	00000014 EPAdr
+4000288c g     O .bss	00000004 USB_EndPointMask
+0000268f g     O .text	00000074 USB_StringDescriptor
+40002890 g     O .bss	00000001 USB_DeviceAddress
+00002130 g     F .text	00000004 USB_EndPoint6
+000015e8 g     F .text	00000010 USB_StatusInStage
+00001d88 g     F .text	000000c4 USB_ReadEP
+400030b4 g     O .bss	00000002 usb_send_w
+00001060 g     F .text	0000004c USB_ResetCore
+40000004 g     O .bss	00000001 bit
+0000265c g     O .text	00000012 USB_DeviceDescriptor
+40000000 g       .bss	00000000 __bss_start__
+00001bd8 g     F .text	00000028 USB_WakeUp
+0000031c g     F .text	00000054 write_cmd_word
+00001d00 g     F .text	00000024 USB_DisableEP
+00001d44 g     F .text	00000024 USB_SetStallEP
+00000294 g       .text	00000002 __exit_THUMB
+00002150 g     F .text	00000004 USB_EndPoint14
+00002548 g     F .text	00000060 install_irq
+00001eec g     F .text	00000034 USB_GetFrame
+000015f8 g     F .text	00000040 USB_DataInStage
+000010ac g     F .text	000001ac USB_SetInterface
+00001258 g     F .text	00000220 USB_SetConfiguration
+00000b1c g     F .text	000000b8 complete_erase
+00000858 g     F .text	00000170 incomplete_write
+00001acc g     F .text	00000028 WrCmd
+40000005 g     O .bss	00000001 Byte
+00002190 g     F .text	00000050 usb_user_init
+00000768 g     F .text	000000f0 write
+0000213c g     F .text	00000004 USB_EndPoint9
+00002750 g       *ABS*	00000000 __ctors_start__
+00001bd0 g     F .text	00000004 USB_Suspend
+00002144 g     F .text	00000004 USB_EndPoint11
+00001c38 g     F .text	0000004c USB_Configure
+40000008 g     O .bss	00000004 tprogram
+00002128 g     F .text	00000004 USB_EndPoint4
+00001c00 g     F .text	00000004 USB_WakeUpCfg
+00002174 g     F .text	0000001c USB_Reset_Event
+400038bc g       *ABS*	00000000 __bss_end__
+00000098 g       .text	00000000 SoftwareInterrupt
+00001b64 g     F .text	0000001c USB_Connect
+00000690 g     F .text	000000d8 read
+400030b6 g     O .bss	00000001 inTransfer
+00002298 g     F .text	000000d8 usb_bulkIn
+00002618 g       .text	00000000 IntGetCPSR
+000021e0 g     F .text	00000024 usb_read_ready
+00000168 g       .text	00000128 __startup
+40002894 g     O .bss	00000004 USB_EndPointHalt
+00001594 g     F .text	00000010 USB_StatusOutStage
+4000000c g     O .bss	0000001e write_buffer1
+000025a8 g     F .text	00000060 uninstall_irq
+00000bd4 g     F .text	00000034 init
+00002504 g     F .text	00000044 init_VIC
+00002638 g       .text	00000000 FiqDisable
+00001d24 g     F .text	00000020 USB_ResetEP
+00000370 g     F .text	00000078 read_status
+40000000 g       .bss	00000000 __bss_start
+00002640 g     F .text	0000001c memset
+00000c08 g     F .text	00000458 main
+4000002a g     O .bss	0000001e read_buffer
+0000214c g     F .text	00000004 USB_EndPoint13
+00000290 g       .text	00000004 __exit_ARM
+00002750 g       *ABS*	00000000 __ctors_end__
+000015d8 g     F .text	00000010 USB_SetupStage
+0000222c g     F .text	0000006c usb_bulkOut
+00002704 g     O .text	00000040 USB_P_EP
+0000212c g     F .text	00000004 USB_EndPoint5
+00002138 g     F .text	00000004 USB_EndPoint8
+40002898 g     O .bss	00000001 USB_Configuration
+400030b8 g     O .bss	00000002 usb_send_r
+400030ba g     O .bss	00000002 usb_recv_r
+00000050 g       .text	00000044 __IRQ_Wrapper
+000003e8 g     F .text	000000a0 write_address
+00002158 g     F .text	0000001c USB_EndPoint2
+00002608 g       .text	00000000 IntRestore
+0000266e g     O .text	00000021 USB_ConfigDescriptor
+00002628 g       .text	00000000 IntDisable
+00001c84 g     F .text	00000058 USB_ConfigEP
+40000000 g       *ABS*	00000000 _data
+00001cdc g     F .text	00000004 USB_DirCtrlEP
+4000289c g     O .bss	00000008 SetupPacket
+00002610 g       .text	00000000 FiqRestore
+400028a4 g     O .bss	00000001 USB_NumInterfaces
+00002140 g     F .text	00000004 USB_EndPoint10
+00002750 g       *ABS*	00000000 _edata
+40004500 g       *ABS*	00000000 _end
+000009c8 g     F .text	00000154 erase
+00001e4c g     F .text	000000a0 USB_WriteEP
+00002148 g     F .text	00000004 USB_EndPoint12
+400030bc g     O .bss	00000800 usb_send_buf
+000020f0 g     F .text	00000030 USB_Configure_Event
+00002120 g     F .text	00000004 USB_EndPoint1
+00002370 g     F .text	00000120 usb_write
+00002620 g       .text	00000000 IntEnable
+000002d0 g     F .text	0000004c reset_io
+00001478 g     F .text	0000011c USB_SetClrFeature
+00002630 g       .text	00000000 FiqEnable
+40000048 g     O .bss	00002800 record
+00001b38 g     F .text	0000002c RdCmdDat
+00001bd4 g     F .text	00000004 USB_Resume
+00001728 g     F .text	00000128 USB_GetStatus
+400028a8 g     O .bss	00000008 EP0Data
+00001d68 g     F .text	00000020 USB_ClrStallEP
+00002490 g     F .text	00000064 usb_read
+400028b0 g     O .bss	00000002 USB_DeviceStatus
+00002154 g     F .text	00000004 USB_EndPoint15
+00001ce0 g     F .text	00000020 USB_EnableEP
+
+
+DYNAMIC SYMBOL TABLE:
+no symbols
+
+
+Disassembly of section .text:
+
+00000000 <__Vectors>:
+       0:	e59ff018 	ldr	pc, [pc, #24]	; 20 <Reset_Addr>
+       4:	e59ff018 	ldr	pc, [pc, #24]	; 24 <Undef_Addr>
+       8:	e59ff018 	ldr	pc, [pc, #24]	; 28 <SWI_Addr>
+       c:	e59ff018 	ldr	pc, [pc, #24]	; 2c <PAbt_Addr>
+      10:	e59ff018 	ldr	pc, [pc, #24]	; 30 <DAbt_Addr>
+      14:	e1a00000 	nop			(mov r0,r0)
+      18:	e59ff018 	ldr	pc, [pc, #24]	; 38 <IRQ_Wrapper_Addr>
+      1c:	e59ff018 	ldr	pc, [pc, #24]	; 3c <FIQ_Addr>
+
+00000020 <Reset_Addr>:
+      20:	00000168 	andeq	r0, r0, r8, ror #2
+
+00000024 <Undef_Addr>:
+      24:	00000040 	andeq	r0, r0, r0, asr #32
+
+00000028 <SWI_Addr>:
+      28:	00000098 	muleq	r0, r8, r0
+
+0000002c <PAbt_Addr>:
+      2c:	00000044 	andeq	r0, r0, r4, asr #32
+
+00000030 <DAbt_Addr>:
+      30:	00000048 	andeq	r0, r0, r8, asr #32
+      34:	00000000 	andeq	r0, r0, r0
+
+00000038 <IRQ_Wrapper_Addr>:
+      38:	00000050 	andeq	r0, r0, r0, asr r0
+
+0000003c <FIQ_Addr>:
+      3c:	0000004c 	andeq	r0, r0, ip, asr #32
+
+00000040 <Undef_Handler>:
+      40:	eafffffe 	b	40 <Undef_Handler>
+
+00000044 <PAbt_Handler>:
+      44:	eafffffe 	b	44 <PAbt_Handler>
+
+00000048 <DAbt_Handler>:
+      48:	eafffffe 	b	48 <DAbt_Handler>
+
+0000004c <FIQ_Handler>:
+      4c:	eafffffe 	b	4c <FIQ_Handler>
+
+00000050 <__IRQ_Wrapper>:
+      50:	e24ee004 	sub	lr, lr, #4	; 0x4
+      54:	e92d4000 	stmdb	sp!, {lr}
+      58:	e14fe000 	mrs	lr, SPSR
+      5c:	e92d4000 	stmdb	sp!, {lr}
+      60:	e92d0001 	stmdb	sp!, {r0}
+      64:	e59fe028 	ldr	lr, [pc, #40]	; 94 <.text+0x94>
+      68:	e59e0030 	ldr	r0, [lr, #48]
+      6c:	e321f013 	msr	CPSR_c, #19	; 0x13
+      70:	e92d5ffe 	stmdb	sp!, {r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+      74:	e1a0e00f 	mov	lr, pc
+      78:	e12fff10 	bx	r0
+      7c:	e8bd5ffe 	ldmia	sp!, {r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+      80:	e321f092 	msr	CPSR_c, #146	; 0x92
+      84:	e8bd0001 	ldmia	sp!, {r0}
+      88:	e8bd4000 	ldmia	sp!, {lr}
+      8c:	e16ff00e 	msr	SPSR_fsxc, lr
+      90:	e8fd8000 	ldmia	sp!, {pc}^
+      94:	fffff000 	undefined instruction 0xfffff000
+
+00000098 <SoftwareInterrupt>:
+      98:	e92d4010 	stmdb	sp!, {r4, lr}
+      9c:	e14f4000 	mrs	r4, SPSR
+      a0:	e3140020 	tst	r4, #32	; 0x20
+      a4:	115e40b2 	ldrneh	r4, [lr, #-2]
+      a8:	13c44cff 	bicne	r4, r4, #65280	; 0xff00
+      ac:	051e4004 	ldreq	r4, [lr, #-4]
+      b0:	03c444ff 	biceq	r4, r4, #-16777216	; 0xff000000
+      b4:	e3540006 	cmp	r4, #6	; 0x6
+      b8:	979ff104 	ldrls	pc, [pc, r4, lsl #2]
+
+000000bc <SWIOutOfRange>:
+      bc:	eafffffe 	b	bc <SWIOutOfRange>
+
+000000c0 <SwiTableStart>:
+      c0:	000000dc 	ldreqd	r0, [r0], -ip
+      c4:	000000ec 	andeq	r0, r0, ip, ror #1
+      c8:	000000fc 	streqd	r0, [r0], -ip
+      cc:	00000110 	andeq	r0, r0, r0, lsl r1
+      d0:	00000124 	andeq	r0, r0, r4, lsr #2
+      d4:	0000012c 	andeq	r0, r0, ip, lsr #2
+      d8:	00000148 	andeq	r0, r0, r8, asr #2
+
+000000dc <IRQDisable>:
+      dc:	e14f0000 	mrs	r0, SPSR
+      e0:	e3804080 	orr	r4, r0, #128	; 0x80
+      e4:	e161f004 	msr	SPSR_c, r4
+      e8:	ea00001d 	b	164 <EndofSWI>
+
+000000ec <IRQEnable>:
+      ec:	e14f0000 	mrs	r0, SPSR
+      f0:	e3c04080 	bic	r4, r0, #128	; 0x80
+      f4:	e161f004 	msr	SPSR_c, r4
+      f8:	ea000019 	b	164 <EndofSWI>
+
+000000fc <FIQDisable>:
+      fc:	e14f0000 	mrs	r0, SPSR
+     100:	e3804040 	orr	r4, r0, #64	; 0x40
+     104:	e2000040 	and	r0, r0, #64	; 0x40
+     108:	e161f004 	msr	SPSR_c, r4
+     10c:	ea000014 	b	164 <EndofSWI>
+
+00000110 <FIQEnable>:
+     110:	e14f0000 	mrs	r0, SPSR
+     114:	e3c04040 	bic	r4, r0, #64	; 0x40
+     118:	e2000040 	and	r0, r0, #64	; 0x40
+     11c:	e161f004 	msr	SPSR_c, r4
+     120:	ea00000f 	b	164 <EndofSWI>
+
+00000124 <CPSRget>:
+     124:	e14f0000 	mrs	r0, SPSR
+     128:	ea00000d 	b	164 <EndofSWI>
+
+0000012c <IRQRestore>:
+     12c:	e14f4000 	mrs	r4, SPSR
+     130:	e2000080 	and	r0, r0, #128	; 0x80
+     134:	e3100080 	tst	r0, #128	; 0x80
+     138:	03c44080 	biceq	r4, r4, #128	; 0x80
+     13c:	13844080 	orrne	r4, r4, #128	; 0x80
+     140:	e161f004 	msr	SPSR_c, r4
+     144:	ea000006 	b	164 <EndofSWI>
+
+00000148 <FIQRestore>:
+     148:	e14f4000 	mrs	r4, SPSR
+     14c:	e2000040 	and	r0, r0, #64	; 0x40
+     150:	e3100040 	tst	r0, #64	; 0x40
+     154:	03c44040 	biceq	r4, r4, #64	; 0x40
+     158:	13844040 	orrne	r4, r4, #64	; 0x40
+     15c:	e161f004 	msr	SPSR_c, r4
+     160:	eaffffff 	b	164 <EndofSWI>
+
+00000164 <EndofSWI>:
+     164:	e8fd8010 	ldmia	sp!, {r4, pc}^
+
+00000168 <__startup>:
+     168:	e59f0128 	ldr	r0, [pc, #296]	; 298 <.text+0x298>
+     16c:	e3a01002 	mov	r1, #2	; 0x2
+     170:	e5801000 	str	r1, [r0]
+     174:	e59f0120 	ldr	r0, [pc, #288]	; 29c <.text+0x29c>
+     178:	e3a010aa 	mov	r1, #170	; 0xaa
+     17c:	e3a02055 	mov	r2, #85	; 0x55
+     180:	e3a03024 	mov	r3, #36	; 0x24
+     184:	e5803004 	str	r3, [r0, #4]
+     188:	e3a03001 	mov	r3, #1	; 0x1
+     18c:	e5803000 	str	r3, [r0]
+     190:	e580100c 	str	r1, [r0, #12]
+     194:	e580200c 	str	r2, [r0, #12]
+
+00000198 <PLL_Loop>:
+     198:	e5903008 	ldr	r3, [r0, #8]
+     19c:	e2133b01 	ands	r3, r3, #1024	; 0x400
+     1a0:	0afffffc 	beq	198 <PLL_Loop>
+     1a4:	e3a03003 	mov	r3, #3	; 0x3
+     1a8:	e5803000 	str	r3, [r0]
+     1ac:	e580100c 	str	r1, [r0, #12]
+     1b0:	e580200c 	str	r2, [r0, #12]
+     1b4:	e59f00e4 	ldr	r0, [pc, #228]	; 2a0 <.text+0x2a0>
+     1b8:	e3a01004 	mov	r1, #4	; 0x4
+     1bc:	e5801004 	str	r1, [r0, #4]
+     1c0:	e3a01002 	mov	r1, #2	; 0x2
+     1c4:	e5801000 	str	r1, [r0]
+     1c8:	e59f00d4 	ldr	r0, [pc, #212]	; 2a4 <.text+0x2a4>
+     1cc:	e321f0db 	msr	CPSR_c, #219	; 0xdb
+     1d0:	e1a0d000 	mov	sp, r0
+     1d4:	e2400080 	sub	r0, r0, #128	; 0x80
+     1d8:	e321f0d7 	msr	CPSR_c, #215	; 0xd7
+     1dc:	e1a0d000 	mov	sp, r0
+     1e0:	e2400080 	sub	r0, r0, #128	; 0x80
+     1e4:	e321f0d1 	msr	CPSR_c, #209	; 0xd1
+     1e8:	e1a0d000 	mov	sp, r0
+     1ec:	e2400080 	sub	r0, r0, #128	; 0x80
+     1f0:	e321f0d2 	msr	CPSR_c, #210	; 0xd2
+     1f4:	e1a0d000 	mov	sp, r0
+     1f8:	e2400c02 	sub	r0, r0, #512	; 0x200
+     1fc:	e321f0d3 	msr	CPSR_c, #211	; 0xd3
+     200:	e1a0d000 	mov	sp, r0
+     204:	e2400080 	sub	r0, r0, #128	; 0x80
+     208:	e321f010 	msr	CPSR_c, #16	; 0x10
+     20c:	e1a0d000 	mov	sp, r0
+     210:	e59f1090 	ldr	r1, [pc, #144]	; 2a8 <.text+0x2a8>
+     214:	e59f2090 	ldr	r2, [pc, #144]	; 2ac <.text+0x2ac>
+     218:	e59f3090 	ldr	r3, [pc, #144]	; 2b0 <.text+0x2b0>
+     21c:	e1520003 	cmp	r2, r3
+     220:	0a000003 	beq	234 <DataIsEmpty>
+
+00000224 <LoopRel>:
+     224:	e1520003 	cmp	r2, r3
+     228:	34910004 	ldrcc	r0, [r1], #4
+     22c:	34820004 	strcc	r0, [r2], #4
+     230:	3afffffb 	bcc	224 <LoopRel>
+
+00000234 <DataIsEmpty>:
+     234:	e3a00000 	mov	r0, #0	; 0x0
+     238:	e59f1074 	ldr	r1, [pc, #116]	; 2b4 <.text+0x2b4>
+     23c:	e59f2074 	ldr	r2, [pc, #116]	; 2b8 <.text+0x2b8>
+     240:	e1510002 	cmp	r1, r2
+     244:	0a000002 	beq	254 <BSSIsEmpty>
+
+00000248 <LoopZI>:
+     248:	e1510002 	cmp	r1, r2
+     24c:	34810004 	strcc	r0, [r1], #4
+     250:	3afffffc 	bcc	248 <LoopZI>
+
+00000254 <BSSIsEmpty>:
+     254:	e59f0060 	ldr	r0, [pc, #96]	; 2bc <.text+0x2bc>
+     258:	e59f1060 	ldr	r1, [pc, #96]	; 2c0 <.text+0x2c0>
+
+0000025c <ctor_loop>:
+     25c:	e1500001 	cmp	r0, r1
+     260:	0a000005 	beq	27c <ctor_end>
+     264:	e4902004 	ldr	r2, [r0], #4
+     268:	e92d0003 	stmdb	sp!, {r0, r1}
+     26c:	e1a0e00f 	mov	lr, pc
+     270:	e1a0f002 	mov	pc, r2
+     274:	e8bd0003 	ldmia	sp!, {r0, r1}
+     278:	eafffff7 	b	25c <ctor_loop>
+
+0000027c <ctor_end>:
+     27c:	e59f0040 	ldr	r0, [pc, #64]	; 2c4 <.text+0x2c4>
+     280:	e3100001 	tst	r0, #1	; 0x1
+     284:	059fe03c 	ldreq	lr, [pc, #60]	; 2c8 <.text+0x2c8>
+     288:	159fe03c 	ldrne	lr, [pc, #60]	; 2cc <.text+0x2cc>
+     28c:	e12fff10 	bx	r0
+
+00000290 <__exit_ARM>:
+     290:	eafffffe 	b	290 <__exit_ARM>
+
+00000294 <__exit_THUMB>:
+     294:	e7fe      	b.n	294 <__exit_THUMB>
+     296:	0000      	lsls	r0, r0, #0
+     298:	c100      	stmia	r1!, {}
+     29a:	e01f      	b.n	2dc <reset_io+0xc>
+     29c:	c080      	stmia	r0!, {r7}
+     29e:	e01f      	b.n	2e0 <reset_io+0x10>
+     2a0:	c000      	stmia	r0!, {}
+     2a2:	e01f      	b.n	2e4 <reset_io+0x14>
+     2a4:	4500      	cmp	r0, r0
+     2a6:	4000      	ands	r0, r0
+     2a8:	2750      	movs	r7, #80
+     2aa:	0000      	lsls	r0, r0, #0
+     2ac:	0000      	lsls	r0, r0, #0
+     2ae:	4000      	ands	r0, r0
+     2b0:	2750      	movs	r7, #80
+     2b2:	0000      	lsls	r0, r0, #0
+     2b4:	0000      	lsls	r0, r0, #0
+     2b6:	4000      	ands	r0, r0
+     2b8:	38bc      	subs	r0, #188
+     2ba:	4000      	ands	r0, r0
+     2bc:	2750      	movs	r7, #80
+     2be:	0000      	lsls	r0, r0, #0
+     2c0:	2750      	movs	r7, #80
+     2c2:	0000      	lsls	r0, r0, #0
+     2c4:	0c08      	lsrs	r0, r1, #16
+     2c6:	0000      	lsls	r0, r0, #0
+     2c8:	0290      	lsls	r0, r2, #10
+     2ca:	0000      	lsls	r0, r0, #0
+     2cc:	0294      	lsls	r4, r2, #10
+	...
+
+000002d0 <reset_io>:
+     2d0:	e59f2038 	ldr	r2, [pc, #56]	; 310 <.text+0x310>
+     2d4:	e59f3038 	ldr	r3, [pc, #56]	; 314 <.text+0x314>
+     2d8:	e5023fff 	str	r3, [r2, #-4095]
+     2dc:	e2433c21 	sub	r3, r3, #8448	; 0x2100
+     2e0:	e5023fe7 	str	r3, [r2, #-4071]
+     2e4:	e2833ecd 	add	r3, r3, #3280	; 0xcd0
+     2e8:	e5023fe3 	str	r3, [r2, #-4067]
+     2ec:	e1a00000 	nop			(mov r0,r0)
+     2f0:	e1a00000 	nop			(mov r0,r0)
+     2f4:	e1a00000 	nop			(mov r0,r0)
+     2f8:	e2433c11 	sub	r3, r3, #4352	; 0x1100
+     2fc:	e5023fe7 	str	r3, [r2, #-4071]
+     300:	e59f3010 	ldr	r3, [pc, #16]	; 318 <.text+0x318>
+     304:	e3e02000 	mvn	r2, #0	; 0x0
+     308:	e54320fd 	strb	r2, [r3, #-253]
+     30c:	e12fff1e 	bx	lr
+     310:	3fffcfff 	svccc	0x00ffcfff
+     314:	00003530 	andeq	r3, r0, r0, lsr r5
+     318:	3fffc0ff 	svccc	0x00ffc0ff
+
+0000031c <write_cmd_word>:
+     31c:	e59f2040 	ldr	r2, [pc, #64]	; 364 <.text+0x364>
+     320:	e3a03c05 	mov	r3, #1280	; 0x500
+     324:	e5023fe7 	str	r3, [r2, #-4071]
+     328:	e59f3038 	ldr	r3, [pc, #56]	; 368 <.text+0x368>
+     32c:	e5023fe3 	str	r3, [r2, #-4067]
+     330:	e20000ff 	and	r0, r0, #255	; 0xff
+     334:	e1a00000 	nop			(mov r0,r0)
+     338:	e1a00000 	nop			(mov r0,r0)
+     33c:	e59f3028 	ldr	r3, [pc, #40]	; 36c <.text+0x36c>
+     340:	e3a01010 	mov	r1, #16	; 0x10
+     344:	e5021fe3 	str	r1, [r2, #-4067]
+     348:	e54300e9 	strb	r0, [r3, #-233]
+     34c:	e3a03c01 	mov	r3, #256	; 0x100
+     350:	e5021fe7 	str	r1, [r2, #-4071]
+     354:	e5023fe3 	str	r3, [r2, #-4067]
+     358:	e1a00000 	nop			(mov r0,r0)
+     35c:	e1a00000 	nop			(mov r0,r0)
+     360:	e12fff1e 	bx	lr
+     364:	3fffcfff 	svccc	0x00ffcfff
+     368:	00002010 	andeq	r2, r0, r0, lsl r0
+     36c:	3fffc0ff 	svccc	0x00ffc0ff
+
+00000370 <read_status>:
+     370:	e92d40f0 	stmdb	sp!, {r4, r5, r6, r7, lr}
+     374:	e59f5060 	ldr	r5, [pc, #96]	; 3dc <.text+0x3dc>
+     378:	e59f4060 	ldr	r4, [pc, #96]	; 3e0 <.text+0x3e0>
+     37c:	e3a07a01 	mov	r7, #4096	; 0x1000
+     380:	e3e03000 	mvn	r3, #0	; 0x0
+     384:	e5057fe3 	str	r7, [r5, #-4067]
+     388:	e54430fd 	strb	r3, [r4, #-253]
+     38c:	e59f3050 	ldr	r3, [pc, #80]	; 3e4 <.text+0x3e4>
+     390:	e3a06b01 	mov	r6, #1024	; 0x400
+     394:	e5053fe3 	str	r3, [r5, #-4067]
+     398:	e3a00070 	mov	r0, #112	; 0x70
+     39c:	e5056fe7 	str	r6, [r5, #-4071]
+     3a0:	ebffffdd 	bl	31c <write_cmd_word>
+     3a4:	e3a03000 	mov	r3, #0	; 0x0
+     3a8:	e54430fd 	strb	r3, [r4, #-253]
+     3ac:	e1a00000 	nop			(mov r0,r0)
+     3b0:	e1a00000 	nop			(mov r0,r0)
+     3b4:	e1a00000 	nop			(mov r0,r0)
+     3b8:	e5056fe3 	str	r6, [r5, #-4067]
+     3bc:	e1a00000 	nop			(mov r0,r0)
+     3c0:	e55440e9 	ldrb	r4, [r4, #-233]
+     3c4:	e5057fe7 	str	r7, [r5, #-4071]
+     3c8:	e20440ff 	and	r4, r4, #255	; 0xff
+     3cc:	e1a00000 	nop			(mov r0,r0)
+     3d0:	ebffffbe 	bl	2d0 <reset_io>
+     3d4:	e1a00004 	mov	r0, r4
+     3d8:	e8bd80f0 	ldmia	sp!, {r4, r5, r6, r7, pc}
+     3dc:	3fffcfff 	svccc	0x00ffcfff
+     3e0:	3fffc0ff 	svccc	0x00ffc0ff
+     3e4:	00002110 	andeq	r2, r0, r0, lsl r1
+
+000003e8 <write_address>:
+     3e8:	e92d41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
+     3ec:	e59fe08c 	ldr	lr, [pc, #140]	; 480 <.text+0x480>
+     3f0:	e3a08a02 	mov	r8, #8192	; 0x2000
+     3f4:	e3a03e11 	mov	r3, #272	; 0x110
+     3f8:	e50e8fe7 	str	r8, [lr, #-4071]
+     3fc:	e20110ff 	and	r1, r1, #255	; 0xff
+     400:	e50e3fe3 	str	r3, [lr, #-4067]
+     404:	e1a00000 	nop			(mov r0,r0)
+     408:	e2003aff 	and	r3, r0, #1044480	; 0xff000
+     40c:	e20026ff 	and	r2, r0, #267386880	; 0xff00000
+     410:	e200c207 	and	ip, r0, #1879048192	; 0x70000000
+     414:	e1a05623 	mov	r5, r3, lsr #12
+     418:	e3510000 	cmp	r1, #0	; 0x0
+     41c:	e2003c0f 	and	r3, r0, #3840	; 0xf00
+     420:	e1a06a22 	mov	r6, r2, lsr #20
+     424:	e59f4058 	ldr	r4, [pc, #88]	; 484 <.text+0x484>
+     428:	e1a07e2c 	mov	r7, ip, lsr #28
+     42c:	e3a02010 	mov	r2, #16	; 0x10
+     430:	e1a03423 	mov	r3, r3, lsr #8
+     434:	e20000ff 	and	r0, r0, #255	; 0xff
+     438:	1a000005 	bne	454 <PLLSTAT_PLOCK+0x54>
+     43c:	e50e2fe3 	str	r2, [lr, #-4067]
+     440:	e54400e9 	strb	r0, [r4, #-233]
+     444:	e50e2fe7 	str	r2, [lr, #-4071]
+     448:	e50e2fe3 	str	r2, [lr, #-4067]
+     44c:	e54430e9 	strb	r3, [r4, #-233]
+     450:	e50e2fe7 	str	r2, [lr, #-4071]
+     454:	e50e2fe3 	str	r2, [lr, #-4067]
+     458:	e54450e9 	strb	r5, [r4, #-233]
+     45c:	e50e2fe7 	str	r2, [lr, #-4071]
+     460:	e50e2fe3 	str	r2, [lr, #-4067]
+     464:	e54460e9 	strb	r6, [r4, #-233]
+     468:	e50e2fe7 	str	r2, [lr, #-4071]
+     46c:	e50e2fe3 	str	r2, [lr, #-4067]
+     470:	e54470e9 	strb	r7, [r4, #-233]
+     474:	e50e2fe7 	str	r2, [lr, #-4071]
+     478:	e50e8fe3 	str	r8, [lr, #-4067]
+     47c:	e8bd81f0 	ldmia	sp!, {r4, r5, r6, r7, r8, pc}
+     480:	3fffcfff 	svccc	0x00ffcfff
+     484:	3fffc0ff 	svccc	0x00ffc0ff
+
+00000488 <cache_read>:
+     488:	e59fc1e8 	ldr	ip, [pc, #488]	; 678 <.text+0x678>
+     48c:	e92d4ff0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
+     490:	e3a0ea01 	mov	lr, #4096	; 0x1000
+     494:	e59f41e0 	ldr	r4, [pc, #480]	; 67c <.text+0x67c>
+     498:	e50cefe3 	str	lr, [ip, #-4067]
+     49c:	e3e0c000 	mvn	ip, #0	; 0x0
+     4a0:	e544c0fd 	strb	ip, [r4, #-253]
+     4a4:	e1a08000 	mov	r8, r0
+     4a8:	e3a00000 	mov	r0, #0	; 0x0
+     4ac:	e1a0b003 	mov	fp, r3
+     4b0:	e1a09002 	mov	r9, r2
+     4b4:	e1a0a001 	mov	sl, r1
+     4b8:	ebffff97 	bl	31c <write_cmd_word>
+     4bc:	e1a00008 	mov	r0, r8
+     4c0:	e3a01000 	mov	r1, #0	; 0x0
+     4c4:	ebffffc7 	bl	3e8 <write_address>
+     4c8:	e3a00030 	mov	r0, #48	; 0x30
+     4cc:	ebffff92 	bl	31c <write_cmd_word>
+     4d0:	e3a03000 	mov	r3, #0	; 0x0
+     4d4:	e54430fd 	strb	r3, [r4, #-253]
+     4d8:	ea000000 	b	4e0 <cache_read+0x58>
+     4dc:	e1a00000 	nop			(mov r0,r0)
+     4e0:	e59f3190 	ldr	r3, [pc, #400]	; 678 <.text+0x678>
+     4e4:	e5133feb 	ldr	r3, [r3, #-4075]
+     4e8:	e3130040 	tst	r3, #64	; 0x40
+     4ec:	0afffffa 	beq	4dc <cache_read+0x54>
+     4f0:	e3a05000 	mov	r5, #0	; 0x0
+     4f4:	e1a06005 	mov	r6, r5
+     4f8:	e3a07001 	mov	r7, #1	; 0x1
+     4fc:	ea000030 	b	5c4 <cache_read+0x13c>
+     500:	e59f4174 	ldr	r4, [pc, #372]	; 67c <.text+0x67c>
+     504:	e3e03000 	mvn	r3, #0	; 0x0
+     508:	e54430fd 	strb	r3, [r4, #-253]
+     50c:	e3a00000 	mov	r0, #0	; 0x0
+     510:	ebffff81 	bl	31c <write_cmd_word>
+     514:	e1a00008 	mov	r0, r8
+     518:	e3a01000 	mov	r1, #0	; 0x0
+     51c:	ebffffb1 	bl	3e8 <write_address>
+     520:	e3a00031 	mov	r0, #49	; 0x31
+     524:	ebffff7c 	bl	31c <write_cmd_word>
+     528:	e3a03000 	mov	r3, #0	; 0x0
+     52c:	e54430fd 	strb	r3, [r4, #-253]
+     530:	ea000000 	b	538 <cache_read+0xb0>
+     534:	e1a00000 	nop			(mov r0,r0)
+     538:	e59f3138 	ldr	r3, [pc, #312]	; 678 <.text+0x678>
+     53c:	e5133feb 	ldr	r3, [r3, #-4075]
+     540:	e3130040 	tst	r3, #64	; 0x40
+     544:	0afffffa 	beq	534 <cache_read+0xac>
+     548:	e3a02000 	mov	r2, #0	; 0x0
+     54c:	ea000005 	b	568 <cache_read+0xe0>
+     550:	e5001fe3 	str	r1, [r0, #-4067]
+     554:	e59f3120 	ldr	r3, [pc, #288]	; 67c <.text+0x67c>
+     558:	e55330e9 	ldrb	r3, [r3, #-233]
+     55c:	e7c93002 	strb	r3, [r9, r2]
+     560:	e5001fe7 	str	r1, [r0, #-4071]
+     564:	e2822001 	add	r2, r2, #1	; 0x1
+     568:	e152000a 	cmp	r2, sl
+     56c:	e59f0104 	ldr	r0, [pc, #260]	; 678 <.text+0x678>
+     570:	e3a01b01 	mov	r1, #1024	; 0x400
+     574:	1afffff5 	bne	550 <cache_read+0xc8>
+     578:	e59f3100 	ldr	r3, [pc, #256]	; 680 <.text+0x680>
+     57c:	e5d32000 	ldrb	r2, [r3]
+     580:	e59f30fc 	ldr	r3, [pc, #252]	; 684 <.text+0x684>
+     584:	e7d33002 	ldrb	r3, [r3, r2]
+     588:	e59f20f8 	ldr	r2, [pc, #248]	; 688 <.text+0x688>
+     58c:	e5d22000 	ldrb	r2, [r2]
+     590:	e1a03253 	mov	r3, r3, asr r2
+     594:	e3130001 	tst	r3, #1	; 0x1
+     598:	059f30ec 	ldreq	r3, [pc, #236]	; 68c <.text+0x68c>
+     59c:	07d32005 	ldreqb	r2, [r3, r5]
+     5a0:	03a01001 	moveq	r1, #1	; 0x1
+     5a4:	01822611 	orreq	r2, r2, r1, lsl r6
+     5a8:	07c32005 	streqb	r2, [r3, r5]
+     5ac:	e2863001 	add	r3, r6, #1	; 0x1
+     5b0:	e20360ff 	and	r6, r3, #255	; 0xff
+     5b4:	e3560008 	cmp	r6, #8	; 0x8
+     5b8:	02855001 	addeq	r5, r5, #1	; 0x1
+     5bc:	03a06000 	moveq	r6, #0	; 0x0
+     5c0:	e2877001 	add	r7, r7, #1	; 0x1
+     5c4:	e157000b 	cmp	r7, fp
+     5c8:	1affffcc 	bne	500 <cache_read+0x78>
+     5cc:	e59f40a8 	ldr	r4, [pc, #168]	; 67c <.text+0x67c>
+     5d0:	e3e03000 	mvn	r3, #0	; 0x0
+     5d4:	e54430fd 	strb	r3, [r4, #-253]
+     5d8:	e3a0003f 	mov	r0, #63	; 0x3f
+     5dc:	ebffff4e 	bl	31c <write_cmd_word>
+     5e0:	e3a03000 	mov	r3, #0	; 0x0
+     5e4:	e54430fd 	strb	r3, [r4, #-253]
+     5e8:	ea000000 	b	5f0 <cache_read+0x168>
+     5ec:	e1a00000 	nop			(mov r0,r0)
+     5f0:	e59f3080 	ldr	r3, [pc, #128]	; 678 <.text+0x678>
+     5f4:	e5133feb 	ldr	r3, [r3, #-4075]
+     5f8:	e3130040 	tst	r3, #64	; 0x40
+     5fc:	0afffffa 	beq	5ec <cache_read+0x164>
+     600:	e3a02000 	mov	r2, #0	; 0x0
+     604:	ea000005 	b	620 <cache_read+0x198>
+     608:	e5001fe3 	str	r1, [r0, #-4067]
+     60c:	e59f3068 	ldr	r3, [pc, #104]	; 67c <.text+0x67c>
+     610:	e55330e9 	ldrb	r3, [r3, #-233]
+     614:	e7c93002 	strb	r3, [r9, r2]
+     618:	e5001fe7 	str	r1, [r0, #-4071]
+     61c:	e2822001 	add	r2, r2, #1	; 0x1
+     620:	e152000a 	cmp	r2, sl
+     624:	e59f004c 	ldr	r0, [pc, #76]	; 678 <.text+0x678>
+     628:	e3a01b01 	mov	r1, #1024	; 0x400
+     62c:	1afffff5 	bne	608 <cache_read+0x180>
+     630:	e59f3048 	ldr	r3, [pc, #72]	; 680 <.text+0x680>
+     634:	e5d32000 	ldrb	r2, [r3]
+     638:	e59f3044 	ldr	r3, [pc, #68]	; 684 <.text+0x684>
+     63c:	e7d33002 	ldrb	r3, [r3, r2]
+     640:	e59f2040 	ldr	r2, [pc, #64]	; 688 <.text+0x688>
+     644:	e5d22000 	ldrb	r2, [r2]
+     648:	e1a03253 	mov	r3, r3, asr r2
+     64c:	e3130001 	tst	r3, #1	; 0x1
+     650:	059f3034 	ldreq	r3, [pc, #52]	; 68c <.text+0x68c>
+     654:	07d32005 	ldreqb	r2, [r3, r5]
+     658:	03a01001 	moveq	r1, #1	; 0x1
+     65c:	01822611 	orreq	r2, r2, r1, lsl r6
+     660:	07c32005 	streqb	r2, [r3, r5]
+     664:	e59f300c 	ldr	r3, [pc, #12]	; 678 <.text+0x678>
+     668:	e3a02a01 	mov	r2, #4096	; 0x1000
+     66c:	e5032fe7 	str	r2, [r3, #-4071]
+     670:	e8bd4ff0 	ldmia	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
+     674:	eaffff15 	b	2d0 <reset_io>
+     678:	3fffcfff 	svccc	0x00ffcfff
+     67c:	3fffc0ff 	svccc	0x00ffc0ff
+     680:	40000005 	andmi	r0, r0, r5
+     684:	4000002a 	andmi	r0, r0, sl, lsr #32
+     688:	40000004 	andmi	r0, r0, r4
+     68c:	40000048 	andmi	r0, r0, r8, asr #32
+
+00000690 <read>:
+     690:	e59f30c8 	ldr	r3, [pc, #200]	; 760 <.text+0x760>
+     694:	e92d40f0 	stmdb	sp!, {r4, r5, r6, r7, lr}
+     698:	e3a0ca01 	mov	ip, #4096	; 0x1000
+     69c:	e59f50c0 	ldr	r5, [pc, #192]	; 764 <.text+0x764>
+     6a0:	e503cfe3 	str	ip, [r3, #-4067]
+     6a4:	e3e03000 	mvn	r3, #0	; 0x0
+     6a8:	e3510d21 	cmp	r1, #2112	; 0x840
+     6ac:	31a07001 	movcc	r7, r1
+     6b0:	23a07d21 	movcs	r7, #2112	; 0x840
+     6b4:	e54530fd 	strb	r3, [r5, #-253]
+     6b8:	e1a04000 	mov	r4, r0
+     6bc:	e1a06002 	mov	r6, r2
+     6c0:	e1a00000 	nop			(mov r0,r0)
+     6c4:	e1a00000 	nop			(mov r0,r0)
+     6c8:	e3a00000 	mov	r0, #0	; 0x0
+     6cc:	ebffff12 	bl	31c <write_cmd_word>
+     6d0:	e1a00004 	mov	r0, r4
+     6d4:	e3a01000 	mov	r1, #0	; 0x0
+     6d8:	ebffff42 	bl	3e8 <write_address>
+     6dc:	e3a00030 	mov	r0, #48	; 0x30
+     6e0:	ebffff0d 	bl	31c <write_cmd_word>
+     6e4:	e3a03000 	mov	r3, #0	; 0x0
+     6e8:	e54530fd 	strb	r3, [r5, #-253]
+     6ec:	ea000000 	b	6f4 <read+0x64>
+     6f0:	e1a00000 	nop			(mov r0,r0)
+     6f4:	e59f3064 	ldr	r3, [pc, #100]	; 760 <.text+0x760>
+     6f8:	e5133feb 	ldr	r3, [r3, #-4075]
+     6fc:	e3130040 	tst	r3, #64	; 0x40
+     700:	0afffffa 	beq	6f0 <read+0x60>
+     704:	e3a03000 	mov	r3, #0	; 0x0
+     708:	e1a00000 	nop			(mov r0,r0)
+     70c:	e2833001 	add	r3, r3, #1	; 0x1
+     710:	e3530064 	cmp	r3, #100	; 0x64
+     714:	1afffffb 	bne	708 <read+0x78>
+     718:	e3a02000 	mov	r2, #0	; 0x0
+     71c:	ea000007 	b	740 <read+0xb0>
+     720:	e5001fe3 	str	r1, [r0, #-4067]
+     724:	e1a00000 	nop			(mov r0,r0)
+     728:	e59f3034 	ldr	r3, [pc, #52]	; 764 <.text+0x764>
+     72c:	e55330e9 	ldrb	r3, [r3, #-233]
+     730:	e7c63002 	strb	r3, [r6, r2]
+     734:	e5001fe7 	str	r1, [r0, #-4071]
+     738:	e1a00000 	nop			(mov r0,r0)
+     73c:	e2822001 	add	r2, r2, #1	; 0x1
+     740:	e1520007 	cmp	r2, r7
+     744:	e59f0014 	ldr	r0, [pc, #20]	; 760 <.text+0x760>
+     748:	e3a01b01 	mov	r1, #1024	; 0x400
+     74c:	1afffff3 	bne	720 <read+0x90>
+     750:	e3a02a01 	mov	r2, #4096	; 0x1000
+     754:	e5002fe7 	str	r2, [r0, #-4071]
+     758:	e8bd40f0 	ldmia	sp!, {r4, r5, r6, r7, lr}
+     75c:	eafffedb 	b	2d0 <reset_io>
+     760:	3fffcfff 	svccc	0x00ffcfff
+     764:	3fffc0ff 	svccc	0x00ffc0ff
+
+00000768 <write>:
+     768:	e92d40f0 	stmdb	sp!, {r4, r5, r6, r7, lr}
+     76c:	e59f40d8 	ldr	r4, [pc, #216]	; 84c <.text+0x84c>
+     770:	e3a03a01 	mov	r3, #4096	; 0x1000
+     774:	e5043fe3 	str	r3, [r4, #-4067]
+     778:	e59f30d0 	ldr	r3, [pc, #208]	; 850 <.text+0x850>
+     77c:	e3510d21 	cmp	r1, #2112	; 0x840
+     780:	31a07001 	movcc	r7, r1
+     784:	23a07d21 	movcs	r7, #2112	; 0x840
+     788:	e3e01000 	mvn	r1, #0	; 0x0
+     78c:	e54310fd 	strb	r1, [r3, #-253]
+     790:	e3a03010 	mov	r3, #16	; 0x10
+     794:	e5043fe7 	str	r3, [r4, #-4071]
+     798:	e1a05000 	mov	r5, r0
+     79c:	e1a06002 	mov	r6, r2
+     7a0:	e1a00000 	nop			(mov r0,r0)
+     7a4:	e1a00000 	nop			(mov r0,r0)
+     7a8:	e1a00000 	nop			(mov r0,r0)
+     7ac:	e3a00080 	mov	r0, #128	; 0x80
+     7b0:	ebfffed9 	bl	31c <write_cmd_word>
+     7b4:	e3a01000 	mov	r1, #0	; 0x0
+     7b8:	e1a00005 	mov	r0, r5
+     7bc:	ebffff09 	bl	3e8 <write_address>
+     7c0:	e59f308c 	ldr	r3, [pc, #140]	; 854 <.text+0x854>
+     7c4:	e3a01000 	mov	r1, #0	; 0x0
+     7c8:	e5043fe3 	str	r3, [r4, #-4067]
+     7cc:	e3a03e42 	mov	r3, #1056	; 0x420
+     7d0:	e5043fe7 	str	r3, [r4, #-4071]
+     7d4:	ea000007 	b	7f8 <write+0x90>
+     7d8:	e50c0fe3 	str	r0, [ip, #-4067]
+     7dc:	e1a00000 	nop			(mov r0,r0)
+     7e0:	e59f3068 	ldr	r3, [pc, #104]	; 850 <.text+0x850>
+     7e4:	e7d12006 	ldrb	r2, [r1, r6]
+     7e8:	e54320e9 	strb	r2, [r3, #-233]
+     7ec:	e50c0fe7 	str	r0, [ip, #-4071]
+     7f0:	e1a00000 	nop			(mov r0,r0)
+     7f4:	e2811001 	add	r1, r1, #1	; 0x1
+     7f8:	e1510007 	cmp	r1, r7
+     7fc:	e59fc048 	ldr	ip, [pc, #72]	; 84c <.text+0x84c>
+     800:	e3a00010 	mov	r0, #16	; 0x10
+     804:	1afffff3 	bne	7d8 <write+0x70>
+     808:	ebfffec3 	bl	31c <write_cmd_word>
+     80c:	e59f303c 	ldr	r3, [pc, #60]	; 850 <.text+0x850>
+     810:	e3a02000 	mov	r2, #0	; 0x0
+     814:	e54320fd 	strb	r2, [r3, #-253]
+     818:	ea000000 	b	820 <USR_Stack_Size+0x20>
+     81c:	e1a00000 	nop			(mov r0,r0)
+     820:	e59f2024 	ldr	r2, [pc, #36]	; 84c <.text+0x84c>
+     824:	e5123feb 	ldr	r3, [r2, #-4075]
+     828:	e3130040 	tst	r3, #64	; 0x40
+     82c:	0afffffa 	beq	81c <USR_Stack_Size+0x1c>
+     830:	e3a03a01 	mov	r3, #4096	; 0x1000
+     834:	e5023fe7 	str	r3, [r2, #-4071]
+     838:	e1a00000 	nop			(mov r0,r0)
+     83c:	ebfffea3 	bl	2d0 <reset_io>
+     840:	ebfffeca 	bl	370 <read_status>
+     844:	e2000001 	and	r0, r0, #1	; 0x1
+     848:	e8bd80f0 	ldmia	sp!, {r4, r5, r6, r7, pc}
+     84c:	3fffcfff 	svccc	0x00ffcfff
+     850:	3fffc0ff 	svccc	0x00ffc0ff
+     854:	00002110 	andeq	r2, r0, r0, lsl r1
+
+00000858 <incomplete_write>:
+     858:	e59f3154 	ldr	r3, [pc, #340]	; 9b4 <.text+0x9b4>
+     85c:	e59fc154 	ldr	ip, [pc, #340]	; 9b8 <.text+0x9b8>
+     860:	e92d41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
+     864:	e593e000 	ldr	lr, [r3]
+     868:	e3a05000 	mov	r5, #0	; 0x0
+     86c:	e3a03002 	mov	r3, #2	; 0x2
+     870:	e58c500c 	str	r5, [ip, #12]
+     874:	e59f4140 	ldr	r4, [pc, #320]	; 9bc <.text+0x9bc>
+     878:	e58c3004 	str	r3, [ip, #4]
+     87c:	e283301e 	add	r3, r3, #30	; 0x1e
+     880:	e58c3014 	str	r3, [ip, #20]
+     884:	e2833efe 	add	r3, r3, #4064	; 0xfe0
+     888:	e58ce01c 	str	lr, [ip, #28]
+     88c:	e5043fe3 	str	r3, [r4, #-4067]
+     890:	e59f3128 	ldr	r3, [pc, #296]	; 9c0 <.text+0x9c0>
+     894:	e3510d21 	cmp	r1, #2112	; 0x840
+     898:	31a08001 	movcc	r8, r1
+     89c:	23a08d21 	movcs	r8, #2112	; 0x840
+     8a0:	e3e01000 	mvn	r1, #0	; 0x0
+     8a4:	e54310fd 	strb	r1, [r3, #-253]
+     8a8:	e3a03010 	mov	r3, #16	; 0x10
+     8ac:	e5043fe7 	str	r3, [r4, #-4071]
+     8b0:	e1a06000 	mov	r6, r0
+     8b4:	e1a07002 	mov	r7, r2
+     8b8:	e1a00000 	nop			(mov r0,r0)
+     8bc:	e1a00000 	nop			(mov r0,r0)
+     8c0:	e1a00000 	nop			(mov r0,r0)
+     8c4:	e3a00080 	mov	r0, #128	; 0x80
+     8c8:	ebfffe93 	bl	31c <write_cmd_word>
+     8cc:	e1a00006 	mov	r0, r6
+     8d0:	e1a01005 	mov	r1, r5
+     8d4:	ebfffec3 	bl	3e8 <write_address>
+     8d8:	e59f30e4 	ldr	r3, [pc, #228]	; 9c4 <.text+0x9c4>
+     8dc:	e5043fe3 	str	r3, [r4, #-4067]
+     8e0:	e3a03e42 	mov	r3, #1056	; 0x420
+     8e4:	e5043fe7 	str	r3, [r4, #-4071]
+     8e8:	ea000007 	b	90c <incomplete_write+0xb4>
+     8ec:	e5001fe3 	str	r1, [r0, #-4067]
+     8f0:	e1a00000 	nop			(mov r0,r0)
+     8f4:	e59f30c4 	ldr	r3, [pc, #196]	; 9c0 <.text+0x9c0>
+     8f8:	e7d52007 	ldrb	r2, [r5, r7]
+     8fc:	e54320e9 	strb	r2, [r3, #-233]
+     900:	e5001fe7 	str	r1, [r0, #-4071]
+     904:	e1a00000 	nop			(mov r0,r0)
+     908:	e2855001 	add	r5, r5, #1	; 0x1
+     90c:	e1550008 	cmp	r5, r8
+     910:	e59f00a4 	ldr	r0, [pc, #164]	; 9bc <.text+0x9bc>
+     914:	e3a01010 	mov	r1, #16	; 0x10
+     918:	1afffff3 	bne	8ec <incomplete_write+0x94>
+     91c:	e1a00001 	mov	r0, r1
+     920:	ebfffe7d 	bl	31c <write_cmd_word>
+     924:	e59f3094 	ldr	r3, [pc, #148]	; 9c0 <.text+0x9c0>
+     928:	e3a02000 	mov	r2, #0	; 0x0
+     92c:	e54320fd 	strb	r2, [r3, #-253]
+     930:	e59f3080 	ldr	r3, [pc, #128]	; 9b8 <.text+0x9b8>
+     934:	e2822001 	add	r2, r2, #1	; 0x1
+     938:	e5832004 	str	r2, [r3, #4]
+     93c:	e59f3074 	ldr	r3, [pc, #116]	; 9b8 <.text+0x9b8>
+     940:	e5933004 	ldr	r3, [r3, #4]
+     944:	e2135001 	ands	r5, r3, #1	; 0x1
+     948:	1afffffb 	bne	93c <incomplete_write+0xe4>
+     94c:	e59f406c 	ldr	r4, [pc, #108]	; 9c0 <.text+0x9c0>
+     950:	e3e03000 	mvn	r3, #0	; 0x0
+     954:	e54430fd 	strb	r3, [r4, #-253]
+     958:	e1a00000 	nop			(mov r0,r0)
+     95c:	e1a00000 	nop			(mov r0,r0)
+     960:	e3a000ff 	mov	r0, #255	; 0xff
+     964:	ebfffe6c 	bl	31c <write_cmd_word>
+     968:	e54450fd 	strb	r5, [r4, #-253]
+     96c:	e1a00000 	nop			(mov r0,r0)
+     970:	e1a00000 	nop			(mov r0,r0)
+     974:	e1a00000 	nop			(mov r0,r0)
+     978:	e1a00000 	nop			(mov r0,r0)
+     97c:	e1a00000 	nop			(mov r0,r0)
+     980:	e1a00000 	nop			(mov r0,r0)
+     984:	e1a00000 	nop			(mov r0,r0)
+     988:	e59f202c 	ldr	r2, [pc, #44]	; 9bc <.text+0x9bc>
+     98c:	e5123feb 	ldr	r3, [r2, #-4075]
+     990:	e3130040 	tst	r3, #64	; 0x40
+     994:	0afffffa 	beq	984 <incomplete_write+0x12c>
+     998:	e3a03a01 	mov	r3, #4096	; 0x1000
+     99c:	e5023fe7 	str	r3, [r2, #-4071]
+     9a0:	e1a00000 	nop			(mov r0,r0)
+     9a4:	ebfffe49 	bl	2d0 <reset_io>
+     9a8:	ebfffe70 	bl	370 <read_status>
+     9ac:	e2000001 	and	r0, r0, #1	; 0x1
+     9b0:	e8bd81f0 	ldmia	sp!, {r4, r5, r6, r7, r8, pc}
+     9b4:	40000008 	andmi	r0, r0, r8
+     9b8:	e0004000 	and	r4, r0, r0
+     9bc:	3fffcfff 	svccc	0x00ffcfff
+     9c0:	3fffc0ff 	svccc	0x00ffc0ff
+     9c4:	00002110 	andeq	r2, r0, r0, lsl r1
+
+000009c8 <erase>:
+     9c8:	e59f3138 	ldr	r3, [pc, #312]	; b08 <.text+0xb08>
+     9cc:	e92d41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
+     9d0:	e59f6134 	ldr	r6, [pc, #308]	; b0c <.text+0xb0c>
+     9d4:	e5932000 	ldr	r2, [r3]
+     9d8:	e3a07000 	mov	r7, #0	; 0x0
+     9dc:	e3a03002 	mov	r3, #2	; 0x2
+     9e0:	e586700c 	str	r7, [r6, #12]
+     9e4:	e59f5124 	ldr	r5, [pc, #292]	; b10 <.text+0xb10>
+     9e8:	e5863004 	str	r3, [r6, #4]
+     9ec:	e283301e 	add	r3, r3, #30	; 0x1e
+     9f0:	e5863014 	str	r3, [r6, #20]
+     9f4:	e59f8118 	ldr	r8, [pc, #280]	; b14 <.text+0xb14>
+     9f8:	e2833efe 	add	r3, r3, #4064	; 0xfe0
+     9fc:	e586201c 	str	r2, [r6, #28]
+     a00:	e5053fe3 	str	r3, [r5, #-4067]
+     a04:	e3e03000 	mvn	r3, #0	; 0x0
+     a08:	e54830fd 	strb	r3, [r8, #-253]
+     a0c:	e59f3104 	ldr	r3, [pc, #260]	; b18 <.text+0xb18>
+     a10:	e5053fe3 	str	r3, [r5, #-4067]
+     a14:	e3a03e42 	mov	r3, #1056	; 0x420
+     a18:	e5053fe7 	str	r3, [r5, #-4071]
+     a1c:	e1a04000 	mov	r4, r0
+     a20:	e1a00000 	nop			(mov r0,r0)
+     a24:	e1a00000 	nop			(mov r0,r0)
+     a28:	e3a00060 	mov	r0, #96	; 0x60
+     a2c:	ebfffe3a 	bl	31c <write_cmd_word>
+     a30:	e1a00004 	mov	r0, r4
+     a34:	e3a01001 	mov	r1, #1	; 0x1
+     a38:	ebfffe6a 	bl	3e8 <write_address>
+     a3c:	e3a000d0 	mov	r0, #208	; 0xd0
+     a40:	ebfffe35 	bl	31c <write_cmd_word>
+     a44:	e3a03b01 	mov	r3, #1024	; 0x400
+     a48:	e5053fe3 	str	r3, [r5, #-4067]
+     a4c:	e54870fd 	strb	r7, [r8, #-253]
+     a50:	e1a00000 	nop			(mov r0,r0)
+     a54:	e1a00000 	nop			(mov r0,r0)
+     a58:	e1a00000 	nop			(mov r0,r0)
+     a5c:	e1a00000 	nop			(mov r0,r0)
+     a60:	e1a00000 	nop			(mov r0,r0)
+     a64:	e1a00000 	nop			(mov r0,r0)
+     a68:	e1a00000 	nop			(mov r0,r0)
+     a6c:	e3a03001 	mov	r3, #1	; 0x1
+     a70:	e5863004 	str	r3, [r6, #4]
+     a74:	e59f3090 	ldr	r3, [pc, #144]	; b0c <.text+0xb0c>
+     a78:	e5933004 	ldr	r3, [r3, #4]
+     a7c:	e2136001 	ands	r6, r3, #1	; 0x1
+     a80:	1afffffb 	bne	a74 <erase+0xac>
+     a84:	e59f5088 	ldr	r5, [pc, #136]	; b14 <.text+0xb14>
+     a88:	e3e03000 	mvn	r3, #0	; 0x0
+     a8c:	e54530fd 	strb	r3, [r5, #-253]
+     a90:	e59f4078 	ldr	r4, [pc, #120]	; b10 <.text+0xb10>
+     a94:	e59f307c 	ldr	r3, [pc, #124]	; b18 <.text+0xb18>
+     a98:	e5043fe3 	str	r3, [r4, #-4067]
+     a9c:	e3a03e42 	mov	r3, #1056	; 0x420
+     aa0:	e5043fe7 	str	r3, [r4, #-4071]
+     aa4:	e1a00000 	nop			(mov r0,r0)
+     aa8:	e1a00000 	nop			(mov r0,r0)
+     aac:	e3a000ff 	mov	r0, #255	; 0xff
+     ab0:	ebfffe19 	bl	31c <write_cmd_word>
+     ab4:	e3a03b01 	mov	r3, #1024	; 0x400
+     ab8:	e5043fe3 	str	r3, [r4, #-4067]
+     abc:	e54560fd 	strb	r6, [r5, #-253]
+     ac0:	e1a00000 	nop			(mov r0,r0)
+     ac4:	e1a00000 	nop			(mov r0,r0)
+     ac8:	e1a00000 	nop			(mov r0,r0)
+     acc:	e1a00000 	nop			(mov r0,r0)
+     ad0:	e1a00000 	nop			(mov r0,r0)
+     ad4:	e1a00000 	nop			(mov r0,r0)
+     ad8:	e1a00000 	nop			(mov r0,r0)
+     adc:	e59f402c 	ldr	r4, [pc, #44]	; b10 <.text+0xb10>
+     ae0:	e5143feb 	ldr	r3, [r4, #-4075]
+     ae4:	e3130040 	tst	r3, #64	; 0x40
+     ae8:	0afffffa 	beq	ad8 <erase+0x110>
+     aec:	ebfffdf7 	bl	2d0 <reset_io>
+     af0:	e3a03a01 	mov	r3, #4096	; 0x1000
+     af4:	e5043fe7 	str	r3, [r4, #-4071]
+     af8:	e1a00000 	nop			(mov r0,r0)
+     afc:	ebfffe1b 	bl	370 <read_status>
+     b00:	e2000001 	and	r0, r0, #1	; 0x1
+     b04:	e8bd81f0 	ldmia	sp!, {r4, r5, r6, r7, r8, pc}
+     b08:	40000000 	andmi	r0, r0, r0
+     b0c:	e0004000 	and	r4, r0, r0
+     b10:	3fffcfff 	svccc	0x00ffcfff
+     b14:	3fffc0ff 	svccc	0x00ffc0ff
+     b18:	00002110 	andeq	r2, r0, r0, lsl r1
+
+00000b1c <complete_erase>:
+     b1c:	e92d4070 	stmdb	sp!, {r4, r5, r6, lr}
+     b20:	e59f40a0 	ldr	r4, [pc, #160]	; bc8 <.text+0xbc8>
+     b24:	e59f60a0 	ldr	r6, [pc, #160]	; bcc <.text+0xbcc>
+     b28:	e3a03a01 	mov	r3, #4096	; 0x1000
+     b2c:	e5043fe3 	str	r3, [r4, #-4067]
+     b30:	e3e03000 	mvn	r3, #0	; 0x0
+     b34:	e54630fd 	strb	r3, [r6, #-253]
+     b38:	e59f3090 	ldr	r3, [pc, #144]	; bd0 <.text+0xbd0>
+     b3c:	e5043fe3 	str	r3, [r4, #-4067]
+     b40:	e3a03e42 	mov	r3, #1056	; 0x420
+     b44:	e5043fe7 	str	r3, [r4, #-4071]
+     b48:	e1a05000 	mov	r5, r0
+     b4c:	e1a00000 	nop			(mov r0,r0)
+     b50:	e1a00000 	nop			(mov r0,r0)
+     b54:	e3a00060 	mov	r0, #96	; 0x60
+     b58:	ebfffdef 	bl	31c <write_cmd_word>
+     b5c:	e1a00005 	mov	r0, r5
+     b60:	e3a01001 	mov	r1, #1	; 0x1
+     b64:	ebfffe1f 	bl	3e8 <write_address>
+     b68:	e3a000d0 	mov	r0, #208	; 0xd0
+     b6c:	ebfffdea 	bl	31c <write_cmd_word>
+     b70:	e3a03b01 	mov	r3, #1024	; 0x400
+     b74:	e5043fe3 	str	r3, [r4, #-4067]
+     b78:	e2433b01 	sub	r3, r3, #1024	; 0x400
+     b7c:	e54630fd 	strb	r3, [r6, #-253]
+     b80:	e1a00000 	nop			(mov r0,r0)
+     b84:	e1a00000 	nop			(mov r0,r0)
+     b88:	e1a00000 	nop			(mov r0,r0)
+     b8c:	e1a00000 	nop			(mov r0,r0)
+     b90:	e1a00000 	nop			(mov r0,r0)
+     b94:	e1a00000 	nop			(mov r0,r0)
+     b98:	e1a00000 	nop			(mov r0,r0)
+     b9c:	e59f4024 	ldr	r4, [pc, #36]	; bc8 <.text+0xbc8>
+     ba0:	e5143feb 	ldr	r3, [r4, #-4075]
+     ba4:	e3130040 	tst	r3, #64	; 0x40
+     ba8:	0afffffa 	beq	b98 <complete_erase+0x7c>
+     bac:	ebfffdc7 	bl	2d0 <reset_io>
+     bb0:	e3a03a01 	mov	r3, #4096	; 0x1000
+     bb4:	e5043fe7 	str	r3, [r4, #-4071]
+     bb8:	e1a00000 	nop			(mov r0,r0)
+     bbc:	ebfffdeb 	bl	370 <read_status>
+     bc0:	e2000001 	and	r0, r0, #1	; 0x1
+     bc4:	e8bd8070 	ldmia	sp!, {r4, r5, r6, pc}
+     bc8:	3fffcfff 	svccc	0x00ffcfff
+     bcc:	3fffc0ff 	svccc	0x00ffc0ff
+     bd0:	00002110 	andeq	r2, r0, r0, lsl r1
+
+00000bd4 <init>:
+     bd4:	e52de004 	str	lr, [sp, #-4]!
+     bd8:	eb000649 	bl	2504 <init_VIC>
+     bdc:	e59f201c 	ldr	r2, [pc, #28]	; c00 <.text+0xc00>
+     be0:	e59231a0 	ldr	r3, [r2, #416]
+     be4:	e3833003 	orr	r3, r3, #3	; 0x3
+     be8:	e58231a0 	str	r3, [r2, #416]
+     bec:	ebfffdb7 	bl	2d0 <reset_io>
+     bf0:	e59f300c 	ldr	r3, [pc, #12]	; c04 <.text+0xc04>
+     bf4:	e3a02005 	mov	r2, #5	; 0x5
+     bf8:	e5832000 	str	r2, [r3]
+     bfc:	e49df004 	ldr	pc, [sp], #4
+     c00:	e01fc000 	ands	ip, pc, r0
+     c04:	e002c000 	and	ip, r2, r0
+
+00000c08 <main>:
+     c08:	e92d40f0 	stmdb	sp!, {r4, r5, r6, r7, lr}
+     c0c:	e24dd02c 	sub	sp, sp, #44	; 0x2c
+     c10:	ebffffef 	bl	bd4 <init>
+     c14:	eb00055d 	bl	2190 <usb_user_init>
+     c18:	eb0004c0 	bl	1f20 <USB_Init>
+     c1c:	e3a00001 	mov	r0, #1	; 0x1
+     c20:	eb0003cf 	bl	1b64 <USB_Connect>
+     c24:	e59f33f0 	ldr	r3, [pc, #1008]	; 101c <.text+0x101c>
+     c28:	e3a02a01 	mov	r2, #4096	; 0x1000
+     c2c:	e5032fe3 	str	r2, [r3, #-4067]
+     c30:	e2422a01 	sub	r2, r2, #4096	; 0x1000
+     c34:	e2433c0f 	sub	r3, r3, #3840	; 0xf00
+     c38:	e54320fd 	strb	r2, [r3, #-253]
+     c3c:	ea000000 	b	c44 <main+0x3c>
+     c40:	e1a00000 	nop			(mov r0,r0)
+     c44:	e59f13d0 	ldr	r1, [pc, #976]	; 101c <.text+0x101c>
+     c48:	e5113feb 	ldr	r3, [r1, #-4075]
+     c4c:	e3130040 	tst	r3, #64	; 0x40
+     c50:	0afffffa 	beq	c40 <main+0x38>
+     c54:	e59f33c4 	ldr	r3, [pc, #964]	; 1020 <.text+0x1020>
+     c58:	e3e02000 	mvn	r2, #0	; 0x0
+     c5c:	e54320fd 	strb	r2, [r3, #-253]
+     c60:	e59f33bc 	ldr	r3, [pc, #956]	; 1024 <.text+0x1024>
+     c64:	e5013fe3 	str	r3, [r1, #-4067]
+     c68:	e3a03e42 	mov	r3, #1056	; 0x420
+     c6c:	e3a000ff 	mov	r0, #255	; 0xff
+     c70:	e5013fe7 	str	r3, [r1, #-4071]
+     c74:	ebfffda8 	bl	31c <write_cmd_word>
+     c78:	eb000558 	bl	21e0 <usb_read_ready>
+     c7c:	e3500000 	cmp	r0, #0	; 0x0
+     c80:	0afffffc 	beq	c78 <main+0x70>
+     c84:	e1a0000d 	mov	r0, sp
+     c88:	e3a01004 	mov	r1, #4	; 0x4
+     c8c:	eb0005ff 	bl	2490 <usb_read>
+     c90:	e59f3390 	ldr	r3, [pc, #912]	; 1028 <.text+0x1028>
+     c94:	e5d32000 	ldrb	r2, [r3]
+     c98:	e5dd3000 	ldrb	r3, [sp]
+     c9c:	e1530002 	cmp	r3, r2
+     ca0:	1afffff4 	bne	c78 <main+0x70>
+     ca4:	e59f0380 	ldr	r0, [pc, #896]	; 102c <.text+0x102c>
+     ca8:	e3a01005 	mov	r1, #5	; 0x5
+     cac:	eb0005af 	bl	2370 <usb_write>
+     cb0:	e59f2378 	ldr	r2, [pc, #888]	; 1030 <.text+0x1030>
+     cb4:	e59f3378 	ldr	r3, [pc, #888]	; 1034 <.text+0x1034>
+     cb8:	e3a04000 	mov	r4, #0	; 0x0
+     cbc:	e5824014 	str	r4, [r2, #20]
+     cc0:	e59f0370 	ldr	r0, [pc, #880]	; 1038 <.text+0x1038>
+     cc4:	e582300c 	str	r3, [r2, #12]
+     cc8:	ebffff93 	bl	b1c <complete_erase>
+     ccc:	e3e0304e 	mvn	r3, #78	; 0x4e
+     cd0:	e5cd301c 	strb	r3, [sp, #28]
+     cd4:	e2833058 	add	r3, r3, #88	; 0x58
+     cd8:	e5cd3024 	strb	r3, [sp, #36]
+     cdc:	e2833074 	add	r3, r3, #116	; 0x74
+     ce0:	e5cd301d 	strb	r3, [sp, #29]
+     ce4:	e3a03014 	mov	r3, #20	; 0x14
+     ce8:	e5cd3025 	strb	r3, [sp, #37]
+     cec:	e3a03004 	mov	r3, #4	; 0x4
+     cf0:	e5cd3021 	strb	r3, [sp, #33]
+     cf4:	e2833060 	add	r3, r3, #96	; 0x60
+     cf8:	e5cd301e 	strb	r3, [sp, #30]
+     cfc:	e3a03016 	mov	r3, #22	; 0x16
+     d00:	e5cd3026 	strb	r3, [sp, #38]
+     d04:	e3a03002 	mov	r3, #2	; 0x2
+     d08:	e5cd3022 	strb	r3, [sp, #34]
+     d0c:	e2833037 	add	r3, r3, #55	; 0x37
+     d10:	e5cd301f 	strb	r3, [sp, #31]
+     d14:	e3a0301b 	mov	r3, #27	; 0x1b
+     d18:	e5cd3027 	strb	r3, [sp, #39]
+     d1c:	e59f3318 	ldr	r3, [pc, #792]	; 103c <.text+0x103c>
+     d20:	e3a02006 	mov	r2, #6	; 0x6
+     d24:	e1cd31ba 	strh	r3, [sp, #26]
+     d28:	e3a03e7d 	mov	r3, #2000	; 0x7d0
+     d2c:	e5cd2023 	strb	r2, [sp, #35]
+     d30:	e5cd2020 	strb	r2, [sp, #32]
+     d34:	e1cd31b4 	strh	r3, [sp, #20]
+     d38:	e1cd31b6 	strh	r3, [sp, #22]
+     d3c:	e1cd31b8 	strh	r3, [sp, #24]
+     d40:	e1a06004 	mov	r6, r4
+     d44:	e59f42f4 	ldr	r4, [pc, #756]	; 1040 <.text+0x1040>
+     d48:	e59f32f4 	ldr	r3, [pc, #756]	; 1044 <.text+0x1044>
+     d4c:	e3a0cfd2 	mov	ip, #840	; 0x348
+     d50:	e3a010ff 	mov	r1, #255	; 0xff
+     d54:	e3a0201e 	mov	r2, #30	; 0x1e
+     d58:	e583c000 	str	ip, [r3]
+     d5c:	e1a00004 	mov	r0, r4
+     d60:	eb000636 	bl	2640 <memset>
+     d64:	e28d3024 	add	r3, sp, #36	; 0x24
+     d68:	e7d61003 	ldrb	r1, [r6, r3]
+     d6c:	e28d3020 	add	r3, sp, #32	; 0x20
+     d70:	e7d60003 	ldrb	r0, [r6, r3]
+     d74:	e7d42001 	ldrb	r2, [r4, r1]
+     d78:	e3a03001 	mov	r3, #1	; 0x1
+     d7c:	e1c22013 	bic	r2, r2, r3, lsl r0
+     d80:	e28d301c 	add	r3, sp, #28	; 0x1c
+     d84:	e7d63003 	ldrb	r3, [r6, r3]
+     d88:	e2433008 	sub	r3, r3, #8	; 0x8
+     d8c:	e20370ff 	and	r7, r3, #255	; 0xff
+     d90:	e59f32b0 	ldr	r3, [pc, #688]	; 1048 <.text+0x1048>
+     d94:	e5c31000 	strb	r1, [r3]
+     d98:	e59f32ac 	ldr	r3, [pc, #684]	; 104c <.text+0x104c>
+     d9c:	e3a05000 	mov	r5, #0	; 0x0
+     da0:	e7c42001 	strb	r2, [r4, r1]
+     da4:	e5c30000 	strb	r0, [r3]
+     da8:	ea000007 	b	dcc <main+0x1c4>
+     dac:	ebfffea9 	bl	858 <incomplete_write>
+     db0:	e59f028c 	ldr	r0, [pc, #652]	; 1044 <.text+0x1044>
+     db4:	e5903000 	ldr	r3, [r0]
+     db8:	e2831002 	add	r1, r3, #2	; 0x2
+     dbc:	e3530fe1 	cmp	r3, #900	; 0x384
+     dc0:	e2852001 	add	r2, r5, #1	; 0x1
+     dc4:	35801000 	strcc	r1, [r0]
+     dc8:	e20250ff 	and	r5, r2, #255	; 0xff
+     dcc:	e1550007 	cmp	r5, r7
+     dd0:	e59f0260 	ldr	r0, [pc, #608]	; 1038 <.text+0x1038>
+     dd4:	e3a0101e 	mov	r1, #30	; 0x1e
+     dd8:	e59f2260 	ldr	r2, [pc, #608]	; 1040 <.text+0x1040>
+     ddc:	1afffff2 	bne	dac <main+0x1a4>
+     de0:	e2866001 	add	r6, r6, #1	; 0x1
+     de4:	e3560004 	cmp	r6, #4	; 0x4
+     de8:	1affffd5 	bne	d44 <main+0x13c>
+     dec:	e59f3250 	ldr	r3, [pc, #592]	; 1044 <.text+0x1044>
+     df0:	e3a02e37 	mov	r2, #880	; 0x370
+     df4:	e5832000 	str	r2, [r3]
+     df8:	e3a07000 	mov	r7, #0	; 0x0
+     dfc:	e59f423c 	ldr	r4, [pc, #572]	; 1040 <.text+0x1040>
+     e00:	e3a010ff 	mov	r1, #255	; 0xff
+     e04:	e3a0201e 	mov	r2, #30	; 0x1e
+     e08:	e1a00004 	mov	r0, r4
+     e0c:	eb00060b 	bl	2640 <memset>
+     e10:	e28d3024 	add	r3, sp, #36	; 0x24
+     e14:	e7d71003 	ldrb	r1, [r7, r3]
+     e18:	e28d3020 	add	r3, sp, #32	; 0x20
+     e1c:	e7d70003 	ldrb	r0, [r7, r3]
+     e20:	e7d43001 	ldrb	r3, [r4, r1]
+     e24:	e3a02001 	mov	r2, #1	; 0x1
+     e28:	e1c33012 	bic	r3, r3, r2, lsl r0
+     e2c:	e7c43001 	strb	r3, [r4, r1]
+     e30:	e59f3210 	ldr	r3, [pc, #528]	; 1048 <.text+0x1048>
+     e34:	e5c31000 	strb	r1, [r3]
+     e38:	e59f320c 	ldr	r3, [pc, #524]	; 104c <.text+0x104c>
+     e3c:	e5c30000 	strb	r0, [r3]
+     e40:	e59f01f0 	ldr	r0, [pc, #496]	; 1038 <.text+0x1038>
+     e44:	e3a0101e 	mov	r1, #30	; 0x1e
+     e48:	e59f21f0 	ldr	r2, [pc, #496]	; 1040 <.text+0x1040>
+     e4c:	ebfffe81 	bl	858 <incomplete_write>
+     e50:	e3a05000 	mov	r5, #0	; 0x0
+     e54:	e1a06005 	mov	r6, r5
+     e58:	e59f41f0 	ldr	r4, [pc, #496]	; 1050 <.text+0x1050>
+     e5c:	e59f01d4 	ldr	r0, [pc, #468]	; 1038 <.text+0x1038>
+     e60:	e1a02004 	mov	r2, r4
+     e64:	e3a0101e 	mov	r1, #30	; 0x1e
+     e68:	ebfffe08 	bl	690 <read>
+     e6c:	e59f31d4 	ldr	r3, [pc, #468]	; 1048 <.text+0x1048>
+     e70:	e5d33000 	ldrb	r3, [r3]
+     e74:	e7d42003 	ldrb	r2, [r4, r3]
+     e78:	e59f31cc 	ldr	r3, [pc, #460]	; 104c <.text+0x104c>
+     e7c:	e5d33000 	ldrb	r3, [r3]
+     e80:	e1a02352 	mov	r2, r2, asr r3
+     e84:	e2853001 	add	r3, r5, #1	; 0x1
+     e88:	e1a03803 	mov	r3, r3, lsl #16
+     e8c:	e3120001 	tst	r2, #1	; 0x1
+     e90:	01a05823 	moveq	r5, r3, lsr #16
+     e94:	e59f31b8 	ldr	r3, [pc, #440]	; 1054 <.text+0x1054>
+     e98:	e2866001 	add	r6, r6, #1	; 0x1
+     e9c:	e1560003 	cmp	r6, r3
+     ea0:	1affffec 	bne	e58 <main+0x250>
+     ea4:	e1a03087 	mov	r3, r7, lsl #1
+     ea8:	e28d2014 	add	r2, sp, #20	; 0x14
+     eac:	e19330b2 	ldrh	r3, [r3, r2]
+     eb0:	e1530005 	cmp	r3, r5
+     eb4:	2affffe1 	bcs	e40 <main+0x238>
+     eb8:	e28d0024 	add	r0, sp, #36	; 0x24
+     ebc:	e3a01004 	mov	r1, #4	; 0x4
+     ec0:	eb00052a 	bl	2370 <usb_write>
+     ec4:	e2877001 	add	r7, r7, #1	; 0x1
+     ec8:	e28d0020 	add	r0, sp, #32	; 0x20
+     ecc:	e3a01004 	mov	r1, #4	; 0x4
+     ed0:	eb000526 	bl	2370 <usb_write>
+     ed4:	e3570004 	cmp	r7, #4	; 0x4
+     ed8:	1affffc7 	bne	dfc <main+0x1f4>
+     edc:	e59f314c 	ldr	r3, [pc, #332]	; 1030 <.text+0x1030>
+     ee0:	e3a02002 	mov	r2, #2	; 0x2
+     ee4:	e5832004 	str	r2, [r3, #4]
+     ee8:	e3a07000 	mov	r7, #0	; 0x0
+     eec:	e3a02001 	mov	r2, #1	; 0x1
+     ef0:	e5832004 	str	r2, [r3, #4]
+     ef4:	ea000046 	b	1014 <main+0x40c>
+     ef8:	e28d4024 	add	r4, sp, #36	; 0x24
+     efc:	e7d62004 	ldrb	r2, [r6, r4]
+     f00:	e59f3140 	ldr	r3, [pc, #320]	; 1048 <.text+0x1048>
+     f04:	e28d5020 	add	r5, sp, #32	; 0x20
+     f08:	e7d6c005 	ldrb	ip, [r6, r5]
+     f0c:	e5c32000 	strb	r2, [r3]
+     f10:	e59f3134 	ldr	r3, [pc, #308]	; 104c <.text+0x104c>
+     f14:	e1a00004 	mov	r0, r4
+     f18:	e5c3c000 	strb	ip, [r3]
+     f1c:	e3a01004 	mov	r1, #4	; 0x4
+     f20:	eb000512 	bl	2370 <usb_write>
+     f24:	e1a00005 	mov	r0, r5
+     f28:	e3a01004 	mov	r1, #4	; 0x4
+     f2c:	eb00050f 	bl	2370 <usb_write>
+     f30:	e3a02b0a 	mov	r2, #10240	; 0x2800
+     f34:	e3a01000 	mov	r1, #0	; 0x0
+     f38:	e59f0118 	ldr	r0, [pc, #280]	; 1058 <.text+0x1058>
+     f3c:	eb0005bf 	bl	2640 <memset>
+     f40:	e1a00004 	mov	r0, r4
+     f44:	e3a01004 	mov	r1, #4	; 0x4
+     f48:	eb000508 	bl	2370 <usb_write>
+     f4c:	e1a00005 	mov	r0, r5
+     f50:	e3a01004 	mov	r1, #4	; 0x4
+     f54:	eb000505 	bl	2370 <usb_write>
+     f58:	e59f20f0 	ldr	r2, [pc, #240]	; 1050 <.text+0x1050>
+     f5c:	e3a0390a 	mov	r3, #163840	; 0x28000
+     f60:	e3a0101e 	mov	r1, #30	; 0x1e
+     f64:	e59f00cc 	ldr	r0, [pc, #204]	; 1038 <.text+0x1038>
+     f68:	ebfffd46 	bl	488 <cache_read>
+     f6c:	e1a00004 	mov	r0, r4
+     f70:	e3a01004 	mov	r1, #4	; 0x4
+     f74:	eb0004fd 	bl	2370 <usb_write>
+     f78:	e1a00005 	mov	r0, r5
+     f7c:	e3a01004 	mov	r1, #4	; 0x4
+     f80:	eb0004fa 	bl	2370 <usb_write>
+     f84:	e59f40cc 	ldr	r4, [pc, #204]	; 1058 <.text+0x1058>
+     f88:	e1a00004 	mov	r0, r4
+     f8c:	e3a01040 	mov	r1, #64	; 0x40
+     f90:	eb0004f6 	bl	2370 <usb_write>
+     f94:	e59f30c0 	ldr	r3, [pc, #192]	; 105c <.text+0x105c>
+     f98:	e2844040 	add	r4, r4, #64	; 0x40
+     f9c:	e1540003 	cmp	r4, r3
+     fa0:	1afffff8 	bne	f88 <main+0x380>
+     fa4:	e2866001 	add	r6, r6, #1	; 0x1
+     fa8:	e59f007c 	ldr	r0, [pc, #124]	; 102c <.text+0x102c>
+     fac:	e3a01005 	mov	r1, #5	; 0x5
+     fb0:	eb0004ee 	bl	2370 <usb_write>
+     fb4:	e3560004 	cmp	r6, #4	; 0x4
+     fb8:	1affffce 	bne	ef8 <main+0x2f0>
+     fbc:	e2873001 	add	r3, r7, #1	; 0x1
+     fc0:	e20370ff 	and	r7, r3, #255	; 0xff
+     fc4:	e3570064 	cmp	r7, #100	; 0x64
+     fc8:	1a000011 	bne	1014 <main+0x40c>
+     fcc:	e59fc05c 	ldr	ip, [pc, #92]	; 1030 <.text+0x1030>
+     fd0:	e59c2008 	ldr	r2, [ip, #8]
+     fd4:	e3a03002 	mov	r3, #2	; 0x2
+     fd8:	e58c3004 	str	r3, [ip, #4]
+     fdc:	e1a01006 	mov	r1, r6
+     fe0:	e1a0ec22 	mov	lr, r2, lsr #24
+     fe4:	e1a04822 	mov	r4, r2, lsr #16
+     fe8:	e1a05422 	mov	r5, r2, lsr #8
+     fec:	e28d0028 	add	r0, sp, #40	; 0x28
+     ff0:	e5cde028 	strb	lr, [sp, #40]
+     ff4:	e5cd4029 	strb	r4, [sp, #41]
+     ff8:	e5cd502a 	strb	r5, [sp, #42]
+     ffc:	e5cd202b 	strb	r2, [sp, #43]
+    1000:	eb0004da 	bl	2370 <usb_write>
+    1004:	e59f0020 	ldr	r0, [pc, #32]	; 102c <.text+0x102c>
+    1008:	e3a01005 	mov	r1, #5	; 0x5
+    100c:	eb0004d7 	bl	2370 <usb_write>
+    1010:	eaffff18 	b	c78 <main+0x70>
+    1014:	e3a06000 	mov	r6, #0	; 0x0
+    1018:	eaffffb6 	b	ef8 <main+0x2f0>
+    101c:	3fffcfff 	svccc	0x00ffcfff
+    1020:	3fffc0ff 	svccc	0x00ffc0ff
+    1024:	00002110 	andeq	r2, r0, r0, lsl r1
+    1028:	00002744 	andeq	r2, r0, r4, asr #14
+    102c:	00002748 	andeq	r2, r0, r8, asr #14
+    1030:	e0008000 	and	r8, r0, r0
+    1034:	000003e7 	andeq	r0, r0, r7, ror #7
+    1038:	00c09000 	sbceq	r9, r0, r0
+    103c:	00000bb8 	streqh	r0, [r0], -r8
+    1040:	4000000c 	andmi	r0, r0, ip
+    1044:	40000008 	andmi	r0, r0, r8
+    1048:	40000005 	andmi	r0, r0, r5
+    104c:	40000004 	andmi	r0, r0, r4
+    1050:	4000002a 	andmi	r0, r0, sl, lsr #32
+    1054:	00002710 	andeq	r2, r0, r0, lsl r7
+    1058:	40000048 	andmi	r0, r0, r8, asr #32
+    105c:	40002848 	andmi	r2, r0, r8, asr #16
+
+00001060 <USB_ResetCore>:
+    1060:	e59f302c 	ldr	r3, [pc, #44]	; 1094 <.text+0x1094>
+    1064:	e3a01000 	mov	r1, #0	; 0x0
+    1068:	e5c31000 	strb	r1, [r3]
+    106c:	e59f2024 	ldr	r2, [pc, #36]	; 1098 <.text+0x1098>
+    1070:	e59f3024 	ldr	r3, [pc, #36]	; 109c <.text+0x109c>
+    1074:	e5832000 	str	r2, [r3]
+    1078:	e59f3020 	ldr	r3, [pc, #32]	; 10a0 <.text+0x10a0>
+    107c:	e5831000 	str	r1, [r3]
+    1080:	e59f301c 	ldr	r3, [pc, #28]	; 10a4 <.text+0x10a4>
+    1084:	e1c310b0 	strh	r1, [r3]
+    1088:	e59f3018 	ldr	r3, [pc, #24]	; 10a8 <.text+0x10a8>
+    108c:	e5c31000 	strb	r1, [r3]
+    1090:	e12fff1e 	bx	lr
+    1094:	40002890 	mulmi	r0, r0, r8
+    1098:	00010001 	andeq	r0, r1, r1
+    109c:	4000288c 	andmi	r2, r0, ip, lsl #17
+    10a0:	40002894 	mulmi	r0, r4, r8
+    10a4:	400028b0 	strmih	r2, [r0], -r0
+    10a8:	40002898 	mulmi	r0, r8, r8
+
+000010ac <USB_SetInterface>:
+    10ac:	e92d4ff0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
+    10b0:	e59f3188 	ldr	r3, [pc, #392]	; 1240 <.text+0x1240>
+    10b4:	e5d30000 	ldrb	r0, [r3]
+    10b8:	e3500000 	cmp	r0, #0	; 0x0
+    10bc:	01a0b000 	moveq	fp, r0
+    10c0:	0a00005c 	beq	1238 <USB_SetInterface+0x18c>
+    10c4:	e3a07000 	mov	r7, #0	; 0x0
+    10c8:	e59f6174 	ldr	r6, [pc, #372]	; 1244 <.text+0x1244>
+    10cc:	e1a0b007 	mov	fp, r7
+    10d0:	e1a08007 	mov	r8, r7
+    10d4:	e1a0a007 	mov	sl, r7
+    10d8:	e1a09007 	mov	r9, r7
+    10dc:	ea000052 	b	122c <USB_SetInterface+0x180>
+    10e0:	e5d63001 	ldrb	r3, [r6, #1]
+    10e4:	e3530004 	cmp	r3, #4	; 0x4
+    10e8:	0a00000c 	beq	1120 <USB_SetInterface+0x74>
+    10ec:	e3530005 	cmp	r3, #5	; 0x5
+    10f0:	0a000019 	beq	115c <USB_SetInterface+0xb0>
+    10f4:	e3530002 	cmp	r3, #2	; 0x2
+    10f8:	1a000049 	bne	1224 <USB_SetInterface+0x178>
+    10fc:	e59f313c 	ldr	r3, [pc, #316]	; 1240 <.text+0x1240>
+    1100:	e5d32000 	ldrb	r2, [r3]
+    1104:	e5d63005 	ldrb	r3, [r6, #5]
+    1108:	e1530002 	cmp	r3, r2
+    110c:	0a000044 	beq	1224 <USB_SetInterface+0x178>
+    1110:	e5d63002 	ldrb	r3, [r6, #2]
+    1114:	e5d62003 	ldrb	r2, [r6, #3]
+    1118:	e0833402 	add	r3, r3, r2, lsl #8
+    111c:	ea000041 	b	1228 <USB_SetInterface+0x17c>
+    1120:	e59f2120 	ldr	r2, [pc, #288]	; 1248 <.text+0x1248>
+    1124:	e5d68002 	ldrb	r8, [r6, #2]
+    1128:	e5d23004 	ldrb	r3, [r2, #4]
+    112c:	e1580003 	cmp	r8, r3
+    1130:	e5d67003 	ldrb	r7, [r6, #3]
+    1134:	1a000039 	bne	1220 <USB_SetInterface+0x174>
+    1138:	e5d23002 	ldrb	r3, [r2, #2]
+    113c:	e1570003 	cmp	r7, r3
+    1140:	1a000036 	bne	1220 <USB_SetInterface+0x174>
+    1144:	e59f3100 	ldr	r3, [pc, #256]	; 124c <.text+0x124c>
+    1148:	e7d3a008 	ldrb	sl, [r3, r8]
+    114c:	e3a09000 	mov	r9, #0	; 0x0
+    1150:	e3a0b001 	mov	fp, #1	; 0x1
+    1154:	e7c37008 	strb	r7, [r3, r8]
+    1158:	ea000031 	b	1224 <USB_SetInterface+0x178>
+    115c:	e59f30e4 	ldr	r3, [pc, #228]	; 1248 <.text+0x1248>
+    1160:	e5d33004 	ldrb	r3, [r3, #4]
+    1164:	e1580003 	cmp	r8, r3
+    1168:	1a00002d 	bne	1224 <USB_SetInterface+0x178>
+    116c:	e5d62002 	ldrb	r2, [r6, #2]
+    1170:	e3120080 	tst	r2, #128	; 0x80
+    1174:	13a03801 	movne	r3, #65536	; 0x10000
+    1178:	03a03001 	moveq	r3, #1	; 0x1
+    117c:	e202508f 	and	r5, r2, #143	; 0x8f
+    1180:	1202200f 	andne	r2, r2, #15	; 0xf
+    1184:	11a04213 	movne	r4, r3, lsl r2
+    1188:	01a04513 	moveq	r4, r3, lsl r5
+    118c:	e59f30b4 	ldr	r3, [pc, #180]	; 1248 <.text+0x1248>
+    1190:	e5d33002 	ldrb	r3, [r3, #2]
+    1194:	e1570003 	cmp	r7, r3
+    1198:	1a00000f 	bne	11dc <USB_SetInterface+0x130>
+    119c:	e59f10ac 	ldr	r1, [pc, #172]	; 1250 <.text+0x1250>
+    11a0:	e59fc0ac 	ldr	ip, [pc, #172]	; 1254 <.text+0x1254>
+    11a4:	e5913000 	ldr	r3, [r1]
+    11a8:	e59c2000 	ldr	r2, [ip]
+    11ac:	e1833004 	orr	r3, r3, r4
+    11b0:	e1c22004 	bic	r2, r2, r4
+    11b4:	e5813000 	str	r3, [r1]
+    11b8:	e58c2000 	str	r2, [ip]
+    11bc:	e1a00006 	mov	r0, r6
+    11c0:	eb0002af 	bl	1c84 <USB_ConfigEP>
+    11c4:	e1a00005 	mov	r0, r5
+    11c8:	eb0002c4 	bl	1ce0 <USB_EnableEP>
+    11cc:	e1a00005 	mov	r0, r5
+    11d0:	eb0002d3 	bl	1d24 <USB_ResetEP>
+    11d4:	e1899004 	orr	r9, r9, r4
+    11d8:	ea000011 	b	1224 <USB_SetInterface+0x178>
+    11dc:	e157000a 	cmp	r7, sl
+    11e0:	1a00000f 	bne	1224 <USB_SetInterface+0x178>
+    11e4:	e1190004 	tst	r9, r4
+    11e8:	1a00000a 	bne	1218 <USB_SetInterface+0x16c>
+    11ec:	e59fc05c 	ldr	ip, [pc, #92]	; 1250 <.text+0x1250>
+    11f0:	e59fe05c 	ldr	lr, [pc, #92]	; 1254 <.text+0x1254>
+    11f4:	e59c2000 	ldr	r2, [ip]
+    11f8:	e59e1000 	ldr	r1, [lr]
+    11fc:	e1e03004 	mvn	r3, r4
+    1200:	e0011003 	and	r1, r1, r3
+    1204:	e0022003 	and	r2, r2, r3
+    1208:	e1a00005 	mov	r0, r5
+    120c:	e58c2000 	str	r2, [ip]
+    1210:	e58e1000 	str	r1, [lr]
+    1214:	eb0002b9 	bl	1d00 <USB_DisableEP>
+    1218:	e1a0a007 	mov	sl, r7
+    121c:	ea000000 	b	1224 <USB_SetInterface+0x178>
+    1220:	e3a09000 	mov	r9, #0	; 0x0
+    1224:	e5d63000 	ldrb	r3, [r6]
+    1228:	e0866003 	add	r6, r6, r3
+    122c:	e5d63000 	ldrb	r3, [r6]
+    1230:	e3530000 	cmp	r3, #0	; 0x0
+    1234:	1affffa9 	bne	10e0 <USB_SetInterface+0x34>
+    1238:	e1a0000b 	mov	r0, fp
+    123c:	e8bd8ff0 	ldmia	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, pc}
+    1240:	40002898 	mulmi	r0, r8, r8
+    1244:	0000266e 	andeq	r2, r0, lr, ror #12
+    1248:	4000289c 	mulmi	r0, ip, r8
+    124c:	40002848 	andmi	r2, r0, r8, asr #16
+    1250:	4000288c 	andmi	r2, r0, ip, lsl #17
+    1254:	40002894 	mulmi	r0, r4, r8
+
+00001258 <USB_SetConfiguration>:
+    1258:	e59f31f4 	ldr	r3, [pc, #500]	; 1454 <.text+0x1454>
+    125c:	e5d32002 	ldrb	r2, [r3, #2]
+    1260:	e3520000 	cmp	r2, #0	; 0x0
+    1264:	e92d41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
+    1268:	159f51e8 	ldrne	r5, [pc, #488]	; 1458 <.text+0x1458>
+    126c:	13a08000 	movne	r8, #0	; 0x0
+    1270:	1a000053 	bne	13c4 <USB_SetConfiguration+0x16c>
+    1274:	ea000056 	b	13d4 <USB_SetConfiguration+0x17c>
+    1278:	e5d53001 	ldrb	r3, [r5, #1]
+    127c:	e3530004 	cmp	r3, #4	; 0x4
+    1280:	0a000037 	beq	1364 <USB_SetConfiguration+0x10c>
+    1284:	e3530005 	cmp	r3, #5	; 0x5
+    1288:	0a000037 	beq	136c <USB_SetConfiguration+0x114>
+    128c:	e3530002 	cmp	r3, #2	; 0x2
+    1290:	1a000049 	bne	13bc <USB_SetConfiguration+0x164>
+    1294:	e59f31b8 	ldr	r3, [pc, #440]	; 1454 <.text+0x1454>
+    1298:	e1d3c0b2 	ldrh	ip, [r3, #2]
+    129c:	e5d52005 	ldrb	r2, [r5, #5]
+    12a0:	e20c30ff 	and	r3, ip, #255	; 0xff
+    12a4:	e1520003 	cmp	r2, r3
+    12a8:	1a000029 	bne	1354 <USB_SetConfiguration+0xfc>
+    12ac:	e59f31a8 	ldr	r3, [pc, #424]	; 145c <.text+0x145c>
+    12b0:	e5d50004 	ldrb	r0, [r5, #4]
+    12b4:	e59f11a4 	ldr	r1, [pc, #420]	; 1460 <.text+0x1460>
+    12b8:	e5c3c000 	strb	ip, [r3]
+    12bc:	e59f31a0 	ldr	r3, [pc, #416]	; 1464 <.text+0x1464>
+    12c0:	e3a02000 	mov	r2, #0	; 0x0
+    12c4:	e5c30000 	strb	r0, [r3]
+    12c8:	e5c12003 	strb	r2, [r1, #3]
+    12cc:	e5c12000 	strb	r2, [r1]
+    12d0:	e5c12001 	strb	r2, [r1, #1]
+    12d4:	e5c12002 	strb	r2, [r1, #2]
+    12d8:	e3a04001 	mov	r4, #1	; 0x1
+    12dc:	e59f6184 	ldr	r6, [pc, #388]	; 1468 <.text+0x1468>
+    12e0:	e5963000 	ldr	r3, [r6]
+    12e4:	e3a07001 	mov	r7, #1	; 0x1
+    12e8:	e0133417 	ands	r3, r3, r7, lsl r4
+    12ec:	e1a00004 	mov	r0, r4
+    12f0:	1b000282 	blne	1d00 <USB_DisableEP>
+    12f4:	e5962000 	ldr	r2, [r6]
+    12f8:	e3a03801 	mov	r3, #65536	; 0x10000
+    12fc:	e0123413 	ands	r3, r2, r3, lsl r4
+    1300:	e3840080 	orr	r0, r4, #128	; 0x80
+    1304:	e2844001 	add	r4, r4, #1	; 0x1
+    1308:	1b00027c 	blne	1d00 <USB_DisableEP>
+    130c:	e3540010 	cmp	r4, #16	; 0x10
+    1310:	1afffff1 	bne	12dc <USB_SetConfiguration+0x84>
+    1314:	e59f3150 	ldr	r3, [pc, #336]	; 146c <.text+0x146c>
+    1318:	e5863000 	str	r3, [r6]
+    131c:	e59f314c 	ldr	r3, [pc, #332]	; 1470 <.text+0x1470>
+    1320:	e3a02000 	mov	r2, #0	; 0x0
+    1324:	e5832000 	str	r2, [r3]
+    1328:	e1a00007 	mov	r0, r7
+    132c:	eb000241 	bl	1c38 <USB_Configure>
+    1330:	e5d53007 	ldrb	r3, [r5, #7]
+    1334:	e59f2138 	ldr	r2, [pc, #312]	; 1474 <.text+0x1474>
+    1338:	e3130040 	tst	r3, #64	; 0x40
+    133c:	11d230b0 	ldrneh	r3, [r2]
+    1340:	01d230b0 	ldreqh	r3, [r2]
+    1344:	13833001 	orrne	r3, r3, #1	; 0x1
+    1348:	03c33001 	biceq	r3, r3, #1	; 0x1
+    134c:	e1c230b0 	strh	r3, [r2]
+    1350:	ea000019 	b	13bc <USB_SetConfiguration+0x164>
+    1354:	e5d53002 	ldrb	r3, [r5, #2]
+    1358:	e5d52003 	ldrb	r2, [r5, #3]
+    135c:	e0833402 	add	r3, r3, r2, lsl #8
+    1360:	ea000016 	b	13c0 <USB_SetConfiguration+0x168>
+    1364:	e5d58003 	ldrb	r8, [r5, #3]
+    1368:	ea000013 	b	13bc <USB_SetConfiguration+0x164>
+    136c:	e3580000 	cmp	r8, #0	; 0x0
+    1370:	1a000011 	bne	13bc <USB_SetConfiguration+0x164>
+    1374:	e5d52002 	ldrb	r2, [r5, #2]
+    1378:	e3120080 	tst	r2, #128	; 0x80
+    137c:	e202408f 	and	r4, r2, #143	; 0x8f
+    1380:	13a03801 	movne	r3, #65536	; 0x10000
+    1384:	1202200f 	andne	r2, r2, #15	; 0xf
+    1388:	03a03001 	moveq	r3, #1	; 0x1
+    138c:	11a01213 	movne	r1, r3, lsl r2
+    1390:	01a01413 	moveq	r1, r3, lsl r4
+    1394:	e59f20cc 	ldr	r2, [pc, #204]	; 1468 <.text+0x1468>
+    1398:	e5923000 	ldr	r3, [r2]
+    139c:	e1833001 	orr	r3, r3, r1
+    13a0:	e1a00005 	mov	r0, r5
+    13a4:	e5823000 	str	r3, [r2]
+    13a8:	eb000235 	bl	1c84 <USB_ConfigEP>
+    13ac:	e1a00004 	mov	r0, r4
+    13b0:	eb00024a 	bl	1ce0 <USB_EnableEP>
+    13b4:	e1a00004 	mov	r0, r4
+    13b8:	eb000259 	bl	1d24 <USB_ResetEP>
+    13bc:	e5d53000 	ldrb	r3, [r5]
+    13c0:	e0855003 	add	r5, r5, r3
+    13c4:	e5d53000 	ldrb	r3, [r5]
+    13c8:	e3530000 	cmp	r3, #0	; 0x0
+    13cc:	1affffa9 	bne	1278 <USB_SetConfiguration+0x20>
+    13d0:	ea000017 	b	1434 <USB_SetConfiguration+0x1dc>
+    13d4:	e59f3080 	ldr	r3, [pc, #128]	; 145c <.text+0x145c>
+    13d8:	e5c32000 	strb	r2, [r3]
+    13dc:	e3a04001 	mov	r4, #1	; 0x1
+    13e0:	e59f5080 	ldr	r5, [pc, #128]	; 1468 <.text+0x1468>
+    13e4:	e5952000 	ldr	r2, [r5]
+    13e8:	e3a03001 	mov	r3, #1	; 0x1
+    13ec:	e0123413 	ands	r3, r2, r3, lsl r4
+    13f0:	e1a00004 	mov	r0, r4
+    13f4:	1b000241 	blne	1d00 <USB_DisableEP>
+    13f8:	e5952000 	ldr	r2, [r5]
+    13fc:	e3a03801 	mov	r3, #65536	; 0x10000
+    1400:	e0123413 	ands	r3, r2, r3, lsl r4
+    1404:	e3840080 	orr	r0, r4, #128	; 0x80
+    1408:	e2844001 	add	r4, r4, #1	; 0x1
+    140c:	1b00023b 	blne	1d00 <USB_DisableEP>
+    1410:	e3540010 	cmp	r4, #16	; 0x10
+    1414:	1afffff1 	bne	13e0 <USB_SetConfiguration+0x188>
+    1418:	e59f204c 	ldr	r2, [pc, #76]	; 146c <.text+0x146c>
+    141c:	e5852000 	str	r2, [r5]
+    1420:	e59f2048 	ldr	r2, [pc, #72]	; 1470 <.text+0x1470>
+    1424:	e3a03000 	mov	r3, #0	; 0x0
+    1428:	e1a00003 	mov	r0, r3
+    142c:	e5823000 	str	r3, [r2]
+    1430:	eb000200 	bl	1c38 <USB_Configure>
+    1434:	e59f3020 	ldr	r3, [pc, #32]	; 145c <.text+0x145c>
+    1438:	e5d32000 	ldrb	r2, [r3]
+    143c:	e59f3010 	ldr	r3, [pc, #16]	; 1454 <.text+0x1454>
+    1440:	e5d30002 	ldrb	r0, [r3, #2]
+    1444:	e1520000 	cmp	r2, r0
+    1448:	13a00000 	movne	r0, #0	; 0x0
+    144c:	03a00001 	moveq	r0, #1	; 0x1
+    1450:	e8bd81f0 	ldmia	sp!, {r4, r5, r6, r7, r8, pc}
+    1454:	4000289c 	mulmi	r0, ip, r8
+    1458:	0000266e 	andeq	r2, r0, lr, ror #12
+    145c:	40002898 	mulmi	r0, r8, r8
+    1460:	40002848 	andmi	r2, r0, r8, asr #16
+    1464:	400028a4 	andmi	r2, r0, r4, lsr #17
+    1468:	4000288c 	andmi	r2, r0, ip, lsl #17
+    146c:	00010001 	andeq	r0, r1, r1
+    1470:	40002894 	mulmi	r0, r4, r8
+    1474:	400028b0 	strmih	r2, [r0], -r0
+
+00001478 <USB_SetClrFeature>:
+    1478:	e92d4030 	stmdb	sp!, {r4, r5, lr}
+    147c:	e59f20fc 	ldr	r2, [pc, #252]	; 1580 <.text+0x1580>
+    1480:	e5d23000 	ldrb	r3, [r2]
+    1484:	e213301f 	ands	r3, r3, #31	; 0x1f
+    1488:	e1a0c000 	mov	ip, r0
+    148c:	0a000002 	beq	149c <USB_SetClrFeature+0x24>
+    1490:	e3530002 	cmp	r3, #2	; 0x2
+    1494:	1a000037 	bne	1578 <USB_SetClrFeature+0x100>
+    1498:	ea000011 	b	14e4 <USB_SetClrFeature+0x6c>
+    149c:	e1d240b2 	ldrh	r4, [r2, #2]
+    14a0:	e3540001 	cmp	r4, #1	; 0x1
+    14a4:	1a000033 	bne	1578 <USB_SetClrFeature+0x100>
+    14a8:	e3500000 	cmp	r0, #0	; 0x0
+    14ac:	e59f50d0 	ldr	r5, [pc, #208]	; 1584 <.text+0x1584>
+    14b0:	0a000005 	beq	14cc <USB_SetClrFeature+0x54>
+    14b4:	e1a00004 	mov	r0, r4
+    14b8:	eb0001d0 	bl	1c00 <USB_WakeUpCfg>
+    14bc:	e1d530b0 	ldrh	r3, [r5]
+    14c0:	e1a00004 	mov	r0, r4
+    14c4:	e3833002 	orr	r3, r3, #2	; 0x2
+    14c8:	ea000003 	b	14dc <USB_SetClrFeature+0x64>
+    14cc:	eb0001cb 	bl	1c00 <USB_WakeUpCfg>
+    14d0:	e1d530b0 	ldrh	r3, [r5]
+    14d4:	e1a00004 	mov	r0, r4
+    14d8:	e3c33002 	bic	r3, r3, #2	; 0x2
+    14dc:	e1c530b0 	strh	r3, [r5]
+    14e0:	e8bd8030 	ldmia	sp!, {r4, r5, pc}
+    14e4:	e1d200b4 	ldrh	r0, [r2, #4]
+    14e8:	e3100080 	tst	r0, #128	; 0x80
+    14ec:	13a03801 	movne	r3, #65536	; 0x10000
+    14f0:	03a03001 	moveq	r3, #1	; 0x1
+    14f4:	1200200f 	andne	r2, r0, #15	; 0xf
+    14f8:	e200108f 	and	r1, r0, #143	; 0x8f
+    14fc:	11a04213 	movne	r4, r3, lsl r2
+    1500:	01a04113 	moveq	r4, r3, lsl r1
+    1504:	e59f307c 	ldr	r3, [pc, #124]	; 1588 <.text+0x1588>
+    1508:	e5d33000 	ldrb	r3, [r3]
+    150c:	e3530000 	cmp	r3, #0	; 0x0
+    1510:	0a000018 	beq	1578 <USB_SetClrFeature+0x100>
+    1514:	e311000f 	tst	r1, #15	; 0xf
+    1518:	0a000016 	beq	1578 <USB_SetClrFeature+0x100>
+    151c:	e59f3068 	ldr	r3, [pc, #104]	; 158c <.text+0x158c>
+    1520:	e5933000 	ldr	r3, [r3]
+    1524:	e1140003 	tst	r4, r3
+    1528:	0a000012 	beq	1578 <USB_SetClrFeature+0x100>
+    152c:	e59f304c 	ldr	r3, [pc, #76]	; 1580 <.text+0x1580>
+    1530:	e1d330b2 	ldrh	r3, [r3, #2]
+    1534:	e3530000 	cmp	r3, #0	; 0x0
+    1538:	1a00000e 	bne	1578 <USB_SetClrFeature+0x100>
+    153c:	e35c0000 	cmp	ip, #0	; 0x0
+    1540:	e59f5048 	ldr	r5, [pc, #72]	; 1590 <.text+0x1590>
+    1544:	0a000004 	beq	155c <USB_SetClrFeature+0xe4>
+    1548:	e1a00001 	mov	r0, r1
+    154c:	eb0001fc 	bl	1d44 <USB_SetStallEP>
+    1550:	e5953000 	ldr	r3, [r5]
+    1554:	e1833004 	orr	r3, r3, r4
+    1558:	ea000003 	b	156c <USB_SetClrFeature+0xf4>
+    155c:	e1a00001 	mov	r0, r1
+    1560:	eb000200 	bl	1d68 <USB_ClrStallEP>
+    1564:	e5953000 	ldr	r3, [r5]
+    1568:	e1c33004 	bic	r3, r3, r4
+    156c:	e3a00001 	mov	r0, #1	; 0x1
+    1570:	e5853000 	str	r3, [r5]
+    1574:	e8bd8030 	ldmia	sp!, {r4, r5, pc}
+    1578:	e3a00000 	mov	r0, #0	; 0x0
+    157c:	e8bd8030 	ldmia	sp!, {r4, r5, pc}
+    1580:	4000289c 	mulmi	r0, ip, r8
+    1584:	400028b0 	strmih	r2, [r0], -r0
+    1588:	40002898 	mulmi	r0, r8, r8
+    158c:	4000288c 	andmi	r2, r0, ip, lsl #17
+    1590:	40002894 	mulmi	r0, r4, r8
+
+00001594 <USB_StatusOutStage>:
+    1594:	e59f1004 	ldr	r1, [pc, #4]	; 15a0 <.text+0x15a0>
+    1598:	e3a00000 	mov	r0, #0	; 0x0
+    159c:	ea0001f9 	b	1d88 <USB_ReadEP>
+    15a0:	4000284c 	andmi	r2, r0, ip, asr #16
+
+000015a4 <USB_DataOutStage>:
+    15a4:	e92d4010 	stmdb	sp!, {r4, lr}
+    15a8:	e59f4024 	ldr	r4, [pc, #36]	; 15d4 <.text+0x15d4>
+    15ac:	e3a00000 	mov	r0, #0	; 0x0
+    15b0:	e5941000 	ldr	r1, [r4]
+    15b4:	eb0001f3 	bl	1d88 <USB_ReadEP>
+    15b8:	e5942000 	ldr	r2, [r4]
+    15bc:	e1d430b4 	ldrh	r3, [r4, #4]
+    15c0:	e0822000 	add	r2, r2, r0
+    15c4:	e0603003 	rsb	r3, r0, r3
+    15c8:	e1c430b4 	strh	r3, [r4, #4]
+    15cc:	e5842000 	str	r2, [r4]
+    15d0:	e8bd8010 	ldmia	sp!, {r4, pc}
+    15d4:	400028a8 	andmi	r2, r0, r8, lsr #17
+
+000015d8 <USB_SetupStage>:
+    15d8:	e59f1004 	ldr	r1, [pc, #4]	; 15e4 <.text+0x15e4>
+    15dc:	e3a00000 	mov	r0, #0	; 0x0
+    15e0:	ea0001e8 	b	1d88 <USB_ReadEP>
+    15e4:	4000289c 	mulmi	r0, ip, r8
+
+000015e8 <USB_StatusInStage>:
+    15e8:	e3a01000 	mov	r1, #0	; 0x0
+    15ec:	e3a00080 	mov	r0, #128	; 0x80
+    15f0:	e1a02001 	mov	r2, r1
+    15f4:	ea000214 	b	1e4c <USB_WriteEP>
+
+000015f8 <USB_DataInStage>:
+    15f8:	e92d4010 	stmdb	sp!, {r4, lr}
+    15fc:	e59f4030 	ldr	r4, [pc, #48]	; 1634 <.text+0x1634>
+    1600:	e1d420b4 	ldrh	r2, [r4, #4]
+    1604:	e3a00080 	mov	r0, #128	; 0x80
+    1608:	e3520040 	cmp	r2, #64	; 0x40
+    160c:	23a02040 	movcs	r2, #64	; 0x40
+    1610:	e5941000 	ldr	r1, [r4]
+    1614:	eb00020c 	bl	1e4c <USB_WriteEP>
+    1618:	e5942000 	ldr	r2, [r4]
+    161c:	e1d430b4 	ldrh	r3, [r4, #4]
+    1620:	e0822000 	add	r2, r2, r0
+    1624:	e0603003 	rsb	r3, r0, r3
+    1628:	e1c430b4 	strh	r3, [r4, #4]
+    162c:	e5842000 	str	r2, [r4]
+    1630:	e8bd8010 	ldmia	sp!, {r4, pc}
+    1634:	400028a8 	andmi	r2, r0, r8, lsr #17
+
+00001638 <USB_GetDescriptor>:
+    1638:	e52de004 	str	lr, [sp, #-4]!
+    163c:	e59f10d0 	ldr	r1, [pc, #208]	; 1714 <.text+0x1714>
+    1640:	e5d13000 	ldrb	r3, [r1]
+    1644:	e213301f 	ands	r3, r3, #31	; 0x1f
+    1648:	1a00002f 	bne	170c <USB_GetDescriptor+0xd4>
+    164c:	e1d110b2 	ldrh	r1, [r1, #2]
+    1650:	e1a02421 	mov	r2, r1, lsr #8
+    1654:	e3520002 	cmp	r2, #2	; 0x2
+    1658:	0a000004 	beq	1670 <USB_GetDescriptor+0x38>
+    165c:	e3520003 	cmp	r2, #3	; 0x3
+    1660:	0a00001c 	beq	16d8 <USB_GetDescriptor+0xa0>
+    1664:	e3520001 	cmp	r2, #1	; 0x1
+    1668:	1a000027 	bne	170c <USB_GetDescriptor+0xd4>
+    166c:	ea000002 	b	167c <USB_GetDescriptor+0x44>
+    1670:	e59f00a0 	ldr	r0, [pc, #160]	; 1718 <.text+0x1718>
+    1674:	e1a0c003 	mov	ip, r3
+    1678:	ea000009 	b	16a4 <USB_GetDescriptor+0x6c>
+    167c:	e59f2098 	ldr	r2, [pc, #152]	; 171c <.text+0x171c>
+    1680:	e59f3098 	ldr	r3, [pc, #152]	; 1720 <.text+0x1720>
+    1684:	e3a01012 	mov	r1, #18	; 0x12
+    1688:	e5832000 	str	r2, [r3]
+    168c:	ea000017 	b	16f0 <USB_GetDescriptor+0xb8>
+    1690:	e3530000 	cmp	r3, #0	; 0x0
+    1694:	15d03002 	ldrneb	r3, [r0, #2]
+    1698:	15d02003 	ldrneb	r2, [r0, #3]
+    169c:	10833402 	addne	r3, r3, r2, lsl #8
+    16a0:	10800003 	addne	r0, r0, r3
+    16a4:	e20130ff 	and	r3, r1, #255	; 0xff
+    16a8:	e15c0003 	cmp	ip, r3
+    16ac:	e28cc001 	add	ip, ip, #1	; 0x1
+    16b0:	e5d03000 	ldrb	r3, [r0]
+    16b4:	1afffff5 	bne	1690 <USB_GetDescriptor+0x58>
+    16b8:	e3530000 	cmp	r3, #0	; 0x0
+    16bc:	0a000012 	beq	170c <USB_GetDescriptor+0xd4>
+    16c0:	e5d03003 	ldrb	r3, [r0, #3]
+    16c4:	e5d02002 	ldrb	r2, [r0, #2]
+    16c8:	e0821403 	add	r1, r2, r3, lsl #8
+    16cc:	e59f304c 	ldr	r3, [pc, #76]	; 1720 <.text+0x1720>
+    16d0:	e5830000 	str	r0, [r3]
+    16d4:	ea000005 	b	16f0 <USB_GetDescriptor+0xb8>
+    16d8:	e59f0044 	ldr	r0, [pc, #68]	; 1724 <.text+0x1724>
+    16dc:	e20110ff 	and	r1, r1, #255	; 0xff
+    16e0:	e59f3038 	ldr	r3, [pc, #56]	; 1720 <.text+0x1720>
+    16e4:	e0812000 	add	r2, r1, r0
+    16e8:	e5832000 	str	r2, [r3]
+    16ec:	e7d11000 	ldrb	r1, [r1, r0]
+    16f0:	e59f2028 	ldr	r2, [pc, #40]	; 1720 <.text+0x1720>
+    16f4:	e1d230b4 	ldrh	r3, [r2, #4]
+    16f8:	e1530001 	cmp	r3, r1
+    16fc:	81c210b4 	strhih	r1, [r2, #4]
+    1700:	ebffffbc 	bl	15f8 <USB_DataInStage>
+    1704:	e3a00001 	mov	r0, #1	; 0x1
+    1708:	e49df004 	ldr	pc, [sp], #4
+    170c:	e3a00000 	mov	r0, #0	; 0x0
+    1710:	e49df004 	ldr	pc, [sp], #4
+    1714:	4000289c 	mulmi	r0, ip, r8
+    1718:	0000266e 	andeq	r2, r0, lr, ror #12
+    171c:	0000265c 	andeq	r2, r0, ip, asr r6
+    1720:	400028a8 	andmi	r2, r0, r8, lsr #17
+    1724:	0000268f 	andeq	r2, r0, pc, lsl #13
+
+00001728 <USB_GetStatus>:
+    1728:	e92d4010 	stmdb	sp!, {r4, lr}
+    172c:	e59f20fc 	ldr	r2, [pc, #252]	; 1830 <.text+0x1830>
+    1730:	e5d23000 	ldrb	r3, [r2]
+    1734:	e203401f 	and	r4, r3, #31	; 0x1f
+    1738:	e3540001 	cmp	r4, #1	; 0x1
+    173c:	0a000007 	beq	1760 <USB_GetStatus+0x38>
+    1740:	e3540002 	cmp	r4, #2	; 0x2
+    1744:	0a000017 	beq	17a8 <USB_GetStatus+0x80>
+    1748:	e3540000 	cmp	r4, #0	; 0x0
+    174c:	1a000035 	bne	1828 <USB_GetStatus+0x100>
+    1750:	e59f20dc 	ldr	r2, [pc, #220]	; 1834 <.text+0x1834>
+    1754:	e59f30dc 	ldr	r3, [pc, #220]	; 1838 <.text+0x1838>
+    1758:	e5832000 	str	r2, [r3]
+    175c:	ea00002e 	b	181c <USB_GetStatus+0xf4>
+    1760:	e59f30d4 	ldr	r3, [pc, #212]	; 183c <.text+0x183c>
+    1764:	e5d33000 	ldrb	r3, [r3]
+    1768:	e3530000 	cmp	r3, #0	; 0x0
+    176c:	0a00002d 	beq	1828 <USB_GetStatus+0x100>
+    1770:	e5d23004 	ldrb	r3, [r2, #4]
+    1774:	e59f20c4 	ldr	r2, [pc, #196]	; 1840 <.text+0x1840>
+    1778:	e5d22000 	ldrb	r2, [r2]
+    177c:	e1530002 	cmp	r3, r2
+    1780:	aa000028 	bge	1828 <USB_GetStatus+0x100>
+    1784:	e59f30b8 	ldr	r3, [pc, #184]	; 1844 <.text+0x1844>
+    1788:	e59f20a8 	ldr	r2, [pc, #168]	; 1838 <.text+0x1838>
+    178c:	e3a01000 	mov	r1, #0	; 0x0
+    1790:	e5823000 	str	r3, [r2]
+    1794:	e5c31001 	strb	r1, [r3, #1]
+    1798:	e5c31000 	strb	r1, [r3]
+    179c:	ebffff95 	bl	15f8 <USB_DataInStage>
+    17a0:	e1a00004 	mov	r0, r4
+    17a4:	e8bd8010 	ldmia	sp!, {r4, pc}
+    17a8:	e1d220b4 	ldrh	r2, [r2, #4]
+    17ac:	e3120080 	tst	r2, #128	; 0x80
+    17b0:	e202108f 	and	r1, r2, #143	; 0x8f
+    17b4:	13a03801 	movne	r3, #65536	; 0x10000
+    17b8:	03a03001 	moveq	r3, #1	; 0x1
+    17bc:	1202200f 	andne	r2, r2, #15	; 0xf
+    17c0:	11a02213 	movne	r2, r3, lsl r2
+    17c4:	01a02113 	moveq	r2, r3, lsl r1
+    17c8:	e59f306c 	ldr	r3, [pc, #108]	; 183c <.text+0x183c>
+    17cc:	e5d33000 	ldrb	r3, [r3]
+    17d0:	e3530000 	cmp	r3, #0	; 0x0
+    17d4:	1a000001 	bne	17e0 <USB_GetStatus+0xb8>
+    17d8:	e311000f 	tst	r1, #15	; 0xf
+    17dc:	1a000011 	bne	1828 <USB_GetStatus+0x100>
+    17e0:	e59f3060 	ldr	r3, [pc, #96]	; 1848 <.text+0x1848>
+    17e4:	e5933000 	ldr	r3, [r3]
+    17e8:	e1120003 	tst	r2, r3
+    17ec:	0a00000d 	beq	1828 <USB_GetStatus+0x100>
+    17f0:	e59f3054 	ldr	r3, [pc, #84]	; 184c <.text+0x184c>
+    17f4:	e5933000 	ldr	r3, [r3]
+    17f8:	e1120003 	tst	r2, r3
+    17fc:	e59f2040 	ldr	r2, [pc, #64]	; 1844 <.text+0x1844>
+    1800:	e59f3030 	ldr	r3, [pc, #48]	; 1838 <.text+0x1838>
+    1804:	03a01000 	moveq	r1, #0	; 0x0
+    1808:	13a01001 	movne	r1, #1	; 0x1
+    180c:	e5832000 	str	r2, [r3]
+    1810:	e3a03000 	mov	r3, #0	; 0x0
+    1814:	e5c21000 	strb	r1, [r2]
+    1818:	e5c23001 	strb	r3, [r2, #1]
+    181c:	ebffff75 	bl	15f8 <USB_DataInStage>
+    1820:	e3a00001 	mov	r0, #1	; 0x1
+    1824:	e8bd8010 	ldmia	sp!, {r4, pc}
+    1828:	e3a00000 	mov	r0, #0	; 0x0
+    182c:	e8bd8010 	ldmia	sp!, {r4, pc}
+    1830:	4000289c 	mulmi	r0, ip, r8
+    1834:	400028b0 	strmih	r2, [r0], -r0
+    1838:	400028a8 	andmi	r2, r0, r8, lsr #17
+    183c:	40002898 	mulmi	r0, r8, r8
+    1840:	400028a4 	andmi	r2, r0, r4, lsr #17
+    1844:	4000284c 	andmi	r2, r0, ip, asr #16
+    1848:	4000288c 	andmi	r2, r0, ip, lsl #17
+    184c:	40002894 	mulmi	r0, r4, r8
+
+00001850 <USB_EndPoint0>:
+    1850:	e2400001 	sub	r0, r0, #1	; 0x1
+    1854:	e92d4010 	stmdb	sp!, {r4, lr}
+    1858:	e3500006 	cmp	r0, #6	; 0x6
+    185c:	979ff100 	ldrls	pc, [pc, r0, lsl #2]
+    1860:	ea00008d 	b	1a9c <.text+0x1a9c>
+    1864:	00001880 	andeq	r1, r0, r0, lsl #17
+    1868:	00001a14 	andeq	r1, r0, r4, lsl sl
+    186c:	00001a50 	andeq	r1, r0, r0, asr sl
+    1870:	00001a9c 	muleq	r0, ip, sl
+    1874:	00001a9c 	muleq	r0, ip, sl
+    1878:	00001a90 	muleq	r0, r0, sl
+    187c:	00001a88 	andeq	r1, r0, r8, lsl #21
+    1880:	e59f4218 	ldr	r4, [pc, #536]	; 1aa0 <.text+0x1aa0>
+    1884:	ebffff53 	bl	15d8 <USB_SetupStage>
+    1888:	e5d40000 	ldrb	r0, [r4]
+    188c:	e2000080 	and	r0, r0, #128	; 0x80
+    1890:	eb000111 	bl	1cdc <USB_DirCtrlEP>
+    1894:	e5d42000 	ldrb	r2, [r4]
+    1898:	e59f3204 	ldr	r3, [pc, #516]	; 1aa4 <.text+0x1aa4>
+    189c:	e1d410b6 	ldrh	r1, [r4, #6]
+    18a0:	e3120060 	tst	r2, #96	; 0x60
+    18a4:	e1c310b4 	strh	r1, [r3, #4]
+    18a8:	1a000053 	bne	19fc <.text+0x19fc>
+    18ac:	e5d43001 	ldrb	r3, [r4, #1]
+    18b0:	e353000b 	cmp	r3, #11	; 0xb
+    18b4:	979ff103 	ldrls	pc, [pc, r3, lsl #2]
+    18b8:	ea00004f 	b	19fc <.text+0x19fc>
+    18bc:	000018ec 	andeq	r1, r0, ip, ror #17
+    18c0:	000018fc 	streqd	r1, [r0], -ip
+    18c4:	000019fc 	streqd	r1, [r0], -ip
+    18c8:	00001904 	andeq	r1, r0, r4, lsl #18
+    18cc:	000019fc 	streqd	r1, [r0], -ip
+    18d0:	00001910 	andeq	r1, r0, r0, lsl r9
+    18d4:	00001938 	andeq	r1, r0, r8, lsr r9
+    18d8:	00001948 	andeq	r1, r0, r8, asr #18
+    18dc:	00001960 	andeq	r1, r0, r0, ror #18
+    18e0:	00001978 	andeq	r1, r0, r8, ror r9
+    18e4:	00001998 	muleq	r0, r8, r9
+    18e8:	000019e4 	andeq	r1, r0, r4, ror #19
+    18ec:	ebffff8d 	bl	1728 <USB_GetStatus>
+    18f0:	e3500000 	cmp	r0, #0	; 0x0
+    18f4:	18bd8010 	ldmneia	sp!, {r4, pc}
+    18f8:	ea00003f 	b	19fc <.text+0x19fc>
+    18fc:	e3a00000 	mov	r0, #0	; 0x0
+    1900:	ea000000 	b	1908 <.text+0x1908>
+    1904:	e3a00001 	mov	r0, #1	; 0x1
+    1908:	ebfffeda 	bl	1478 <USB_SetClrFeature>
+    190c:	ea000038 	b	19f4 <.text+0x19f4>
+    1910:	e312001f 	tst	r2, #31	; 0x1f
+    1914:	1a000038 	bne	19fc <.text+0x19fc>
+    1918:	e59f3180 	ldr	r3, [pc, #384]	; 1aa0 <.text+0x1aa0>
+    191c:	e5d33002 	ldrb	r3, [r3, #2]
+    1920:	e59f2180 	ldr	r2, [pc, #384]	; 1aa8 <.text+0x1aa8>
+    1924:	e1e03c83 	mvn	r3, r3, lsl #25
+    1928:	e1e03ca3 	mvn	r3, r3, lsr #25
+    192c:	e5c23000 	strb	r3, [r2]
+    1930:	e8bd4010 	ldmia	sp!, {r4, lr}
+    1934:	eaffff2b 	b	15e8 <USB_StatusInStage>
+    1938:	ebffff3e 	bl	1638 <USB_GetDescriptor>
+    193c:	e3500000 	cmp	r0, #0	; 0x0
+    1940:	18bd8010 	ldmneia	sp!, {r4, pc}
+    1944:	ea00002c 	b	19fc <.text+0x19fc>
+    1948:	e3a00000 	mov	r0, #0	; 0x0
+    194c:	eb0000fc 	bl	1d44 <USB_SetStallEP>
+    1950:	e59f314c 	ldr	r3, [pc, #332]	; 1aa4 <.text+0x1aa4>
+    1954:	e3a02000 	mov	r2, #0	; 0x0
+    1958:	e1c320b4 	strh	r2, [r3, #4]
+    195c:	e8bd8010 	ldmia	sp!, {r4, pc}
+    1960:	e312001f 	tst	r2, #31	; 0x1f
+    1964:	1a000024 	bne	19fc <.text+0x19fc>
+    1968:	e59f213c 	ldr	r2, [pc, #316]	; 1aac <.text+0x1aac>
+    196c:	e59f3130 	ldr	r3, [pc, #304]	; 1aa4 <.text+0x1aa4>
+    1970:	e5832000 	str	r2, [r3]
+    1974:	ea000018 	b	19dc <.text+0x19dc>
+    1978:	e312001f 	tst	r2, #31	; 0x1f
+    197c:	1a00001e 	bne	19fc <.text+0x19fc>
+    1980:	ebfffe34 	bl	1258 <USB_SetConfiguration>
+    1984:	e3500000 	cmp	r0, #0	; 0x0
+    1988:	0a00001b 	beq	19fc <.text+0x19fc>
+    198c:	ebffff15 	bl	15e8 <USB_StatusInStage>
+    1990:	e8bd4010 	ldmia	sp!, {r4, lr}
+    1994:	ea0001d5 	b	20f0 <USB_Configure_Event>
+    1998:	e202301f 	and	r3, r2, #31	; 0x1f
+    199c:	e3530001 	cmp	r3, #1	; 0x1
+    19a0:	1a000015 	bne	19fc <.text+0x19fc>
+    19a4:	e59f3100 	ldr	r3, [pc, #256]	; 1aac <.text+0x1aac>
+    19a8:	e5d33000 	ldrb	r3, [r3]
+    19ac:	e3530000 	cmp	r3, #0	; 0x0
+    19b0:	0a000011 	beq	19fc <.text+0x19fc>
+    19b4:	e59f30e4 	ldr	r3, [pc, #228]	; 1aa0 <.text+0x1aa0>
+    19b8:	e5d32004 	ldrb	r2, [r3, #4]
+    19bc:	e59f30ec 	ldr	r3, [pc, #236]	; 1ab0 <.text+0x1ab0>
+    19c0:	e5d33000 	ldrb	r3, [r3]
+    19c4:	e1520003 	cmp	r2, r3
+    19c8:	aa00000b 	bge	19fc <.text+0x19fc>
+    19cc:	e59f30e0 	ldr	r3, [pc, #224]	; 1ab4 <.text+0x1ab4>
+    19d0:	e0823003 	add	r3, r2, r3
+    19d4:	e59f20c8 	ldr	r2, [pc, #200]	; 1aa4 <.text+0x1aa4>
+    19d8:	e5823000 	str	r3, [r2]
+    19dc:	e8bd4010 	ldmia	sp!, {r4, lr}
+    19e0:	eaffff04 	b	15f8 <USB_DataInStage>
+    19e4:	e202301f 	and	r3, r2, #31	; 0x1f
+    19e8:	e3530001 	cmp	r3, #1	; 0x1
+    19ec:	1a000002 	bne	19fc <.text+0x19fc>
+    19f0:	ebfffdad 	bl	10ac <USB_SetInterface>
+    19f4:	e3500000 	cmp	r0, #0	; 0x0
+    19f8:	1affffcc 	bne	1930 <.text+0x1930>
+    19fc:	e3a00080 	mov	r0, #128	; 0x80
+    1a00:	eb0000cf 	bl	1d44 <USB_SetStallEP>
+    1a04:	e59f3098 	ldr	r3, [pc, #152]	; 1aa4 <.text+0x1aa4>
+    1a08:	e3a01000 	mov	r1, #0	; 0x0
+    1a0c:	e1c310b4 	strh	r1, [r3, #4]
+    1a10:	e8bd8010 	ldmia	sp!, {r4, pc}
+    1a14:	e59f3084 	ldr	r3, [pc, #132]	; 1aa0 <.text+0x1aa0>
+    1a18:	e1d330d0 	ldrsb	r3, [r3]
+    1a1c:	e3530000 	cmp	r3, #0	; 0x0
+    1a20:	ba000008 	blt	1a48 <.text+0x1a48>
+    1a24:	e59f4078 	ldr	r4, [pc, #120]	; 1aa4 <.text+0x1aa4>
+    1a28:	e1d430b4 	ldrh	r3, [r4, #4]
+    1a2c:	e3530000 	cmp	r3, #0	; 0x0
+    1a30:	08bd8010 	ldmeqia	sp!, {r4, pc}
+    1a34:	ebfffeda 	bl	15a4 <USB_DataOutStage>
+    1a38:	e1d430b4 	ldrh	r3, [r4, #4]
+    1a3c:	e3530000 	cmp	r3, #0	; 0x0
+    1a40:	18bd8010 	ldmneia	sp!, {r4, pc}
+    1a44:	eaffffec 	b	19fc <.text+0x19fc>
+    1a48:	e8bd4010 	ldmia	sp!, {r4, lr}
+    1a4c:	eafffed0 	b	1594 <USB_StatusOutStage>
+    1a50:	e59f3048 	ldr	r3, [pc, #72]	; 1aa0 <.text+0x1aa0>
+    1a54:	e1d330d0 	ldrsb	r3, [r3]
+    1a58:	e3530000 	cmp	r3, #0	; 0x0
+    1a5c:	baffffde 	blt	19dc <.text+0x19dc>
+    1a60:	e59f2040 	ldr	r2, [pc, #64]	; 1aa8 <.text+0x1aa8>
+    1a64:	e1d230d0 	ldrsb	r3, [r2]
+    1a68:	e3530000 	cmp	r3, #0	; 0x0
+    1a6c:	e5d23000 	ldrb	r3, [r2]
+    1a70:	a8bd8010 	ldmgeia	sp!, {r4, pc}
+    1a74:	e203307f 	and	r3, r3, #127	; 0x7f
+    1a78:	e1a00003 	mov	r0, r3
+    1a7c:	e5c23000 	strb	r3, [r2]
+    1a80:	e8bd4010 	ldmia	sp!, {r4, lr}
+    1a84:	ea00005e 	b	1c04 <USB_SetAddress>
+    1a88:	e3a00080 	mov	r0, #128	; 0x80
+    1a8c:	ea000000 	b	1a94 <.text+0x1a94>
+    1a90:	e3a00000 	mov	r0, #0	; 0x0
+    1a94:	e8bd4010 	ldmia	sp!, {r4, lr}
+    1a98:	ea0000b2 	b	1d68 <USB_ClrStallEP>
+    1a9c:	e8bd8010 	ldmia	sp!, {r4, pc}
+    1aa0:	4000289c 	mulmi	r0, ip, r8
+    1aa4:	400028a8 	andmi	r2, r0, r8, lsr #17
+    1aa8:	40002890 	mulmi	r0, r0, r8
+    1aac:	40002898 	mulmi	r0, r8, r8
+    1ab0:	400028a4 	andmi	r2, r0, r4, lsr #17
+    1ab4:	40002848 	andmi	r2, r0, r8, asr #16
+
+00001ab8 <EPAdr>:
+    1ab8:	e3100080 	tst	r0, #128	; 0x80
+    1abc:	e200000f 	and	r0, r0, #15	; 0xf
+    1ac0:	e1a00080 	mov	r0, r0, lsl #1
+    1ac4:	12800001 	addne	r0, r0, #1	; 0x1
+    1ac8:	e12fff1e 	bx	lr
+
+00001acc <WrCmd>:
+    1acc:	e59f301c 	ldr	r3, [pc, #28]	; 1af0 <.text+0x1af0>
+    1ad0:	e3a02010 	mov	r2, #16	; 0x10
+    1ad4:	e5832008 	str	r2, [r3, #8]
+    1ad8:	e5830010 	str	r0, [r3, #16]
+    1adc:	e59f300c 	ldr	r3, [pc, #12]	; 1af0 <.text+0x1af0>
+    1ae0:	e5933000 	ldr	r3, [r3]
+    1ae4:	e3130010 	tst	r3, #16	; 0x10
+    1ae8:	0afffffb 	beq	1adc <WrCmd+0x10>
+    1aec:	e12fff1e 	bx	lr
+    1af0:	e0090000 	and	r0, r9, r0
+
+00001af4 <WrCmdDat>:
+    1af4:	e59f3038 	ldr	r3, [pc, #56]	; 1b34 <.text+0x1b34>
+    1af8:	e3a02010 	mov	r2, #16	; 0x10
+    1afc:	e5832008 	str	r2, [r3, #8]
+    1b00:	e5830010 	str	r0, [r3, #16]
+    1b04:	e59f2028 	ldr	r2, [pc, #40]	; 1b34 <.text+0x1b34>
+    1b08:	e5923000 	ldr	r3, [r2]
+    1b0c:	e3130010 	tst	r3, #16	; 0x10
+    1b10:	0afffffb 	beq	1b04 <WrCmdDat+0x10>
+    1b14:	e3a03010 	mov	r3, #16	; 0x10
+    1b18:	e5823008 	str	r3, [r2, #8]
+    1b1c:	e5821010 	str	r1, [r2, #16]
+    1b20:	e59f300c 	ldr	r3, [pc, #12]	; 1b34 <.text+0x1b34>
+    1b24:	e5933000 	ldr	r3, [r3]
+    1b28:	e3130010 	tst	r3, #16	; 0x10
+    1b2c:	0afffffb 	beq	1b20 <WrCmdDat+0x2c>
+    1b30:	e12fff1e 	bx	lr
+    1b34:	e0090000 	and	r0, r9, r0
+
+00001b38 <RdCmdDat>:
+    1b38:	e59f3020 	ldr	r3, [pc, #32]	; 1b60 <.text+0x1b60>
+    1b3c:	e3a02030 	mov	r2, #48	; 0x30
+    1b40:	e5832008 	str	r2, [r3, #8]
+    1b44:	e5830010 	str	r0, [r3, #16]
+    1b48:	e59f2010 	ldr	r2, [pc, #16]	; 1b60 <.text+0x1b60>
+    1b4c:	e5923000 	ldr	r3, [r2]
+    1b50:	e3130020 	tst	r3, #32	; 0x20
+    1b54:	0afffffb 	beq	1b48 <RdCmdDat+0x10>
+    1b58:	e5920014 	ldr	r0, [r2, #20]
+    1b5c:	e12fff1e 	bx	lr
+    1b60:	e0090000 	and	r0, r9, r0
+
+00001b64 <USB_Connect>:
+    1b64:	e3500000 	cmp	r0, #0	; 0x0
+    1b68:	e59f1008 	ldr	r1, [pc, #8]	; 1b78 <.text+0x1b78>
+    1b6c:	e59f0008 	ldr	r0, [pc, #8]	; 1b7c <.text+0x1b7c>
+    1b70:	03a01c01 	moveq	r1, #256	; 0x100
+    1b74:	eaffffde 	b	1af4 <WrCmdDat>
+    1b78:	00010100 	andeq	r0, r1, r0, lsl #2
+    1b7c:	00fe0500 	rsceqs	r0, lr, r0, lsl #10
+
+00001b80 <USB_Reset>:
+    1b80:	e59f2044 	ldr	r2, [pc, #68]	; 1bcc <.text+0x1bcc>
+    1b84:	e3a03000 	mov	r3, #0	; 0x0
+    1b88:	e5823048 	str	r3, [r2, #72]
+    1b8c:	e3a01040 	mov	r1, #64	; 0x40
+    1b90:	e2833001 	add	r3, r3, #1	; 0x1
+    1b94:	e582104c 	str	r1, [r2, #76]
+    1b98:	e5823048 	str	r3, [r2, #72]
+    1b9c:	e582104c 	str	r1, [r2, #76]
+    1ba0:	e59f2024 	ldr	r2, [pc, #36]	; 1bcc <.text+0x1bcc>
+    1ba4:	e5923000 	ldr	r3, [r2]
+    1ba8:	e3130c01 	tst	r3, #256	; 0x100
+    1bac:	0afffffb 	beq	1ba0 <USB_Reset+0x20>
+    1bb0:	e3e03000 	mvn	r3, #0	; 0x0
+    1bb4:	e5823038 	str	r3, [r2, #56]
+    1bb8:	e5823034 	str	r3, [r2, #52]
+    1bbc:	e5823008 	str	r3, [r2, #8]
+    1bc0:	e283300d 	add	r3, r3, #13	; 0xd
+    1bc4:	e5823004 	str	r3, [r2, #4]
+    1bc8:	e12fff1e 	bx	lr
+    1bcc:	e0090000 	and	r0, r9, r0
+
+00001bd0 <USB_Suspend>:
+    1bd0:	e12fff1e 	bx	lr
+
+00001bd4 <USB_Resume>:
+    1bd4:	e12fff1e 	bx	lr
+
+00001bd8 <USB_WakeUp>:
+    1bd8:	e59f3014 	ldr	r3, [pc, #20]	; 1bf4 <.text+0x1bf4>
+    1bdc:	e1d330b0 	ldrh	r3, [r3]
+    1be0:	e3130002 	tst	r3, #2	; 0x2
+    1be4:	e59f000c 	ldr	r0, [pc, #12]	; 1bf8 <.text+0x1bf8>
+    1be8:	e59f100c 	ldr	r1, [pc, #12]	; 1bfc <.text+0x1bfc>
+    1bec:	012fff1e 	bxeq	lr
+    1bf0:	eaffffbf 	b	1af4 <WrCmdDat>
+    1bf4:	400028b0 	strmih	r2, [r0], -r0
+    1bf8:	00fe0500 	rsceqs	r0, lr, r0, lsl #10
+    1bfc:	00010100 	andeq	r0, r1, r0, lsl #2
+
+00001c00 <USB_WakeUpCfg>:
+    1c00:	e12fff1e 	bx	lr
+
+00001c04 <USB_SetAddress>:
+    1c04:	e92d4030 	stmdb	sp!, {r4, r5, lr}
+    1c08:	e3804080 	orr	r4, r0, #128	; 0x80
+    1c0c:	e59f5020 	ldr	r5, [pc, #32]	; 1c34 <.text+0x1c34>
+    1c10:	e1a04804 	mov	r4, r4, lsl #16
+    1c14:	e3844c01 	orr	r4, r4, #256	; 0x100
+    1c18:	e1a00005 	mov	r0, r5
+    1c1c:	e1a01004 	mov	r1, r4
+    1c20:	ebffffb3 	bl	1af4 <WrCmdDat>
+    1c24:	e1a00005 	mov	r0, r5
+    1c28:	e1a01004 	mov	r1, r4
+    1c2c:	e8bd4030 	ldmia	sp!, {r4, r5, lr}
+    1c30:	eaffffaf 	b	1af4 <WrCmdDat>
+    1c34:	00d00500 	sbceqs	r0, r0, r0, lsl #10
+
+00001c38 <USB_Configure>:
+    1c38:	e3500000 	cmp	r0, #0	; 0x0
+    1c3c:	e59f1034 	ldr	r1, [pc, #52]	; 1c78 <.text+0x1c78>
+    1c40:	e52de004 	str	lr, [sp, #-4]!
+    1c44:	03a01c01 	moveq	r1, #256	; 0x100
+    1c48:	e59f002c 	ldr	r0, [pc, #44]	; 1c7c <.text+0x1c7c>
+    1c4c:	ebffffa8 	bl	1af4 <WrCmdDat>
+    1c50:	e59f3028 	ldr	r3, [pc, #40]	; 1c80 <.text+0x1c80>
+    1c54:	e3a02003 	mov	r2, #3	; 0x3
+    1c58:	e5832044 	str	r2, [r3, #68]
+    1c5c:	e59f201c 	ldr	r2, [pc, #28]	; 1c80 <.text+0x1c80>
+    1c60:	e5923000 	ldr	r3, [r2]
+    1c64:	e3130c01 	tst	r3, #256	; 0x100
+    1c68:	0afffffb 	beq	1c5c <USB_Configure+0x24>
+    1c6c:	e3a03c01 	mov	r3, #256	; 0x100
+    1c70:	e5823008 	str	r3, [r2, #8]
+    1c74:	e49df004 	ldr	pc, [sp], #4
+    1c78:	00010100 	andeq	r0, r1, r0, lsl #2
+    1c7c:	00d80500 	sbceqs	r0, r8, r0, lsl #10
+    1c80:	e0090000 	and	r0, r9, r0
+
+00001c84 <USB_ConfigEP>:
+    1c84:	e92d4010 	stmdb	sp!, {r4, lr}
+    1c88:	e1a04000 	mov	r4, r0
+    1c8c:	e5d00002 	ldrb	r0, [r0, #2]
+    1c90:	ebffff88 	bl	1ab8 <EPAdr>
+    1c94:	e59f103c 	ldr	r1, [pc, #60]	; 1cd8 <.text+0x1cd8>
+    1c98:	e5913044 	ldr	r3, [r1, #68]
+    1c9c:	e3a02001 	mov	r2, #1	; 0x1
+    1ca0:	e1833012 	orr	r3, r3, r2, lsl r0
+    1ca4:	e5813044 	str	r3, [r1, #68]
+    1ca8:	e5810048 	str	r0, [r1, #72]
+    1cac:	e5d42005 	ldrb	r2, [r4, #5]
+    1cb0:	e5d43004 	ldrb	r3, [r4, #4]
+    1cb4:	e0833402 	add	r3, r3, r2, lsl #8
+    1cb8:	e581304c 	str	r3, [r1, #76]
+    1cbc:	e59f2014 	ldr	r2, [pc, #20]	; 1cd8 <.text+0x1cd8>
+    1cc0:	e5923000 	ldr	r3, [r2]
+    1cc4:	e3130c01 	tst	r3, #256	; 0x100
+    1cc8:	0afffffb 	beq	1cbc <USB_ConfigEP+0x38>
+    1ccc:	e3a03c01 	mov	r3, #256	; 0x100
+    1cd0:	e5823008 	str	r3, [r2, #8]
+    1cd4:	e8bd8010 	ldmia	sp!, {r4, pc}
+    1cd8:	e0090000 	and	r0, r9, r0
+
+00001cdc <USB_DirCtrlEP>:
+    1cdc:	e12fff1e 	bx	lr
+
+00001ce0 <USB_EnableEP>:
+    1ce0:	e52de004 	str	lr, [sp, #-4]!
+    1ce4:	ebffff73 	bl	1ab8 <EPAdr>
+    1ce8:	e59f300c 	ldr	r3, [pc, #12]	; 1cfc <.text+0x1cfc>
+    1cec:	e3a01c01 	mov	r1, #256	; 0x100
+    1cf0:	e1830800 	orr	r0, r3, r0, lsl #16
+    1cf4:	e49de004 	ldr	lr, [sp], #4
+    1cf8:	eaffff7d 	b	1af4 <WrCmdDat>
+    1cfc:	00400500 	subeq	r0, r0, r0, lsl #10
+
+00001d00 <USB_DisableEP>:
+    1d00:	e52de004 	str	lr, [sp, #-4]!
+    1d04:	ebffff6b 	bl	1ab8 <EPAdr>
+    1d08:	e59f300c 	ldr	r3, [pc, #12]	; 1d1c <.text+0x1d1c>
+    1d0c:	e59f100c 	ldr	r1, [pc, #12]	; 1d20 <.text+0x1d20>
+    1d10:	e1830800 	orr	r0, r3, r0, lsl #16
+    1d14:	e49de004 	ldr	lr, [sp], #4
+    1d18:	eaffff75 	b	1af4 <WrCmdDat>
+    1d1c:	00400500 	subeq	r0, r0, r0, lsl #10
+    1d20:	00200100 	eoreq	r0, r0, r0, lsl #2
+
+00001d24 <USB_ResetEP>:
+    1d24:	e52de004 	str	lr, [sp, #-4]!
+    1d28:	ebffff62 	bl	1ab8 <EPAdr>
+    1d2c:	e59f300c 	ldr	r3, [pc, #12]	; 1d40 <.text+0x1d40>
+    1d30:	e3a01c01 	mov	r1, #256	; 0x100
+    1d34:	e1830800 	orr	r0, r3, r0, lsl #16
+    1d38:	e49de004 	ldr	lr, [sp], #4
+    1d3c:	eaffff6c 	b	1af4 <WrCmdDat>
+    1d40:	00400500 	subeq	r0, r0, r0, lsl #10
+
+00001d44 <USB_SetStallEP>:
+    1d44:	e52de004 	str	lr, [sp, #-4]!
+    1d48:	ebffff5a 	bl	1ab8 <EPAdr>
+    1d4c:	e59f300c 	ldr	r3, [pc, #12]	; 1d60 <.text+0x1d60>
+    1d50:	e59f100c 	ldr	r1, [pc, #12]	; 1d64 <.text+0x1d64>
+    1d54:	e1830800 	orr	r0, r3, r0, lsl #16
+    1d58:	e49de004 	ldr	lr, [sp], #4
+    1d5c:	eaffff64 	b	1af4 <WrCmdDat>
+    1d60:	00400500 	subeq	r0, r0, r0, lsl #10
+    1d64:	00010100 	andeq	r0, r1, r0, lsl #2
+
+00001d68 <USB_ClrStallEP>:
+    1d68:	e52de004 	str	lr, [sp, #-4]!
+    1d6c:	ebffff51 	bl	1ab8 <EPAdr>
+    1d70:	e59f300c 	ldr	r3, [pc, #12]	; 1d84 <.text+0x1d84>
+    1d74:	e3a01c01 	mov	r1, #256	; 0x100
+    1d78:	e1830800 	orr	r0, r3, r0, lsl #16
+    1d7c:	e49de004 	ldr	lr, [sp], #4
+    1d80:	eaffff5b 	b	1af4 <WrCmdDat>
+    1d84:	00400500 	subeq	r0, r0, r0, lsl #10
+
+00001d88 <USB_ReadEP>:
+    1d88:	e200300f 	and	r3, r0, #15	; 0xf
+    1d8c:	e1a03103 	mov	r3, r3, lsl #2
+    1d90:	e59f20a8 	ldr	r2, [pc, #168]	; 1e40 <.text+0x1e40>
+    1d94:	e3833001 	orr	r3, r3, #1	; 0x1
+    1d98:	e5823028 	str	r3, [r2, #40]
+    1d9c:	e92d4030 	stmdb	sp!, {r4, r5, lr}
+    1da0:	e1a05000 	mov	r5, r0
+    1da4:	e59f3094 	ldr	r3, [pc, #148]	; 1e40 <.text+0x1e40>
+    1da8:	e5930020 	ldr	r0, [r3, #32]
+    1dac:	e3100b02 	tst	r0, #2048	; 0x800
+    1db0:	0afffffb 	beq	1da4 <USB_ReadEP+0x1c>
+    1db4:	e1a04b00 	mov	r4, r0, lsl #22
+    1db8:	e1a04b24 	mov	r4, r4, lsr #22
+    1dbc:	e1a0c001 	mov	ip, r1
+    1dc0:	e3a0e000 	mov	lr, #0	; 0x0
+    1dc4:	ea000008 	b	1dec <USB_ReadEP+0x64>
+    1dc8:	e59f3070 	ldr	r3, [pc, #112]	; 1e40 <.text+0x1e40>
+    1dcc:	e5933018 	ldr	r3, [r3, #24]
+    1dd0:	e1a00c23 	mov	r0, r3, lsr #24
+    1dd4:	e1a02423 	mov	r2, r3, lsr #8
+    1dd8:	e1a01823 	mov	r1, r3, lsr #16
+    1ddc:	e54c2003 	strb	r2, [ip, #-3]
+    1de0:	e54c1002 	strb	r1, [ip, #-2]
+    1de4:	e54c0001 	strb	r0, [ip, #-1]
+    1de8:	e54c3004 	strb	r3, [ip, #-4]
+    1dec:	e2843003 	add	r3, r4, #3	; 0x3
+    1df0:	e15e0123 	cmp	lr, r3, lsr #2
+    1df4:	e28cc004 	add	ip, ip, #4	; 0x4
+    1df8:	e28ee001 	add	lr, lr, #1	; 0x1
+    1dfc:	3afffff1 	bcc	1dc8 <USB_ReadEP+0x40>
+    1e00:	e59f303c 	ldr	r3, [pc, #60]	; 1e44 <.text+0x1e44>
+    1e04:	e1a03553 	mov	r3, r3, asr r5
+    1e08:	e3130001 	tst	r3, #1	; 0x1
+    1e0c:	e59f302c 	ldr	r3, [pc, #44]	; 1e40 <.text+0x1e40>
+    1e10:	e3a02000 	mov	r2, #0	; 0x0
+    1e14:	e5832028 	str	r2, [r3, #40]
+    1e18:	1a000006 	bne	1e38 <USB_ReadEP+0xb0>
+    1e1c:	e1a00005 	mov	r0, r5
+    1e20:	ebffff24 	bl	1ab8 <EPAdr>
+    1e24:	e1a00800 	mov	r0, r0, lsl #16
+    1e28:	e3800c05 	orr	r0, r0, #1280	; 0x500
+    1e2c:	ebffff26 	bl	1acc <WrCmd>
+    1e30:	e59f0010 	ldr	r0, [pc, #16]	; 1e48 <.text+0x1e48>
+    1e34:	ebffff24 	bl	1acc <WrCmd>
+    1e38:	e1a00004 	mov	r0, r4
+    1e3c:	e8bd8030 	ldmia	sp!, {r4, r5, pc}
+    1e40:	e0090000 	and	r0, r9, r0
+    1e44:	00001248 	andeq	r1, r0, r8, asr #4
+    1e48:	00f20500 	rsceqs	r0, r2, r0, lsl #10
+
+00001e4c <USB_WriteEP>:
+    1e4c:	e92d4030 	stmdb	sp!, {r4, r5, lr}
+    1e50:	e200300f 	and	r3, r0, #15	; 0xf
+    1e54:	e1a05000 	mov	r5, r0
+    1e58:	e1a03103 	mov	r3, r3, lsl #2
+    1e5c:	e59f0080 	ldr	r0, [pc, #128]	; 1ee4 <.text+0x1ee4>
+    1e60:	e3833002 	orr	r3, r3, #2	; 0x2
+    1e64:	e1a04002 	mov	r4, r2
+    1e68:	e1a0c001 	mov	ip, r1
+    1e6c:	e3a0e000 	mov	lr, #0	; 0x0
+    1e70:	e5803028 	str	r3, [r0, #40]
+    1e74:	e5802024 	str	r2, [r0, #36]
+    1e78:	ea000008 	b	1ea0 <USB_WriteEP+0x54>
+    1e7c:	e55c2003 	ldrb	r2, [ip, #-3]
+    1e80:	e55c3004 	ldrb	r3, [ip, #-4]
+    1e84:	e55c1002 	ldrb	r1, [ip, #-2]
+    1e88:	e0833402 	add	r3, r3, r2, lsl #8
+    1e8c:	e55c2001 	ldrb	r2, [ip, #-1]
+    1e90:	e0833801 	add	r3, r3, r1, lsl #16
+    1e94:	e0833c02 	add	r3, r3, r2, lsl #24
+    1e98:	e59f2044 	ldr	r2, [pc, #68]	; 1ee4 <.text+0x1ee4>
+    1e9c:	e582301c 	str	r3, [r2, #28]
+    1ea0:	e2843003 	add	r3, r4, #3	; 0x3
+    1ea4:	e15e0123 	cmp	lr, r3, lsr #2
+    1ea8:	e28cc004 	add	ip, ip, #4	; 0x4
+    1eac:	e28ee001 	add	lr, lr, #1	; 0x1
+    1eb0:	3afffff1 	bcc	1e7c <USB_WriteEP+0x30>
+    1eb4:	e59f2028 	ldr	r2, [pc, #40]	; 1ee4 <.text+0x1ee4>
+    1eb8:	e3a03000 	mov	r3, #0	; 0x0
+    1ebc:	e5823028 	str	r3, [r2, #40]
+    1ec0:	e1a00005 	mov	r0, r5
+    1ec4:	ebfffefb 	bl	1ab8 <EPAdr>
+    1ec8:	e1a00800 	mov	r0, r0, lsl #16
+    1ecc:	e3800c05 	orr	r0, r0, #1280	; 0x500
+    1ed0:	ebfffefd 	bl	1acc <WrCmd>
+    1ed4:	e59f000c 	ldr	r0, [pc, #12]	; 1ee8 <.text+0x1ee8>
+    1ed8:	ebfffefb 	bl	1acc <WrCmd>
+    1edc:	e1a00004 	mov	r0, r4
+    1ee0:	e8bd8030 	ldmia	sp!, {r4, r5, pc}
+    1ee4:	e0090000 	and	r0, r9, r0
+    1ee8:	00fa0500 	rsceqs	r0, sl, r0, lsl #10
+
+00001eec <USB_GetFrame>:
+    1eec:	e92d4030 	stmdb	sp!, {r4, r5, lr}
+    1ef0:	e59f5020 	ldr	r5, [pc, #32]	; 1f18 <.text+0x1f18>
+    1ef4:	e59f0020 	ldr	r0, [pc, #32]	; 1f1c <.text+0x1f1c>
+    1ef8:	ebfffef3 	bl	1acc <WrCmd>
+    1efc:	e1a00005 	mov	r0, r5
+    1f00:	ebffff0c 	bl	1b38 <RdCmdDat>
+    1f04:	e1a04000 	mov	r4, r0
+    1f08:	e1a00005 	mov	r0, r5
+    1f0c:	ebffff09 	bl	1b38 <RdCmdDat>
+    1f10:	e1840400 	orr	r0, r4, r0, lsl #8
+    1f14:	e8bd8030 	ldmia	sp!, {r4, r5, pc}
+    1f18:	00f50200 	rsceqs	r0, r5, r0, lsl #4
+    1f1c:	00f50500 	rsceqs	r0, r5, r0, lsl #10
+
+00001f20 <USB_Init>:
+    1f20:	e59f207c 	ldr	r2, [pc, #124]	; 1fa4 <.text+0x1fa4>
+    1f24:	e59230c4 	ldr	r3, [r2, #196]
+    1f28:	e3833102 	orr	r3, r3, #-2147483648	; 0x80000000
+    1f2c:	e58230c4 	str	r3, [r2, #196]
+    1f30:	e3a03023 	mov	r3, #35	; 0x23
+    1f34:	e58230a4 	str	r3, [r2, #164]
+    1f38:	e52de004 	str	lr, [sp, #-4]!
+    1f3c:	e3a03001 	mov	r3, #1	; 0x1
+    1f40:	e58230a0 	str	r3, [r2, #160]
+    1f44:	e28330a9 	add	r3, r3, #169	; 0xa9
+    1f48:	e58230ac 	str	r3, [r2, #172]
+    1f4c:	e3a03055 	mov	r3, #85	; 0x55
+    1f50:	e58230ac 	str	r3, [r2, #172]
+    1f54:	e59f2048 	ldr	r2, [pc, #72]	; 1fa4 <.text+0x1fa4>
+    1f58:	e59230a8 	ldr	r3, [r2, #168]
+    1f5c:	e3130b01 	tst	r3, #1024	; 0x400
+    1f60:	0afffffb 	beq	1f54 <USB_Init+0x34>
+    1f64:	e3a03003 	mov	r3, #3	; 0x3
+    1f68:	e58230a0 	str	r3, [r2, #160]
+    1f6c:	e28330a7 	add	r3, r3, #167	; 0xa7
+    1f70:	e58230ac 	str	r3, [r2, #172]
+    1f74:	e3a03055 	mov	r3, #85	; 0x55
+    1f78:	e59f1028 	ldr	r1, [pc, #40]	; 1fa8 <.text+0x1fa8>
+    1f7c:	e58230ac 	str	r3, [r2, #172]
+    1f80:	e3a00016 	mov	r0, #22	; 0x16
+    1f84:	eb00016f 	bl	2548 <install_irq>
+    1f88:	e59f301c 	ldr	r3, [pc, #28]	; 1fac <.text+0x1fac>
+    1f8c:	e3a02008 	mov	r2, #8	; 0x8
+    1f90:	e5832004 	str	r2, [r3, #4]
+    1f94:	ebfffef9 	bl	1b80 <USB_Reset>
+    1f98:	e3a00000 	mov	r0, #0	; 0x0
+    1f9c:	e49de004 	ldr	lr, [sp], #4
+    1fa0:	eaffff17 	b	1c04 <USB_SetAddress>
+    1fa4:	e01fc000 	ands	ip, pc, r0
+    1fa8:	00001fb0 	streqh	r1, [r0], -r0
+    1fac:	e0090000 	and	r0, r9, r0
+
+00001fb0 <USB_ISR>:
+    1fb0:	e59f3128 	ldr	r3, [pc, #296]	; 20e0 <.text+0x20e0>
+    1fb4:	e92d4070 	stmdb	sp!, {r4, r5, r6, lr}
+    1fb8:	e5935000 	ldr	r5, [r3]
+    1fbc:	e3150008 	tst	r5, #8	; 0x8
+    1fc0:	0a00000c 	beq	1ff8 <USB_ISR+0x48>
+    1fc4:	e59f0118 	ldr	r0, [pc, #280]	; 20e4 <.text+0x20e4>
+    1fc8:	ebfffebf 	bl	1acc <WrCmd>
+    1fcc:	e59f0114 	ldr	r0, [pc, #276]	; 20e8 <.text+0x20e8>
+    1fd0:	ebfffed8 	bl	1b38 <RdCmdDat>
+    1fd4:	e3100010 	tst	r0, #16	; 0x10
+    1fd8:	0a000002 	beq	1fe8 <USB_ISR+0x38>
+    1fdc:	ebfffee7 	bl	1b80 <USB_Reset>
+    1fe0:	eb000063 	bl	2174 <USB_Reset_Event>
+    1fe4:	ea000037 	b	20c8 <USB_ISR+0x118>
+    1fe8:	e3100002 	tst	r0, #2	; 0x2
+    1fec:	1a000035 	bne	20c8 <USB_ISR+0x118>
+    1ff0:	e3100008 	tst	r0, #8	; 0x8
+    1ff4:	1a000033 	bne	20c8 <USB_ISR+0x118>
+    1ff8:	e3150004 	tst	r5, #4	; 0x4
+    1ffc:	159f30e8 	ldrne	r3, [pc, #232]	; 20ec <.text+0x20ec>
+    2000:	15936000 	ldrne	r6, [r3]
+    2004:	1a00002b 	bne	20b8 <USB_ISR+0x108>
+    2008:	ea00002e 	b	20c8 <USB_ISR+0x118>
+    200c:	e3a04000 	mov	r4, #0	; 0x0
+    2010:	e3a03001 	mov	r3, #1	; 0x1
+    2014:	e1a02413 	mov	r2, r3, lsl r4
+    2018:	e59f10c0 	ldr	r1, [pc, #192]	; 20e0 <.text+0x20e0>
+    201c:	e5913030 	ldr	r3, [r1, #48]
+    2020:	e1130002 	tst	r3, r2
+    2024:	0a000020 	beq	20ac <USB_ISR+0xfc>
+    2028:	e5812038 	str	r2, [r1, #56]
+    202c:	e1a010a4 	mov	r1, r4, lsr #1
+    2030:	e59f20a8 	ldr	r2, [pc, #168]	; 20e0 <.text+0x20e0>
+    2034:	e5923000 	ldr	r3, [r2]
+    2038:	e3130020 	tst	r3, #32	; 0x20
+    203c:	0afffffb 	beq	2030 <USB_ISR+0x80>
+    2040:	e3140001 	tst	r4, #1	; 0x1
+    2044:	e5923014 	ldr	r3, [r2, #20]
+    2048:	1a000010 	bne	2090 <USB_ISR+0xe0>
+    204c:	e3540000 	cmp	r4, #0	; 0x0
+    2050:	1a000008 	bne	2078 <USB_ISR+0xc8>
+    2054:	e3130004 	tst	r3, #4	; 0x4
+    2058:	0a000006 	beq	2078 <USB_ISR+0xc8>
+    205c:	e3560000 	cmp	r6, #0	; 0x0
+    2060:	0a000004 	beq	2078 <USB_ISR+0xc8>
+    2064:	e3a00001 	mov	r0, #1	; 0x1
+    2068:	e1a0e00f 	mov	lr, pc
+    206c:	e12fff16 	bx	r6
+    2070:	e2844001 	add	r4, r4, #1	; 0x1
+    2074:	eaffffe5 	b	2010 <USB_ISR+0x60>
+    2078:	e59f306c 	ldr	r3, [pc, #108]	; 20ec <.text+0x20ec>
+    207c:	e7933101 	ldr	r3, [r3, r1, lsl #2]
+    2080:	e3530000 	cmp	r3, #0	; 0x0
+    2084:	13a00002 	movne	r0, #2	; 0x2
+    2088:	1a000005 	bne	20a4 <USB_ISR+0xf4>
+    208c:	ea000006 	b	20ac <USB_ISR+0xfc>
+    2090:	e59f3054 	ldr	r3, [pc, #84]	; 20ec <.text+0x20ec>
+    2094:	e7933101 	ldr	r3, [r3, r1, lsl #2]
+    2098:	e3530000 	cmp	r3, #0	; 0x0
+    209c:	0a000002 	beq	20ac <USB_ISR+0xfc>
+    20a0:	e3a00003 	mov	r0, #3	; 0x3
+    20a4:	e1a0e00f 	mov	lr, pc
+    20a8:	e12fff13 	bx	r3
+    20ac:	e2844001 	add	r4, r4, #1	; 0x1
+    20b0:	e354001f 	cmp	r4, #31	; 0x1f
+    20b4:	9affffd5 	bls	2010 <USB_ISR+0x60>
+    20b8:	e59f3020 	ldr	r3, [pc, #32]	; 20e0 <.text+0x20e0>
+    20bc:	e5933030 	ldr	r3, [r3, #48]
+    20c0:	e3530000 	cmp	r3, #0	; 0x0
+    20c4:	1affffd0 	bne	200c <USB_ISR+0x5c>
+    20c8:	e59f3010 	ldr	r3, [pc, #16]	; 20e0 <.text+0x20e0>
+    20cc:	e3a02000 	mov	r2, #0	; 0x0
+    20d0:	e5835008 	str	r5, [r3, #8]
+    20d4:	e3e03000 	mvn	r3, #0	; 0x0
+    20d8:	e5032fcf 	str	r2, [r3, #-4047]
+    20dc:	e8bd8070 	ldmia	sp!, {r4, r5, r6, pc}
+    20e0:	e0090000 	and	r0, r9, r0
+    20e4:	00fe0500 	rsceqs	r0, lr, r0, lsl #10
+    20e8:	00fe0200 	rsceqs	r0, lr, r0, lsl #4
+    20ec:	00002704 	andeq	r2, r0, r4, lsl #14
+
+000020f0 <USB_Configure_Event>:
+    20f0:	e59f3020 	ldr	r3, [pc, #32]	; 2118 <.text+0x2118>
+    20f4:	e5d33000 	ldrb	r3, [r3]
+    20f8:	e3530000 	cmp	r3, #0	; 0x0
+    20fc:	159f3018 	ldrne	r3, [pc, #24]	; 211c <.text+0x211c>
+    2100:	059f3014 	ldreq	r3, [pc, #20]	; 211c <.text+0x211c>
+    2104:	13a02801 	movne	r2, #65536	; 0x10000
+    2108:	03a02801 	moveq	r2, #65536	; 0x10000
+    210c:	15832014 	strne	r2, [r3, #20]
+    2110:	0583201c 	streq	r2, [r3, #28]
+    2114:	e12fff1e 	bx	lr
+    2118:	40002898 	mulmi	r0, r8, r8
+    211c:	e0028000 	and	r8, r2, r0
+
+00002120 <USB_EndPoint1>:
+    2120:	e12fff1e 	bx	lr
+
+00002124 <USB_EndPoint3>:
+    2124:	e12fff1e 	bx	lr
+
+00002128 <USB_EndPoint4>:
+    2128:	e12fff1e 	bx	lr
+
+0000212c <USB_EndPoint5>:
+    212c:	e12fff1e 	bx	lr
+
+00002130 <USB_EndPoint6>:
+    2130:	e12fff1e 	bx	lr
+
+00002134 <USB_EndPoint7>:
+    2134:	e12fff1e 	bx	lr
+
+00002138 <USB_EndPoint8>:
+    2138:	e12fff1e 	bx	lr
+
+0000213c <USB_EndPoint9>:
+    213c:	e12fff1e 	bx	lr
+
+00002140 <USB_EndPoint10>:
+    2140:	e12fff1e 	bx	lr
+
+00002144 <USB_EndPoint11>:
+    2144:	e12fff1e 	bx	lr
+
+00002148 <USB_EndPoint12>:
+    2148:	e12fff1e 	bx	lr
+
+0000214c <USB_EndPoint13>:
+    214c:	e12fff1e 	bx	lr
+
+00002150 <USB_EndPoint14>:
+    2150:	e12fff1e 	bx	lr
+
+00002154 <USB_EndPoint15>:
+    2154:	e12fff1e 	bx	lr
+
+00002158 <USB_EndPoint2>:
+    2158:	e3500002 	cmp	r0, #2	; 0x2
+    215c:	0a000002 	beq	216c <USB_EndPoint2+0x14>
+    2160:	e3500003 	cmp	r0, #3	; 0x3
+    2164:	112fff1e 	bxne	lr
+    2168:	ea000000 	b	2170 <USB_EndPoint2+0x18>
+    216c:	ea00002e 	b	222c <usb_bulkOut>
+    2170:	ea000048 	b	2298 <usb_bulkIn>
+
+00002174 <USB_Reset_Event>:
+    2174:	e52de004 	str	lr, [sp, #-4]!
+    2178:	ebfffbb8 	bl	1060 <USB_ResetCore>
+    217c:	e59f3008 	ldr	r3, [pc, #8]	; 218c <.text+0x218c>
+    2180:	e3a02801 	mov	r2, #65536	; 0x10000
+    2184:	e583201c 	str	r2, [r3, #28]
+    2188:	e49df004 	ldr	pc, [sp], #4
+    218c:	e0028000 	and	r8, r2, r0
+
+00002190 <usb_user_init>:
+    2190:	e59f3034 	ldr	r3, [pc, #52]	; 21cc <.text+0x21cc>
+    2194:	e3a01000 	mov	r1, #0	; 0x0
+    2198:	e1c310b0 	strh	r1, [r3]
+    219c:	e59f202c 	ldr	r2, [pc, #44]	; 21d0 <.text+0x21d0>
+    21a0:	e1d330b0 	ldrh	r3, [r3]
+    21a4:	e1c230b0 	strh	r3, [r2]
+    21a8:	e1d230b0 	ldrh	r3, [r2]
+    21ac:	e59f2020 	ldr	r2, [pc, #32]	; 21d4 <.text+0x21d4>
+    21b0:	e1c230b0 	strh	r3, [r2]
+    21b4:	e1d230b0 	ldrh	r3, [r2]
+    21b8:	e59f2018 	ldr	r2, [pc, #24]	; 21d8 <.text+0x21d8>
+    21bc:	e1c230b0 	strh	r3, [r2]
+    21c0:	e59f3014 	ldr	r3, [pc, #20]	; 21dc <.text+0x21dc>
+    21c4:	e5c31000 	strb	r1, [r3]
+    21c8:	e12fff1e 	bx	lr
+    21cc:	400028b2 	strmih	r2, [r0], -r2
+    21d0:	400030ba 	strmih	r3, [r0], -sl
+    21d4:	400030b4 	strmih	r3, [r0], -r4
+    21d8:	400030b8 	strmih	r3, [r0], -r8
+    21dc:	400030b6 	strmih	r3, [r0], -r6
+
+000021e0 <usb_read_ready>:
+    21e0:	e59f3014 	ldr	r3, [pc, #20]	; 21fc <.text+0x21fc>
+    21e4:	e1d320b0 	ldrh	r2, [r3]
+    21e8:	e59f3010 	ldr	r3, [pc, #16]	; 2200 <.text+0x2200>
+    21ec:	e1d300b0 	ldrh	r0, [r3]
+    21f0:	e0520000 	subs	r0, r2, r0
+    21f4:	13a00001 	movne	r0, #1	; 0x1
+    21f8:	e12fff1e 	bx	lr
+    21fc:	400030ba 	strmih	r3, [r0], -sl
+    2200:	400028b2 	strmih	r2, [r0], -r2
+
+00002204 <usb_send_empty>:
+    2204:	e59f3018 	ldr	r3, [pc, #24]	; 2224 <.text+0x2224>
+    2208:	e1d320b0 	ldrh	r2, [r3]
+    220c:	e59f3014 	ldr	r3, [pc, #20]	; 2228 <.text+0x2228>
+    2210:	e1d300b0 	ldrh	r0, [r3]
+    2214:	e1520000 	cmp	r2, r0
+    2218:	13a00000 	movne	r0, #0	; 0x0
+    221c:	03a00001 	moveq	r0, #1	; 0x1
+    2220:	e12fff1e 	bx	lr
+    2224:	400030b8 	strmih	r3, [r0], -r8
+    2228:	400030b4 	strmih	r3, [r0], -r4
+
+0000222c <usb_bulkOut>:
+    222c:	e52de004 	str	lr, [sp, #-4]!
+    2230:	e24dd040 	sub	sp, sp, #64	; 0x40
+    2234:	e3a00002 	mov	r0, #2	; 0x2
+    2238:	e1a0100d 	mov	r1, sp
+    223c:	ebfffed1 	bl	1d88 <USB_ReadEP>
+    2240:	e3a0e000 	mov	lr, #0	; 0x0
+    2244:	ea000008 	b	226c <usb_bulkOut+0x40>
+    2248:	e1dc30b0 	ldrh	r3, [ip]
+    224c:	e5521040 	ldrb	r1, [r2, #-64]
+    2250:	e59f2038 	ldr	r2, [pc, #56]	; 2290 <.text+0x2290>
+    2254:	e7c21003 	strb	r1, [r2, r3]
+    2258:	e1dc30b0 	ldrh	r3, [ip]
+    225c:	e2833001 	add	r3, r3, #1	; 0x1
+    2260:	e1a03a83 	mov	r3, r3, lsl #21
+    2264:	e1a03aa3 	mov	r3, r3, lsr #21
+    2268:	e1cc30b0 	strh	r3, [ip]
+    226c:	e20e30ff 	and	r3, lr, #255	; 0xff
+    2270:	e28d1040 	add	r1, sp, #64	; 0x40
+    2274:	e1530000 	cmp	r3, r0
+    2278:	e59fc014 	ldr	ip, [pc, #20]	; 2294 <.text+0x2294>
+    227c:	e0812003 	add	r2, r1, r3
+    2280:	e28ee001 	add	lr, lr, #1	; 0x1
+    2284:	baffffef 	blt	2248 <usb_bulkOut+0x1c>
+    2288:	e28dd040 	add	sp, sp, #64	; 0x40
+    228c:	e8bd8000 	ldmia	sp!, {pc}
+    2290:	400028b4 	strmih	r2, [r0], -r4
+    2294:	400028b2 	strmih	r2, [r0], -r2
+
+00002298 <usb_bulkIn>:
+    2298:	e59f30c0 	ldr	r3, [pc, #192]	; 2360 <.text+0x2360>
+    229c:	e59f20c0 	ldr	r2, [pc, #192]	; 2364 <.text+0x2364>
+    22a0:	e1d330b0 	ldrh	r3, [r3]
+    22a4:	e1d220b0 	ldrh	r2, [r2]
+    22a8:	e92d4010 	stmdb	sp!, {r4, lr}
+    22ac:	e0623003 	rsb	r3, r2, r3
+    22b0:	e1a04a83 	mov	r4, r3, lsl #21
+    22b4:	e1a04aa4 	mov	r4, r4, lsr #21
+    22b8:	e3540040 	cmp	r4, #64	; 0x40
+    22bc:	e24dd040 	sub	sp, sp, #64	; 0x40
+    22c0:	da000002 	ble	22d0 <usb_bulkIn+0x38>
+    22c4:	e3a04040 	mov	r4, #64	; 0x40
+    22c8:	e3a00000 	mov	r0, #0	; 0x0
+    22cc:	ea00000d 	b	2308 <usb_bulkIn+0x70>
+    22d0:	e3540000 	cmp	r4, #0	; 0x0
+    22d4:	059f308c 	ldreq	r3, [pc, #140]	; 2368 <.text+0x2368>
+    22d8:	05c34000 	streqb	r4, [r3]
+    22dc:	0a00001d 	beq	2358 <usb_bulkIn+0xc0>
+    22e0:	eafffff8 	b	22c8 <usb_bulkIn+0x30>
+    22e4:	e1d130b0 	ldrh	r3, [r1]
+    22e8:	e59f207c 	ldr	r2, [pc, #124]	; 236c <.text+0x236c>
+    22ec:	e7d22003 	ldrb	r2, [r2, r3]
+    22f0:	e1d130b0 	ldrh	r3, [r1]
+    22f4:	e2833001 	add	r3, r3, #1	; 0x1
+    22f8:	e1a03a83 	mov	r3, r3, lsl #21
+    22fc:	e1a03aa3 	mov	r3, r3, lsr #21
+    2300:	e54c2040 	strb	r2, [ip, #-64]
+    2304:	e1c130b0 	strh	r3, [r1]
+    2308:	e20030ff 	and	r3, r0, #255	; 0xff
+    230c:	e28d2040 	add	r2, sp, #64	; 0x40
+    2310:	e1530004 	cmp	r3, r4
+    2314:	e59f1048 	ldr	r1, [pc, #72]	; 2364 <.text+0x2364>
+    2318:	e082c003 	add	ip, r2, r3
+    231c:	e2800001 	add	r0, r0, #1	; 0x1
+    2320:	baffffef 	blt	22e4 <usb_bulkIn+0x4c>
+    2324:	e3a00082 	mov	r0, #130	; 0x82
+    2328:	e1a0100d 	mov	r1, sp
+    232c:	e1a02004 	mov	r2, r4
+    2330:	ebfffec5 	bl	1e4c <USB_WriteEP>
+    2334:	e1500004 	cmp	r0, r4
+    2338:	aa000006 	bge	2358 <usb_bulkIn+0xc0>
+    233c:	e59f3020 	ldr	r3, [pc, #32]	; 2364 <.text+0x2364>
+    2340:	e1d320b0 	ldrh	r2, [r3]
+    2344:	e0601004 	rsb	r1, r0, r4
+    2348:	e0612002 	rsb	r2, r1, r2
+    234c:	e1a02a82 	mov	r2, r2, lsl #21
+    2350:	e1a02aa2 	mov	r2, r2, lsr #21
+    2354:	e1c320b0 	strh	r2, [r3]
+    2358:	e28dd040 	add	sp, sp, #64	; 0x40
+    235c:	e8bd8010 	ldmia	sp!, {r4, pc}
+    2360:	400030b4 	strmih	r3, [r0], -r4
+    2364:	400030b8 	strmih	r3, [r0], -r8
+    2368:	400030b6 	strmih	r3, [r0], -r6
+    236c:	400030bc 	strmih	r3, [r0], -ip
+
+00002370 <usb_write>:
+    2370:	e92d40f0 	stmdb	sp!, {r4, r5, r6, r7, lr}
+    2374:	e1a07000 	mov	r7, r0
+    2378:	e1a06001 	mov	r6, r1
+    237c:	e3560000 	cmp	r6, #0	; 0x0
+    2380:	08bd80f0 	ldmeqia	sp!, {r4, r5, r6, r7, pc}
+    2384:	e59f30f4 	ldr	r3, [pc, #244]	; 2480 <.text+0x2480>
+    2388:	e1d320b0 	ldrh	r2, [r3]
+    238c:	e59f30f0 	ldr	r3, [pc, #240]	; 2484 <.text+0x2484>
+    2390:	e1d330b0 	ldrh	r3, [r3]
+    2394:	e1520003 	cmp	r2, r3
+    2398:	1a000011 	bne	23e4 <usb_write+0x74>
+    239c:	e59f20e4 	ldr	r2, [pc, #228]	; 2488 <.text+0x2488>
+    23a0:	e5d23000 	ldrb	r3, [r2]
+    23a4:	e3530000 	cmp	r3, #0	; 0x0
+    23a8:	1a00000d 	bne	23e4 <usb_write+0x74>
+    23ac:	e3560040 	cmp	r6, #64	; 0x40
+    23b0:	e2833001 	add	r3, r3, #1	; 0x1
+    23b4:	e5c23000 	strb	r3, [r2]
+    23b8:	83a00082 	movhi	r0, #130	; 0x82
+    23bc:	81a01007 	movhi	r1, r7
+    23c0:	83a02040 	movhi	r2, #64	; 0x40
+    23c4:	93a00082 	movls	r0, #130	; 0x82
+    23c8:	91a01007 	movls	r1, r7
+    23cc:	91a02006 	movls	r2, r6
+    23d0:	ebfffe9d 	bl	1e4c <USB_WriteEP>
+    23d4:	e1500006 	cmp	r0, r6
+    23d8:	08bd80f0 	ldmeqia	sp!, {r4, r5, r6, r7, pc}
+    23dc:	e0877000 	add	r7, r7, r0
+    23e0:	e0606006 	rsb	r6, r0, r6
+    23e4:	e59f3098 	ldr	r3, [pc, #152]	; 2484 <.text+0x2484>
+    23e8:	e59f2090 	ldr	r2, [pc, #144]	; 2480 <.text+0x2480>
+    23ec:	e1d330b0 	ldrh	r3, [r3]
+    23f0:	e1d220b0 	ldrh	r2, [r2]
+    23f4:	e0623003 	rsb	r3, r2, r3
+    23f8:	e1e03003 	mvn	r3, r3
+    23fc:	e1a04a83 	mov	r4, r3, lsl #21
+    2400:	e1a04aa4 	mov	r4, r4, lsr #21
+    2404:	e1540006 	cmp	r4, r6
+    2408:	e1a05004 	mov	r5, r4
+    240c:	23a0c000 	movcs	ip, #0	; 0x0
+    2410:	2a000014 	bcs	2468 <usb_write+0xf8>
+    2414:	e1a00007 	mov	r0, r7
+    2418:	e1a01004 	mov	r1, r4
+    241c:	ebffffd3 	bl	2370 <usb_write>
+    2420:	e59f3058 	ldr	r3, [pc, #88]	; 2480 <.text+0x2480>
+    2424:	e1d320b0 	ldrh	r2, [r3]
+    2428:	e59f3054 	ldr	r3, [pc, #84]	; 2484 <.text+0x2484>
+    242c:	e1d330b0 	ldrh	r3, [r3]
+    2430:	e1520003 	cmp	r2, r3
+    2434:	1afffff9 	bne	2420 <usb_write+0xb0>
+    2438:	e0877004 	add	r7, r7, r4
+    243c:	e0656006 	rsb	r6, r5, r6
+    2440:	eaffffcd 	b	237c <usb_write+0xc>
+    2444:	e1d030b0 	ldrh	r3, [r0]
+    2448:	e7d71002 	ldrb	r1, [r7, r2]
+    244c:	e59f2038 	ldr	r2, [pc, #56]	; 248c <.text+0x248c>
+    2450:	e7c21003 	strb	r1, [r2, r3]
+    2454:	e1d030b0 	ldrh	r3, [r0]
+    2458:	e2833001 	add	r3, r3, #1	; 0x1
+    245c:	e1a03a83 	mov	r3, r3, lsl #21
+    2460:	e1a03aa3 	mov	r3, r3, lsr #21
+    2464:	e1c030b0 	strh	r3, [r0]
+    2468:	e20c20ff 	and	r2, ip, #255	; 0xff
+    246c:	e1520006 	cmp	r2, r6
+    2470:	e59f000c 	ldr	r0, [pc, #12]	; 2484 <.text+0x2484>
+    2474:	e28cc001 	add	ip, ip, #1	; 0x1
+    2478:	3afffff1 	bcc	2444 <usb_write+0xd4>
+    247c:	e8bd80f0 	ldmia	sp!, {r4, r5, r6, r7, pc}
+    2480:	400030b8 	strmih	r3, [r0], -r8
+    2484:	400030b4 	strmih	r3, [r0], -r4
+    2488:	400030b6 	strmih	r3, [r0], -r6
+    248c:	400030bc 	strmih	r3, [r0], -ip
+
+00002490 <usb_read>:
+    2490:	e52de004 	str	lr, [sp, #-4]!
+    2494:	e3a0e000 	mov	lr, #0	; 0x0
+    2498:	ea00000e 	b	24d8 <usb_read+0x48>
+    249c:	e59f2044 	ldr	r2, [pc, #68]	; 24e8 <.text+0x24e8>
+    24a0:	e1dc30b0 	ldrh	r3, [ip]
+    24a4:	e1d220b0 	ldrh	r2, [r2]
+    24a8:	e1530002 	cmp	r3, r2
+    24ac:	0a000009 	beq	24d8 <usb_read+0x48>
+    24b0:	e1dc30b0 	ldrh	r3, [ip]
+    24b4:	e59f2030 	ldr	r2, [pc, #48]	; 24ec <.text+0x24ec>
+    24b8:	e7d23003 	ldrb	r3, [r2, r3]
+    24bc:	e7c0300e 	strb	r3, [r0, lr]
+    24c0:	e1dc30b0 	ldrh	r3, [ip]
+    24c4:	e2833001 	add	r3, r3, #1	; 0x1
+    24c8:	e1a03a83 	mov	r3, r3, lsl #21
+    24cc:	e1a03aa3 	mov	r3, r3, lsr #21
+    24d0:	e1cc30b0 	strh	r3, [ip]
+    24d4:	e28ee001 	add	lr, lr, #1	; 0x1
+    24d8:	e15e0001 	cmp	lr, r1
+    24dc:	e59fc00c 	ldr	ip, [pc, #12]	; 24f0 <.text+0x24f0>
+    24e0:	3affffed 	bcc	249c <usb_read+0xc>
+    24e4:	e49df004 	ldr	pc, [sp], #4
+    24e8:	400028b2 	strmih	r2, [r0], -r2
+    24ec:	400028b4 	strmih	r2, [r0], -r4
+    24f0:	400030ba 	strmih	r3, [r0], -sl
+
+000024f4 <DefaultVICHandler>:
+    24f4:	e3a02000 	mov	r2, #0	; 0x0
+    24f8:	e3e03000 	mvn	r3, #0	; 0x0
+    24fc:	e5032fcf 	str	r2, [r3, #-4047]
+    2500:	eafffffe 	b	2500 <DefaultVICHandler+0xc>
+
+00002504 <init_VIC>:
+    2504:	e3e03000 	mvn	r3, #0	; 0x0
+    2508:	e3a02000 	mov	r2, #0	; 0x0
+    250c:	e5033feb 	str	r3, [r3, #-4075]
+    2510:	e5032fcf 	str	r2, [r3, #-4047]
+    2514:	e5032ff3 	str	r2, [r3, #-4083]
+    2518:	e2422c0f 	sub	r2, r2, #3840	; 0xf00
+    251c:	e3a03000 	mov	r3, #0	; 0x0
+    2520:	e5823100 	str	r3, [r2, #256]
+    2524:	e5823000 	str	r3, [r2]
+    2528:	e2822004 	add	r2, r2, #4	; 0x4
+    252c:	e3720d3b 	cmn	r2, #3776	; 0xec0
+    2530:	1afffff9 	bne	251c <init_VIC+0x18>
+    2534:	e59f2008 	ldr	r2, [pc, #8]	; 2544 <.text+0x2544>
+    2538:	e3e03000 	mvn	r3, #0	; 0x0
+    253c:	e5032fcb 	str	r2, [r3, #-4043]
+    2540:	e12fff1e 	bx	lr
+    2544:	000024f4 	streqd	r2, [r0], -r4
+
+00002548 <install_irq>:
+    2548:	e3a03001 	mov	r3, #1	; 0x1
+    254c:	e52de004 	str	lr, [sp, #-4]!
+    2550:	e1a0e013 	mov	lr, r3, lsl r0
+    2554:	e3e03000 	mvn	r3, #0	; 0x0
+    2558:	e503efeb 	str	lr, [r3, #-4075]
+    255c:	e59fc040 	ldr	ip, [pc, #64]	; 25a4 <.text+0x25a4>
+    2560:	e3a02000 	mov	r2, #0	; 0x0
+    2564:	e51c3100 	ldr	r3, [ip, #-256]
+    2568:	e3530000 	cmp	r3, #0	; 0x0
+    256c:	e2822001 	add	r2, r2, #1	; 0x1
+    2570:	0a000004 	beq	2588 <install_irq+0x40>
+    2574:	e3520010 	cmp	r2, #16	; 0x10
+    2578:	e28cc004 	add	ip, ip, #4	; 0x4
+    257c:	1afffff8 	bne	2564 <install_irq+0x1c>
+    2580:	e3a00000 	mov	r0, #0	; 0x0
+    2584:	e49df004 	ldr	pc, [sp], #4
+    2588:	e3803020 	orr	r3, r0, #32	; 0x20
+    258c:	e58c3000 	str	r3, [ip]
+    2590:	e3a00001 	mov	r0, #1	; 0x1
+    2594:	e3e03000 	mvn	r3, #0	; 0x0
+    2598:	e50c1100 	str	r1, [ip, #-256]
+    259c:	e503efef 	str	lr, [r3, #-4079]
+    25a0:	e49df004 	ldr	pc, [sp], #4
+    25a4:	fffff200 	undefined instruction 0xfffff200
+
+000025a8 <uninstall_irq>:
+    25a8:	e3a03001 	mov	r3, #1	; 0x1
+    25ac:	e1a0c013 	mov	ip, r3, lsl r0
+    25b0:	e3e03000 	mvn	r3, #0	; 0x0
+    25b4:	e503cfeb 	str	ip, [r3, #-4075]
+    25b8:	e59f2044 	ldr	r2, [pc, #68]	; 2604 <.text+0x2604>
+    25bc:	e3a01000 	mov	r1, #0	; 0x0
+    25c0:	e5923000 	ldr	r3, [r2]
+    25c4:	e3c33020 	bic	r3, r3, #32	; 0x20
+    25c8:	e1530000 	cmp	r3, r0
+    25cc:	e2811001 	add	r1, r1, #1	; 0x1
+    25d0:	0a000004 	beq	25e8 <uninstall_irq+0x40>
+    25d4:	e3510010 	cmp	r1, #16	; 0x10
+    25d8:	e2822004 	add	r2, r2, #4	; 0x4
+    25dc:	1afffff7 	bne	25c0 <uninstall_irq+0x18>
+    25e0:	e3a00000 	mov	r0, #0	; 0x0
+    25e4:	e12fff1e 	bx	lr
+    25e8:	e5823000 	str	r3, [r2]
+    25ec:	e3a03000 	mov	r3, #0	; 0x0
+    25f0:	e5023100 	str	r3, [r2, #-256]
+    25f4:	e3a00001 	mov	r0, #1	; 0x1
+    25f8:	e3e03000 	mvn	r3, #0	; 0x0
+    25fc:	e503cfef 	str	ip, [r3, #-4079]
+    2600:	e12fff1e 	bx	lr
+    2604:	fffff200 	undefined instruction 0xfffff200
+
+00002608 <IntRestore>:
+    2608:	ef000005 	svc	0x00000005
+    260c:	e12fff1e 	bx	lr
+
+00002610 <FiqRestore>:
+    2610:	ef000006 	svc	0x00000006
+    2614:	e12fff1e 	bx	lr
+
+00002618 <IntGetCPSR>:
+    2618:	ef000004 	svc	0x00000004
+    261c:	e12fff1e 	bx	lr
+
+00002620 <IntEnable>:
+    2620:	ef000001 	svc	0x00000001
+    2624:	e12fff1e 	bx	lr
+
+00002628 <IntDisable>:
+    2628:	ef000000 	svc	0x00000000
+    262c:	e12fff1e 	bx	lr
+
+00002630 <FiqEnable>:
+    2630:	ef000003 	svc	0x00000003
+    2634:	e12fff1e 	bx	lr
+
+00002638 <FiqDisable>:
+    2638:	ef000002 	svc	0x00000002
+    263c:	e12fff1e 	bx	lr
+
+00002640 <memset>:
+    2640:	e3a03000 	mov	r3, #0	; 0x0
+    2644:	ea000001 	b	2650 <memset+0x10>
+    2648:	e7c31000 	strb	r1, [r3, r0]
+    264c:	e2833001 	add	r3, r3, #1	; 0x1
+    2650:	e2522001 	subs	r2, r2, #1	; 0x1
+    2654:	2afffffb 	bcs	2648 <memset+0x8>
+    2658:	e12fff1e 	bx	lr
+
+0000265c <USB_DeviceDescriptor>:
+    265c:	01100112 400000ff babac251 30040100     .......@Q......0
+    266c:	02090150                                         P.
+
+0000266e <USB_ConfigDescriptor>:
+    266e:	00200209 80000101 00040932 00ff0200     .. .....2.......
+    267e:	05076200 00400282 02050700 00004002     .b....@......@..
+	...
+
+0000268f <USB_StringDescriptor>:
+    268f:	04090304 0054032c 00750072 00740073     ....,.T.r.u.s.t.
+    269f:	00640065 00530020 00730079 00650074     e.d. .S.y.s.t.e.
+    26af:	0073006d 00470020 006f0072 00700075     m.s. .G.r.o.u.p.
+    26bf:	00460320 0061006c 00680073 00490020      .F.l.a.s.h. .I.
+    26cf:	0074006e 00720065 00610066 00650063     n.t.e.r.f.a.c.e.
+    26df:	00440312 00760065 006f0042 00720061     ..D.e.v.B.o.a.r.
+    26ef:	03120064 00650044 00420076 0061006f     d...D.e.v.B.o.a.
+    26ff:	00640072 00185000                                r.d..
+
+00002704 <USB_P_EP>:
+    2704:	00001850 00000000 00002158 00000000     P.......X!......
+	...
+    2744:	0000006d 656e6f44 0000002e              m...Done....
